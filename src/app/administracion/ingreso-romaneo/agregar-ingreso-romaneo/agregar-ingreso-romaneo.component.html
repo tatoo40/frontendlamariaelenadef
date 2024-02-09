@@ -1,0 +1,639 @@
+<div class="card">
+  <div class="card-body">
+    
+    <form [formGroup]="invoiceForm" #form="ngForm">
+
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <h4 class="mb-0">
+            Nro Ingreso: #
+            <span name="id" id="id" ngDefaultControl>
+              {{ invoice.id }}</span
+            >
+          </h4>
+        </div>
+        <div class="col-md-6 mt-3 mt-md-0">
+          <div class="row justify-content-end">
+            <div class="col-lg-3 col-md-4 col-6">
+              <a
+                routerLink="/administracion/ingreso-romaneo"
+                class="btn btn-outline-danger shadow-sm font-medium d-block w-100"
+              >
+                Cancelar
+              </a>
+            </div>
+            <div class="col-lg-3 col-md-4 col-6">
+              <button
+                type="button"
+                class="btn btn-outline-success shadow-sm font-medium d-block w-100"
+                (click)="saveDetail()"
+                [disabled]="addForm?.invalid || invoiceForm?.invalid"
+
+                
+              >
+   
+                Guardar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex align-items-center border-top pt-3 pb-3 border-bottom">
+        <div class="ms-auto">
+          <h5>Fecha Hoy</h5>
+          <span>{{ fechaHoy | date : "dd/MM/yyyy" }}</span>
+        </div>
+
+      </div>
+
+      <div class="row mt-4">
+        <div class="col-md-8">
+          <h5>Cliente:</h5>
+          <div>
+            <select
+              class="form-select"
+              id="id_titular"
+              name="id_titular"
+              formControlName="id_titular"
+              (change)="onClienteSelected()"
+              [class.is-invalid]="id_titular.invalid && (id_titular.dirty || id_titular.touched)"
+            >
+              <option value="-1" [ngValue]="-1" selected>Seleccione...</option>
+              <option
+                *ngFor="let prov of clientes"
+                [value]="prov.id"
+                [ngValue]="prov.id"
+                >
+                {{ prov.razon_social }}
+              </option>
+            </select>
+            <div *ngIf="id_titular.invalid && (id_titular.dirty || id_titular.touched)" class="invalid-feedback">
+              <div *ngIf="id_titular.errors?.['required']">
+               Este campo es obligatorio
+              </div>
+   
+            </div>
+          </div>
+        </div>
+
+
+
+        <div class="col-md-4">
+          <h5>Fecha de ingreso:</h5>
+          <div>
+            <input
+              type="date"
+              class="form-control"
+              placeholder="Fecha factura"
+              id="fecha"
+              name="fecha"
+              formControlName="fecha"
+              [class.is-invalid]="fecha.invalid && (fecha.dirty || fecha.touched)"
+            />
+            <div *ngIf="fecha.invalid && (fecha.dirty || fecha.touched)" class="invalid-feedback">
+              <div *ngIf="fecha.errors?.['required']">
+               Este campo es obligatorio
+              </div>
+   
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-4">
+        <div class="col-md-8">
+          <div>
+            <input
+              type="text"
+              class="form-control"
+              name="rut"
+              placeholder="RUT"
+              formControlName="rut"
+              readonly
+              required
+            />
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div>
+            <input
+              type="text"
+              class="form-control"
+              name="direccion"
+              formControlName="direccion"
+              placeholder="Direccion"
+              readonly
+              required
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-4">
+        <div class="col-md-8">
+          <div class="mb-3">
+            <input
+              required
+              type="text"
+              class="form-control"
+              name="telefono_contacto"
+              formControlName="telefono_contacto"
+              placeholder="Telefono"
+              readonly
+            />
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="mb-3">
+            <input
+              required
+              type="text"
+              class="form-control"
+              name="email"
+              formControlName="email"
+              placeholder="Email"
+              readonly
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-4">
+        <div class="col-md-2">
+          <div class="mb-3">
+            <h5>Moneda:</h5>
+            <div>
+
+
+ 
+
+
+              <select
+                class="form-select"
+                type="number"
+                id="id_moneda"
+                name="id_moneda"
+                formControlName="id_moneda"
+                [class.is-invalid]="id_moneda.invalid && (id_moneda.dirty || id_moneda.touched)"
+              >
+              <option value="-1"  selected>Seleccione...</option>
+                <option
+                  *ngFor="let mon of monedas"
+                  [value]="mon.id"
+       
+       
+                >
+                  {{ mon.simbolo }}
+                </option>
+              </select>
+              <div *ngIf="id_moneda.invalid && (id_moneda.dirty || id_moneda.touched)" class="invalid-feedback">
+                <div *ngIf="id_moneda.errors?.['required']">
+                 Este campo es obligatorio
+                </div>
+     
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <h5>Importe vta:</h5>
+          <div class="mb-3">
+            <div class="row">
+
+              <div class="col-md-12">
+                <input
+                type="number"
+                  class="form-control"
+                  placeholder="Importe MO"
+                  id="importe_mo_general"
+                  name="importe_mo_general"
+                  formControlName="importe_mo_general"
+                  [class.is-invalid]="importe_mo_general.invalid && (importe_mo_general.dirty || importe_mo_general.touched)"
+                  
+                  />
+                  <div *ngIf="importe_mo_general.invalid && (importe_mo_general.dirty || importe_mo_general.touched)" class="invalid-feedback">
+                    <div *ngIf="importe_mo_general.errors?.['required']">
+                     Este campo es obligatorio
+                    </div>
+         
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col-md-2">
+          <div class="mb-3">
+            <h5>TC:</h5>
+            <div>
+              <input
+              type="number"
+                class="form-control"
+                placeholder="Tipo de cambio del dia"
+                id="tc"
+                name="tc"
+                formControlName="tc"
+                [class.is-invalid]="tc.invalid && (tc.dirty || tc.touched)"
+                readonly
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+
+          <div class="mb-3">
+            <h5>Lote de salida:</h5>
+    
+            <div>
+            
+              
+              <select
+                  class="form-select"
+                  id="nro_trans_ref"
+                  name="nro_trans_ref"
+                  formControlName="nro_trans_ref"
+                  (change)="onLoteSelected()"
+                  [class.is-invalid]="nro_trans_ref.invalid && (nro_trans_ref.dirty || nro_trans_ref.touched)"
+                  >
+                  <option value="-1" [ngValue]="-1" selected>Seleccione...</option>
+                  
+                  <option  *ngFor="let lot of lotes" 
+                  [value]="lot.nro_trans" [ngValue]="lot.nro_trans"  >
+                {{lot.nro_lote}}
+                  </option>
+              </select>
+            </div>      
+    
+          </div>
+        </div>
+
+
+        <div class="col-md-2">
+          <div class="mb-3">
+            <h5>Precio kilo 4ta:</h5>
+            <div>
+              <input
+              type="number"
+                class="form-control"
+                placeholder="Precio kilo 4ta balanza"
+                id="precio_unitario_general"
+                name="precio_unitario_general"
+                formControlName="precio_unitario_general"
+                [class.is-invalid]="precio_unitario_general.invalid && (precio_unitario_general.dirty || precio_unitario_general.touched)"
+                readonly
+              />
+            </div>
+          </div>
+        </div>
+        
+
+
+
+      </div>
+
+
+      
+      <div class="row mt-4">
+
+        
+              <div class="col-md-3">
+                <h5>Nro. romaneo</h5>
+                <div class="mb-3">
+                  <div class="row">
+      
+                    <div class="col-md-12">
+                      <input
+                      type="number"
+                        class="form-control"
+                        placeholder="Nro romaneo"
+                        id="nro_romaneo"
+                        name="nro_romaneo"
+                        formControlName="nro_romaneo"
+                        [class.is-invalid]="nro_romaneo.invalid && (nro_romaneo.dirty || nro_romaneo.touched)"
+                        
+                        />
+                        <div *ngIf="nro_romaneo.invalid && (nro_romaneo.dirty || nro_romaneo.touched)" class="invalid-feedback">
+                          <div *ngIf="nro_romaneo.errors?.['required']">
+                           Este campo es obligatorio
+                          </div>
+               
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-3">
+                <h5>Nro. tropa</h5>
+                <div class="mb-3">
+                  <div class="row">
+      
+                    <div class="col-md-12">
+                      <input
+                      type="number"
+                        class="form-control"
+                        placeholder="Nro. tropa"
+                        id="nro_tropa"
+                        name="nro_tropa"
+                        formControlName="nro_tropa"
+                        [class.is-invalid]="nro_tropa.invalid && (nro_tropa.dirty || nro_tropa.touched)"
+                        
+                        />
+                        <div *ngIf="nro_tropa.invalid && (nro_tropa.dirty || nro_tropa.touched)" class="invalid-feedback">
+                          <div *ngIf="nro_tropa.errors?.['required']">
+                           Este campo es obligatorio
+                          </div>
+               
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-3">
+                <h5>% Rendimiento</h5>
+                <div class="mb-3">
+                  <div class="row">
+      
+                    <div class="col-md-12">
+                      <input
+                      type="number"
+                        class="form-control"
+                        placeholder="Porcentaje rend"
+                        id="porcentaje_rendimiento"
+                        name="porcentaje_rendimiento"
+                        formControlName="porcentaje_rendimiento"
+                        [class.is-invalid]="porcentaje_rendimiento.invalid && (porcentaje_rendimiento.dirty || porcentaje_rendimiento.touched)"
+                        
+                        />
+                        <div *ngIf="porcentaje_rendimiento.invalid && (porcentaje_rendimiento.dirty || porcentaje_rendimiento.touched)" class="invalid-feedback">
+                          <div *ngIf="porcentaje_rendimiento.errors?.['required']">
+                           Este campo es obligatorio
+                          </div>
+               
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-3">
+                <h5>Cantidad de animales</h5>
+                <div class="mb-3">
+                  <div class="row">
+      
+                    <div class="col-md-12">
+                      <input
+                      type="number"
+                        class="form-control"
+                        placeholder="Cantidad animales"
+                        id="cantidad_animales"
+                        name="cantidad_animales"
+                        formControlName="cantidad_animales"
+                        [class.is-invalid]="cantidad_animales.invalid && (cantidad_animales.dirty || cantidad_animales.touched)"/>
+                        <div *ngIf="cantidad_animales.invalid && (cantidad_animales.dirty || cantidad_animales.touched)" class="invalid-feedback">
+                          <div *ngIf="cantidad_animales.errors?.['required']">
+                           Este campo es obligatorio
+                          </div>
+               
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+         
+      </div>
+
+
+
+      <div class="row mt-4">
+
+              <div class="col-md-3">
+                <h5>Kilos al salir</h5>
+                <div class="mb-3">
+                  <div class="row">
+      
+                    <div class="col-md-12">
+                      <input
+                      type="number"
+                        class="form-control"
+                        placeholder="Kilos al salir"
+                        id="cantidad_kilos_salida"
+                        name="cantidad_kilos_salida"
+                        formControlName="cantidad_kilos_salida"
+                        [class.is-invalid]="cantidad_kilos_salida.invalid && (nro_romaneo.dirty || nro_romaneo.touched)"
+                        
+                        />
+                        <div *ngIf="cantidad_kilos_salida.invalid && (nro_romaneo.dirty || cantidad_kilos_salida.touched)" class="invalid-feedback">
+                          <div *ngIf="cantidad_kilos_salida.errors?.['required']">
+                           Este campo es obligatorio
+                          </div>
+               
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-3">
+                <h5>Kilos 1era balanza</h5>
+                <div class="mb-3">
+                  <div class="row">
+      
+                    <div class="col-md-12">
+                      <input
+                      type="number"
+                        class="form-control"
+                        placeholder="Kilos al entrar 1era balanza"
+                        id="cantidad_kilos_declarados"
+                        name="cantidad_kilos_declarados"
+                        formControlName="cantidad_kilos_declarados"
+                        [class.is-invalid]="cantidad_kilos_declarados.invalid && (cantidad_kilos_declarados.dirty || cantidad_kilos_declarados.touched)"
+                        (input)="itemsChangedKilos()"
+                        />
+                        <div *ngIf="cantidad_kilos_declarados.invalid && (cantidad_kilos_declarados.dirty || cantidad_kilos_declarados.touched)" class="invalid-feedback">
+                          <div *ngIf="cantidad_kilos_declarados.errors?.['required']">
+                           Este campo es obligatorio
+                          </div>
+               
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-3">
+                <h5>Kilos 4ta balanza</h5>
+                <div class="mb-3">
+                  <div class="row">
+      
+                    <div class="col-md-12">
+                      <input
+                      type="number"
+                        class="form-control"
+                        placeholder="Kilos 4ta balanza"
+                        id="cantidad_kilos_cuarta_balanza"
+                        name="cantidad_kilos_cuarta_balanza"
+                        formControlName="cantidad_kilos_cuarta_balanza"
+                        [class.is-invalid]="cantidad_kilos_cuarta_balanza.invalid && (cantidad_kilos_cuarta_balanza.dirty || cantidad_kilos_cuarta_balanza.touched)"
+                        (input)="itemsChangedKilos()"
+                        />
+                        <div *ngIf="cantidad_kilos_cuarta_balanza.invalid && (cantidad_kilos_cuarta_balanza.dirty || cantidad_kilos_cuarta_balanza.touched)" class="invalid-feedback">
+                          <div *ngIf="cantidad_kilos_cuarta_balanza.errors?.['required']">
+                           Este campo es obligatorio
+                          </div>
+               
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+         
+      </div>
+
+
+
+      <div class="row mt-4">
+        <div class="col-md-12">
+          <div class="mb-3">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Observaciones"
+              id="observaciones"
+              name="observaciones"
+              formControlName="observaciones"
+              [class.is-invalid]="observaciones.invalid && (observaciones.dirty || observaciones.touched)"
+              
+            />
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <div [formGroup]="addForm">
+      <div class="table-responsive">
+        <table class="table table-hover table-bordered no-wrap align-middle">
+          <thead>
+            <tr>
+              <th class="border-bottom-0">#</th>
+              <th class="border-bottom-0">Articulo</th>
+              <th class="border-bottom-0"></th>
+              <th class="border-bottom-0">Caravana</th>
+              <th class="border-bottom-0">Peso salida</th>
+              <th class="border-bottom-0">Peso 1era</th>
+              <th class="border-bottom-0">Peso 4ta</th>
+            </tr>
+          </thead>
+          <tbody
+          formArrayName="item"
+          *ngFor="let a of addForm.get('item')?.controls; let i = index"
+        >
+          <tr [formGroupName]="i">
+              <td>
+                {{ i + 1 }}
+              </td>
+              <td>
+                <input
+                  type="text"
+                  class="form-control"
+              
+                  [id]="'txtCodArticuloControl' + i"
+                  formControlName="cod_articulo"
+                 
+
+
+                />
+              </td>
+              <td>
+                <input
+                  type="text"
+                  class="form-control"
+                  
+                  
+                  [id]="'txtNomArticuloControl' + i"
+                  formControlName="nom_articulo"                 
+                />
+              </td>              
+              <td>
+                <input
+                  type="text"
+                  class="form-control"
+                  
+                
+                  [id]="'txtCodIdentidadControl' + i"
+                  formControlName="cod_identidad"
+                />
+              </td>   
+
+              <td>
+                <input
+                  type="number"
+                  class="form-control"
+                  min="1"
+           
+                  [id]="'txtPesoSalidaControl' + i"
+                  formControlName="peso_salida"                  
+                  
+                />
+              </td>
+
+              <td>
+                <input
+                  type="number"
+                  class="form-control"
+                  min="1"
+             
+                  [id]="'txtPesoPrimeraControl' + i"
+                  formControlName="peso_primera"                  
+                />
+              </td>
+              <td>
+                <input
+                  type="number"
+                  class="form-control"
+                  min="1"
+                
+                  [id]="'txtPesoCuartaControl' + i"
+                  formControlName="peso_cuarta"                   
+                />
+                
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="text-end">
+
+
+        <div class="border-top mt-3 pt-3">
+          <h5><span>Sub total </span> : {{ importe_mo  | number : "1.1-2"}}</h5>
+        </div>
+        <div class="border-top mt-3 pt-3">
+          <h5>Iva:</h5>
+          <div class="row justify-content-end">
+            <div class="col-lg-2 col-md-4">
+              <div class="input-group mb-3">
+                <input type="number" class="form-control" value="22" />
+                <span class="input-group-text">%</span>
+                <span class="input-group-text bg-white font-medium">
+                  {{ importe_iva_mo | number : "1.1-2" }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr />
+        <h3><span class="fw-bold me-2">Total:</span>${{ importe_total_mo  | number : "1.1-2"}}</h3>
+      </div>
+    </div>
+  </div>
+</div>

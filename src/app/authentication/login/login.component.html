@@ -1,0 +1,135 @@
+
+
+
+
+
+
+
+
+
+<div class="auth-wrapper d-flex no-block justify-content-center align-items-center" style="background:url(assets/images/background/login-register.jpg) no-repeat center center;">
+    <div class="auth-box m-3 m-md-0">
+        <div id="loginform" [ngClass]="{'d-block': loginform}">
+
+            <!-- Form -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="text-center">
+                        <span class="db"><img src="assets/images/logo-icon.png" alt="logo" /></span>
+                        <h5 class="font-medium mb-4">Login a Ganao</h5>
+                    </div>
+                    <form class="form-horizontal mt-3" id="loginForm2"
+                    autocomplete="off"
+                    [formGroup]="loginForm" (ngSubmit)="loginUsuario()">
+                        <div class="input-group mb-3"> 
+                                <span class="input-group-text" id="basic-addon1"><i class="ti-user"></i></span>
+                                <input type="email" class="form-control form-control-lg" placeholder="Email" aria-label="Email"
+                                aria-describedby="basic-addon1" #u1 formControlName="email" required>
+                        </div>
+                        <div class="input-group mb-3"> 
+                                <span class="input-group-text" id="basic-addon2"><i class="ti-pencil"></i></span>
+                                <input type="password" class="form-control form-control-lg" placeholder="Password" aria-label="Password"
+                                aria-describedby="basic-addon1" #p2 formControlName="hash" required>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="customCheck1" formControlName="remember">
+                                    <label class="form-check-label" for="customCheck1">Recordar</label><br>
+                         
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <div class="form-check">
+                                    
+                                    <a (click)="showRecoverForm()" href="javascript:void(0)" id="to-recover" class="text-dark float-end"><i
+                                    class="fa fa-lock me-1"></i> Olvidaste contrasena?</a>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="form-group text-center mt-3">
+                            <div class="col-xs-12">
+                                <button class="btn d-block w-100 btn-lg btn-info" type="submit">Ingresar</button>
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-xs-12 col-sm-12 col-md-12 mt-2 text-center">
+                                <div class="social">
+                                    <a href="javascript:void(0)" class="btn btn-danger" data-toggle="tooltip" title="" data-original-title="Login with Google"> 
+                                        <i aria-hidden="true" class="fab fa-google-plus-g"></i> </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group mb-0 mt-2">
+                            <div class="col-sm-12 text-center">
+                                No tenes cuenta? <a [routerLink]="['/authentication/signup']" class="text-info ms-1"><b>Registro</b></a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div id="recoverform" [ngClass]="{'d-none': recoverform}">
+
+            <div class="row mt-3">
+                <!-- Form -->
+                <form class="form-horizontal mt-3" id="recoverForm"
+                autocomplete="off"
+                [formGroup]="recoverForm" (ngSubmit)="recoverUsuario()">
+                    <div class="text-center">
+                        <span class="db"><img src="assets/images/logo-icon.png" alt="logo" /></span>
+                        <h5 class="font-medium mb-4">Recupero password</h5>
+                    </div>
+                    <!-- email -->
+                    <div class="input-group mb-3"> 
+                        <span class="input-group-text" id="basic-addon1"><i class="ti-user"></i></span>
+                        <input type="email" class="form-control form-control-lg" placeholder="Email" aria-label="Email"
+                        aria-describedby="basic-addon1" #u1 formControlName="email" required>
+                </div>
+                    <!-- pwd -->
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            
+                            <button class="btn d-block w-100 btn-lg btn-danger" type="submit" name="action">Resetear</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+
+        <div id="seleccionarempresaform" [ngClass]="{'d-none':  !seleccionarempresaform}">
+
+            <div class="row mt-3">
+                <!-- Form -->
+                <form class="form-horizontal mt-3" id="seleccionarEmpresaForm"
+                autocomplete="off"
+                [formGroup]="seleccionarEmpresaForm">
+                    <div class="text-center">
+                        <span class="db"><img src="assets/images/logo-icon.png" alt="logo" /></span>
+                        <h5 class="font-medium mb-4">Seleccione empresa</h5>
+                    </div>
+                    <div class="mb-3 row">
+                        <div class="col-12 ">
+                            <select class="form-control" formControlName="id_empresa" (change)="seleccionarEmpresa($event)">
+                                <option value="">Seleccione una empresa</option>
+                                <option *ngFor="let empresa of empresas" [value]="empresa.id">{{ empresa.nombre }}</option>
+                              </select>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+
+
+    </div>
+</div>

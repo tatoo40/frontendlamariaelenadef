@@ -1,0 +1,83 @@
+<div class="card">
+
+    <!-- card Header-->
+    <div class="p-3">
+        <div class="d-md-flex align-items-center">
+            <div class="btn-group">
+                <a routerLink='/administracion/facturaProveedor'
+                    class="btn btn-default bg-white text-info d-flex align-items-center shadow-sm me-2">
+                    <i class="mdi mdi-chevron-left fs-6 me-1"></i> <span>Volver</span>
+                </a>
+   
+            </div>
+            <div class="ms-auto mt-3 mt-md-0">
+                <h4 class="mb-0">Factura: #{{invoiceDetail.serie_fact_prov}}-{{invoiceDetail.nro_fact_prov}}</h4>
+            </div>
+        </div>
+    </div>
+
+    <!-- card Body-->
+    <div class="card-body">
+        <div class="row">
+
+            <div class="col-md-6 text-start text-md-right">
+                <h5 class="mt-2">Fecha fact. prov.:</h5>
+                <span>
+                    <i class="mdi mdi-calendar me-1 text-dark fs-5"></i>
+                    {{invoiceDetail.fecha| date:'fullDate'}}
+                </span>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-md-6 text-start">
+                <h5>Proveedor:</h5>
+                <span>{{ invoiceDetail.id_titular }} - {{ invoiceDetail.nombre_fantasia }}</span>
+                <span class="d-block">{{ invoiceDetail.rut }}</span>
+                <span class="d-block">{{ invoiceDetail.direccion }}</span>
+                <span class="d-block">{{ invoiceDetail.email }}</span>
+            </div>
+            <div class="col-md-6 text-start">
+                <h5>Mas datos:</h5>
+                <span>Factura prov:{{ invoiceDetail.serie_fact_prov }}/{{ invoiceDetail.nro_fact_prov }}</span>
+                <span class="d-block">Moneda: {{ invoiceDetail.simbolo_moneda }}</span>
+                <span class="d-block">Nro trans. afectado {{ invoiceDetail.nro_trans_ref }}</span>
+                <span class="d-block">Costeo: {{invoiceDetail.afecta_costo}}</span>
+            </div>
+        </div>
+        <div class="mt-4">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover no-wrap align-middle">
+                    <thead>
+                        <tr>
+                            <th class="border-bottom-0">Articulo/Servicio</th>
+                            <th class="border-bottom-0 text-center">Precio Un.</th>
+                            <th class="border-bottom-0 text-center">Cantidad</th>
+                            <th class="border-bottom-0 text-info text-center">Importe</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngFor="let order of invoiceDetail.orders">
+                        <tr>
+                            <td>{{ order.cod_articulo }} - {{ order.nom_articulo }} </td>
+                            <td class="text-center">{{ order.precio_unitario }} </td>
+                            <td class="text-center">{{ order.cantidad }}</td>
+                            <td class="text-center">{{ order.importe_mo }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <div class="text-end mt-4">
+            <h5><span>Importe: $</span> {{invoiceDetail.importe_mo}}</h5>
+            <h5><span>Importe iva excento: $</span>{{invoiceDetail.importe_iva_excento_mo}}</h5>
+            <h5><span>Importe iva minimo: $</span>{{invoiceDetail.importe_iva_minimo_mo}}</h5>
+            <h5><span>Importe iva basico: $</span>{{invoiceDetail.importe_iva_basico_mo}}</h5>
+            <hr />
+            <h3><span class="fw-bold me-2">Total:</span>${{invoiceDetail.importe_total_mo}} </h3>
+        </div>
+    </div>
+
+
+</div>

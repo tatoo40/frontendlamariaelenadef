@@ -1,0 +1,42 @@
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Mi Ganado</h4>
+        <h5 class="card-subtitle">Animales disponibles para visualizar o tomar acciones por animal</h5>
+
+        <google-map   
+          height="400px"
+          width="100%"
+          (mapClick)="addMarker($event)"
+          [options]="mapOptions">
+
+          <map-marker #markerElem="mapMarker" *ngFor="let marker of markers"
+            [position]="marker.position" [options]="markerOptions"
+            (mapClick)="openInfoWindow(markerElem, infoWindow,marker.label)" [title]="marker.title" [label]="marker.label">
+          </map-marker>
+
+          <map-info-window #infoWindow="mapInfoWindow">
+            <div class="card">
+              <div class="card-body">
+                <h2>{{ currentMarkerTitle }}</h2>
+                <table class="table align-middle fs-3 mb-0">
+                  <tbody>
+                    <tr *ngFor="let ganado of DatoDetailSector">
+
+                   
+                      <ng-container *ngIf="ganado.codigo_sector ===currentMarkerCodigoSector">
+                        <td>{{ ganado.nombre_articulo }}</td>
+                        <td class="text-end font-medium">{{ ganado.cantidad }} Un.</td>
+                      </ng-container>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </map-info-window>
+        </google-map>
+      </div>
+    </div>
+  </div>
+</div>

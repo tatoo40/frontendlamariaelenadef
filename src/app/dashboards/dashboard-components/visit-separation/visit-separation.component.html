@@ -1,0 +1,24 @@
+<div class="row">
+    <div class="col-lg-4 col-md-12" *ngFor="let sector of DatoSector">
+   
+      <ng-container *ngIf="parseCodigoSectorToInt(sector.codigo_sector) !== 7">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title"><span class="lstick"></span>{{ sector.nombre_sector }}</h4>
+  
+            <table class="table align-middle fs-3 mb-0">
+              <tbody>
+                <tr *ngFor="let ganado of DatoDetailSector">
+                  <ng-container *ngIf="ganado.codigo_sector === sector.codigo_sector">
+                    <td>{{ ganado.nombre_articulo }}</td>
+                    <td class="text-end font-medium">{{ ganado.cantidad }} Un.</td>
+                  </ng-container>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+  

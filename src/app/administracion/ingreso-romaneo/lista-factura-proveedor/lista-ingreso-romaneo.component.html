@@ -1,0 +1,92 @@
+<div class="card mb-0">
+    <div class="card-body">
+        <div class="d-md-flex align-items-center">
+            <div class="form-group mb-0">
+                <input type="text" placeholder="Buscar Romaneo o tropa" class="form-control" [(ngModel)]='searchTerm'>
+            </div>
+            <div class="ms-auto mt-4 mt-md-0">
+                <a routerLink='/administracion/agregarRomaneo'>
+                    <button type="button" class="btn btn-info"> <i class="me-2 mdi mdi-plus"></i> Agregar</button>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card pt-3">
+    <div class="table-responsive">
+        <table class="table table-borderless table-hover align-middle no-wrap">
+            <thead>
+                <tr class="border-bottom">
+                    <th scope="col">
+                        <input type="checkbox" [(ngModel)]="isMasterSel" name="list_name" value="h1"
+                            (change)="checkUncheckAll()" />
+                    </th>
+                    <th scope="col">Nro trans</th>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Cliente</th>
+                    <th scope="col">Nro Romaneo / tropa</th>
+                    <th scope="col">Cant animales</th>
+                    <th scope="col">Kilos declarados</th>
+                    <th scope="col">Kilos 4ta bal</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="border-bottom "
+                    *ngFor="let romaneo of compRomaneo|slice: (page-1) * pageSize : (page-1) * pageSize + pageSize; index as i">
+
+                    <td class="py-4">
+                        <input type="checkbox" [(ngModel)]="romaneo.isSelected" name="list_name" value="{{romaneo.id}}"
+                            (change)="isAllSelected()" />
+                    </td>
+                    <td class="py-4">{{ romaneo.nro_trans }}  </td>
+                    <td class="py-4">{{ romaneo.fecha  | date : "dd/MM/yyyy"  }}  </td>
+
+                    <td class="py-4">
+                        <ngb-highlight [result]="romaneo.nombre_fantasia" [term]="searchTerm"></ngb-highlight>
+                    </td>
+
+                
+                    <td class="py-4">
+                    
+                        <ngb-highlight [result]="romaneo.nro_romaneo | number" [term]="searchTerm"></ngb-highlight>
+                    </td>
+                    <td class="py-4">
+                    
+                        <ngb-highlight [result]="romaneo.cantidad_animales | number" [term]="searchTerm"></ngb-highlight>
+                    </td>
+                    <td class="py-4">
+                    
+                        <ngb-highlight [result]="romaneo.cantidad_kilos_declarados | number" [term]="searchTerm"></ngb-highlight>
+                    </td>
+                    <td class="py-4">
+                        
+                        <ngb-highlight [result]="romaneo.cantidad_kilos_cuarta_balanza | number" [term]="searchTerm"></ngb-highlight>
+                    </td>
+
+                    <td class="py-4">
+                        <!-- <a routerLink='/apps/viewinvoice/'>View</a> -->
+
+                        <a [routerLink]="['/administracion/verIngresoRomaneo/',romaneo.id]" class="text-info mx-2">
+                            <i-feather name="eye" class="feather-sm"></i-feather>
+                        </a>
+
+                        <a href="javascript:void(0)" class="text-danger mx-2 ps-3 border-start"
+                            (click)="deleteRomaneo(romaneo.id)">
+                            <i-feather name="trash-2" class="feather-sm"></i-feather>
+                        </a>
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="card-body">
+        <div class="d-flex justify-content-center">
+            <ngb-pagination [(page)]="page" [pageSize]="pageSize" [collectionSize]="totalLengthOfCollection">
+            </ngb-pagination>
+        </div>
+    </div>
+
+</div>

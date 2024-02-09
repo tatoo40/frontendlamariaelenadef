@@ -1,0 +1,117 @@
+
+
+<div class="auth-wrapper d-flex no-block justify-content-center align-items-center" style="background:url(assets/images/background/login-register.jpg) no-repeat center center;">
+    <div class="auth-box on-sidebar m-3 m-md-0">
+        <div>
+            <div class="text-center">
+                <span class="db"><img src="assets/images/logo-icon.png" alt="logo" /></span>
+                <h5 class="font-medium mb-4">Solicita el registro de tu empresa en GANAO</h5>
+
+       
+
+
+            </div>
+            <!-- Form -->
+            <div class="row">
+                <div class="col-12">
+                    <form class="form-horizontal form-material" 
+                    id="registerform" 
+                    autocomplete="off"
+                    [formGroup]="registerForm"
+                    (ngSubmit)="crearEmpresa()">
+
+                        <div class="mb-3 row">
+                            <div class="col-12 ">
+                        <input class="form-control" type="text"  
+                        placeholder="Nombre de la empresa"
+                        formControlName="nombre">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <div class="col-12 ">
+                        <input class="form-control" type="text"  
+                        placeholder="Razon social"
+                        formControlName="razon_social">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <div class="col-12 ">
+                        <input class="form-control" type="text"  
+                        placeholder="RUT"
+                        formControlName="rut">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <div class="col-12 ">
+                                <input class="form-control" type="email"  
+                                placeholder="Direccion fiscal"
+                                formControlName="direccion">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <div class="col-12 ">
+                                <input class="form-control" type="email"  
+                                placeholder="Correo de contacto"
+                                formControlName="email_contacto">
+                            </div>
+                        </div>
+
+                        <div class="mb-3 row">
+                            <div class="col-12 ">
+                                <input class="form-control" type="email"  
+                                placeholder="Telefono de contacto"
+                                formControlName="telefono_contacto">
+                            </div>
+                        </div>
+
+
+                    
+
+
+                        <div class="mb-3 row">
+                            <div class="col-md-12 ">
+                                <div class="form-check">
+
+
+                                
+
+                                    <input id="checkbox-signup" type="checkbox" class="form-check-input" formControlName="terminos">
+                                    <label for="checkbox-signup"  class="form-check-label"> Estoy de acuerdo con los <a href="#">terminos y condiciones</a></label>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col text-danger">
+                                <p *ngIf="campoNoValido('nombre')">El nombre es obligatorio</p>
+                                <p *ngIf="campoNoValido('razon_social')">La razon social es obligatoria</p>
+                                <p *ngIf="campoNoValido('rut')">El rut es obligatorio y tiene que ser valido</p>
+                                <p *ngIf="campoNoValido('direccion')">La direccion es obligatoria</p>
+                                <p *ngIf="campoNoValido('email_contacto')">El correo es obligatorio y tiene que ser valido</p>
+                                <p *ngIf="campoNoValido('telefono_contacto')">El telefono de contacto es obligatorio</p>
+                                <p *ngIf="aceptaTerminos()">Debe aceptar los terminos y condiciones</p>
+                        
+                        
+        
+                            </div>
+                        </div>
+
+
+
+                        <div class="mb-3 text-center ">
+                            <div class="col-xs-12 mb-4">
+                                <button class="btn btn-info btn-lg btn-block waves-effect waves-light" type="submit">Solicitar registro</button>
+                            </div>
+                        </div>
+                        <div class="mb-3 mb-0 mt-2 ">
+                            <div class="col-sm-12 text-center ">
+                    
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,244 @@
+<div class="row">
+  <div class="col-12">
+    <div class="card card-body">
+      <h4 class="card-title">{{ nombreSeccion   | titlecase }}</h4>
+      <h5 class="card-subtitle">Lista de {{ nombreSeccion  }}.</h5>
+
+
+      <form  [formGroup]="filtrosForm" novalidate class="editForm">
+      <div class="d-flex justify-content-between mb-3 mt-3">
+    
+        <div class="form-group flex-fill mx-3">
+          <label for="exampleInputPassword1">Tipo de artículo</label>
+          <select name="id_tipo_articulo" class="form-select mr-sm-2" 
+          formControlName="id_tipo_articulo" [(ngModel)]='id_tipo_articulo' (change)="aplicaFiltros()">
+            <option value="-1">Seleccione...</option>
+            <option  *ngFor="let tipoart of tiposArticulo" 
+            [value]="tipoart.id" [selected]="tipoart.id ==1" >
+          {{tipoart.descripcion}}
+            </option>
+
+            </select>
+        </div>
+      
+
+      
+        <div class="form-group flex-fill mx-3" *ngIf="filtrosForm.get('id_tipo_articulo').value === '1'">
+          <label for="exampleInputPassword1">Categoria ganado</label>
+          <select name="codigo_categoria_ganado" class="form-select mr-sm-2" 
+          formControlName="codigo_categoria_ganado" [(ngModel)]='codigo_categoria_ganado' (change)="aplicaFiltros()">
+            <option value="-1">Seleccione...</option>
+            <option  *ngFor="let categoria of categoriaGanado" 
+            [value]="categoria.id" [selected]="categoria.id ==1" >
+          {{categoria.descripcion}}
+            </option>
+
+            </select>
+        </div>
+      
+        <div class="form-group flex-fill mx-3" *ngIf="filtrosForm.get('id_tipo_articulo').value === '1'">
+          <label for="exampleInputPassword1">Agrupación</label>
+          <select name="agrupacion" class="form-select mr-sm-2" formControlName="agrupacion" [(ngModel)]='agrupacion' (change)="aplicaFiltros()">
+            <option value="-1">Seleccione...</option>
+            <option value="articulo">Articulo</option>
+            <option value="sector">Sector</option>
+            <option value="lote">Lote</option>
+            <option value="caravana">Caravana</option>
+          </select>
+        </div>
+   
+        <div class="form-group flex-fill mx-3" *ngIf="filtrosForm.get('id_tipo_articulo').value === '1' && filtrosForm.get('agrupacion').value !== 'articulo'">
+          <label for="exampleInputPassword1">Sector</label>
+          <select name="codigo_sector" class="form-select mr-sm-2" 
+          formControlName="codigo_sector" [(ngModel)]='codigo_sector' (change)="aplicaFiltros()"> 
+            <option value="-1">Seleccione...</option>
+            <option  *ngFor="let sec of sectores" 
+            [value]="sec.id" [selected]="sec.id ==1" >
+          {{sec.nombre}}
+            </option>
+
+            </select>
+        </div>
+      </div>
+      
+    </form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <div class="d-flex mb-3 mt-3">
+        <input type="text" class="form-control w-25" placeholder="Buscar por nombre" [(ngModel)]='searchTerm'>
+        <div class="ms-auto mt-3 mt-md-0">
+          <!-- No. of  Contacts-->
+          <a href="javascript:void(0)" class="d-flex align-items-center p-2 rounded-pill bg-light">
+  
+              <h5 class="mb-0 me-1 text-dark fw-bold fs-3"> Total unidades
+              </h5>
+              <span *ngIf='filterArray'
+                  class="badge bg-danger badge-pill px-3 fw-bold fs-3">{{filterArray.length}}</span>
+          </a>
+      </div>
+
+            <div class="ms-auto mt-3 mt-md-0">
+              <!-- No. of  Contacts-->
+              <a href="javascript:void(0)" class="d-flex align-items-center p-2 rounded-pill bg-light">
+
+                  <h5 class="mb-0 me-1 text-dark fw-bold fs-3"> Total kilos
+                  </h5>
+                  <span *ngIf='filterArray'
+                      class="badge bg-danger badge-pill px-3 fw-bold fs-3">{{ sumarKilos() }}</span>
+              </a>
+          </div>
+
+
+      </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <div class="table-responsive table-bordered" *ngIf="filtrosForm.get('agrupacion').value === 'caravana'">
+        <table class="table table-striped mb-0 no-wrap align-middle">
+          <thead>
+            <tr>
+              <th scope="col">Cod. Articulo</th>
+              <th scope="col"></th>            
+              <th scope="col">Nro. lote</th>
+              <th scope="col">Caravana</th>
+              <th scope="col">Sector</th>  
+              <th scope="col">Unidades</th>  
+              <th scope="col">Kilos</th> 
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let dato of filterArray | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
+       
+            
+
+              <td>{{ dato.codigo_articulo }}</td>
+              <td>{{ dato.nombre_articulo }}</td>
+              <td>{{ dato.nro_lote }}</td>
+              <td>{{ dato.cod_identidad }}</td>
+              <td>{{dato.nombre_sector }}</td>
+              <td>{{ dato.cantidad}} {{dato.descripcion_corta}} </td>
+              <td>{{ dato.kilos}} Kg.</td>   
+   
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-responsive table-bordered" *ngIf="filtrosForm.get('agrupacion').value === 'lote'">
+        <table class="table table-striped mb-0 no-wrap align-middle">
+          <thead>
+            <tr>
+              <th scope="col">Cod. Articulo</th>
+              <th scope="col"></th>            
+              <th scope="col">Nro. lote</th>
+              <th scope="col">Sector</th>  
+              <th scope="col">Unidades</th>  
+              <th scope="col">Kilos</th> 
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let dato of filterArray | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
+       
+            
+
+              <td>{{ dato.codigo_articulo }}</td>
+              <td>{{ dato.nombre_articulo }}</td>
+              <td>{{ dato.nro_lote }}</td>
+              <td>{{dato.nombre_sector }}</td>
+              <td>{{ dato.cantidad}} {{dato.descripcion_corta}} </td>
+              <td>{{ dato.kilos}} Kg.</td>   
+   
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-responsive table-bordered" *ngIf="filtrosForm.get('agrupacion').value === 'articulo'">
+        <table class="table table-striped mb-0 no-wrap align-middle">
+          <thead>
+            <tr>
+              <th scope="col">Cod. Articulo</th>
+              <th scope="col"></th>            
+              <th scope="col">Unidades</th>  
+              <th scope="col">Kilos</th> 
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let dato of filterArray | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
+       
+            
+
+              <td>{{ dato.codigo_articulo }}</td>
+              <td>{{ dato.nombre_articulo }}</td>
+              <td>{{ dato.cantidad}} {{dato.descripcion_corta}} </td>
+              <td>{{ dato.kilos}} Kg.</td>   
+   
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+
+      <div class="table-responsive table-bordered" *ngIf="filtrosForm.get('agrupacion').value === 'sector'">
+        <table class="table table-striped mb-0 no-wrap align-middle">
+          <thead>
+            <tr>
+              <th scope="col">Cod. Articulo</th>
+              <th scope="col"></th>            
+              <th scope="col">Sector</th>  
+              <th scope="col">Unidades</th>  
+              <th scope="col">Kilos</th> 
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let dato of filterArray | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
+       
+            
+
+              <td>{{ dato.codigo_articulo }}</td>
+              <td>{{ dato.nombre_articulo }}</td>
+              <td>{{dato.nombre_sector }}</td>
+              <td>{{ dato.cantidad}} {{dato.descripcion_corta}} </td>
+              <td>{{ dato.kilos}} Kg.</td>   
+   
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+ 
+
+      <div class="d-flex justify-content-center mt-5">
+        <ngb-pagination [(page)]="page" [pageSize]="pageSize" [collectionSize]="filterArray.length"></ngb-pagination>
+      </div>
+    </div>
+  </div>
+</div>
+
+

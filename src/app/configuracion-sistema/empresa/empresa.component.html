@@ -1,0 +1,213 @@
+<div class="row">
+  <div class="col-12">
+    <div class="card card-body">
+      <h4 class="card-title">{{ nombreSeccion   | titlecase }}</h4>
+      <h5 class="card-subtitle">Lista de {{ nombreSeccion  }}.</h5>
+      <div class="d-flex mb-3 mt-3">
+        <input type="text" class="form-control w-25" placeholder="Buscar por nombre" [(ngModel)]='searchTerm'>
+    
+      </div>
+      <div class="table-responsive table-bordered">
+        <table class="table table-striped mb-0 no-wrap align-middle">
+          <thead>
+            <tr>
+              <th class="text-center" scope="col">#</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Razon social</th>
+    
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let dato of filterArray | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
+       
+            
+              <td class="text-center">
+                {{dato.id}}
+              </td>
+
+              <td>{{ dato.nombre }}</td>
+         
+              <td>{{ dato.razon_social }}</td>
+           
+     
+              <td>
+                <a href="javascript: void(0);" (click)="chequeoApertura(3,editDatoModal, dato)" class="link me-2"
+                  placement="top" ngbTooltip="Edit">
+                  <!-- <i class="far fa-edit"></i> -->
+                  <i-feather name="edit-2" class="feather-sm"></i-feather>
+                </a>
+
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="d-flex justify-content-center mt-5">
+        <ngb-pagination [(page)]="page" [pageSize]="pageSize" [collectionSize]="filterArray.length"></ngb-pagination>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #editDatoModal let-modal>
+
+  <div class="modal-header">
+
+    <h5 class="modal-title" id="editUserLabel">Agregar</h5>
+
+    <button type="button" class="close" (click)="closeBtnClick()" aria-label="Close">
+    </button>
+
+  </div>
+
+  <div class="modal-body">
+
+    <form [formGroup]="editDato" (ngSubmit)="onSubmit()">
+
+
+
+      <div class="mb-3 row">
+        <label for="nombre" class="col-sm-4 col-form-label">Nombre</label>
+        <div class="col-sm-8">
+          <input
+            type="text"
+            class="form-control"
+            formControlName="nombre"
+            id="nombre"
+            [ngClass]="{ 'is-invalid': submitted && f['nombre'].errors }"
+          />
+          <div *ngIf="submitted && f['nombre'].errors" class="invalid-feedback">
+            <div *ngIf="f['nombre'].errors['required']">Nombre es obligatorio</div>
+      
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3 row">
+        <label for="razon_social" class="col-sm-4 col-form-label">Razon social</label>
+        <div class="col-sm-8">
+          <input
+            type="text"
+            class="form-control"
+            formControlName="razon_social"
+            id="razon_social"
+            [ngClass]="{ 'is-invalid': submitted && f['razon_social'].errors }"
+          />
+          <div *ngIf="submitted && f['razon_social'].errors" class="invalid-feedback">
+            <div *ngIf="f['razon_social'].errors['required']">Razon social es obligatorio</div>
+      
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3 row">
+        <label for="rut" class="col-sm-4 col-form-label">RUT</label>
+        <div class="col-sm-8">
+          <input
+            type="text"
+            class="form-control"
+            formControlName="rut"
+            id="rut"
+            [ngClass]="{ 'is-invalid': submitted && f['rut'].errors }"
+          />
+          <div *ngIf="submitted && f['rut'].errors" class="invalid-feedback">
+            <div *ngIf="f['rut'].errors['required']">RUT es obligatorio</div>
+      
+          </div>
+        </div>
+      </div>
+      
+      <div class="mb-3 row">
+        <label for="direccion" class="col-sm-4 col-form-label">Direccion</label>
+        <div class="col-sm-8">
+          <input
+            type="text"
+            class="form-control"
+            formControlName="direccion"
+            id="direccion"
+            [ngClass]="{ 'is-invalid': submitted && f['direccion'].errors }"
+          />
+          <div *ngIf="submitted && f['direccion'].errors" class="invalid-feedback">
+            <div *ngIf="f['direccion'].errors['required']">Direccion es obligatorio</div>
+      
+          </div>
+        </div>
+      </div>
+   
+      
+      <div class="mb-3 row">
+        <label for="email_contacto" class="col-sm-4 col-form-label">Email</label>
+        <div class="col-sm-8">
+          <input
+            type="text"
+            class="form-control"
+            formControlName="email_contacto"
+            id="email_contacto"
+            [ngClass]="{ 'is-invalid': submitted && f['email_contacto'].errors }"
+          />
+          <div *ngIf="submitted && f['direccion'].errors" class="invalid-feedback">
+            <div *ngIf="f['email_contacto'].errors['required']">Email de contacto es obligatorio</div>
+      
+          </div>
+        </div>
+      </div>
+
+
+      <div class="mb-3 row">
+        <label for="telefono_contacto" class="col-sm-4 col-form-label">Telefono</label>
+        <div class="col-sm-8">
+          <input
+            type="text"
+            class="form-control"
+            formControlName="telefono_contacto"
+            id="telefono_contacto"
+            [ngClass]="{ 'is-invalid': submitted && f['telefono_contacto'].errors }"
+          />
+          <div *ngIf="submitted && f['telefono_contacto'].errors" class="invalid-feedback">
+            <div *ngIf="f['telefono_contacto'].errors['required']">Telefono es obligatorio</div>
+      
+          </div>
+        </div>
+      </div>     
+      <div class="mb-3 row">
+        <label for="observaciones" class="col-sm-4 col-form-label">Observaciones</label>
+        <div class="col-sm-8">
+          <input
+            type="text"
+            class="form-control"
+            formControlName="observaciones"
+            id="observaciones"
+            [ngClass]="{ 'is-invalid': submitted && f['observaciones'].errors }"
+          />
+          <div *ngIf="submitted && f['observaciones'].errors" class="invalid-feedback">
+            <div *ngIf="f['observaciones'].errors['required']">Observaciones obligatorio</div>
+      
+          </div>
+        </div>
+      </div>   
+
+
+
+
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeBtnClick()"
+        >
+          Cerrar
+        </button>
+
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="editDato.invalid"
+        >
+          Guardar
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>

@@ -1,0 +1,167 @@
+<div class="row">
+  <div class="col-12">
+    <div class="card card-body">
+      <h4 class="card-title">Tipo de cambio diario</h4>
+      <h5 class="card-subtitle">Lista de tipo de cambio por fecha.</h5>
+      <div class="d-flex mb-3 mt-3">
+        <input type="text" class="form-control w-25" placeholder="Buscar por fecha" [(ngModel)]='searchTerm'>
+        <button class="btn btn-primary ms-auto" (click)="chequeoApertura(1,editTipoCambioModal, null)">Agregar TC</button>
+      </div>
+      <div class="table-responsive table-bordered">
+        <table class="table table-striped mb-0 no-wrap align-middle">
+          <thead>
+            <tr>
+              <th class="text-center" scope="col">#</th>
+              <th scope="col">Fecha</th>
+              <th scope="col">Moneda</th>
+              <th scope="col">Tipo de cambio</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let tipoCambio of filterArray | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
+       
+            
+              <td class="text-center">
+                {{tipoCambio.id}}
+              </td>
+
+              <td>{{ tipoCambio.fecha | date :'fullDate' }}</td>
+              <td>{{ tipoCambio.id_moneda }}</td>
+
+              <td>{{ tipoCambio.valor }}</td>
+              
+
+     
+              <td>
+                <a href="javascript: void(0);" (click)="chequeoApertura(3,editTipoCambioModal, tipoCambio)" class="link me-2"
+                  placement="top" ngbTooltip="Edit">
+                  <!-- <i class="far fa-edit"></i> -->
+                  <i-feather name="edit-2" class="feather-sm"></i-feather>
+                </a>
+                <a href="javascript: void(0);" class="link" (click)="deleteTipoCambio(3,tipoCambio.id)" placement="top"
+                  ngbTooltip="Delete">
+                  <i-feather name="trash-2" class="feather-sm"></i-feather>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="d-flex justify-content-center mt-5">
+        <ngb-pagination [(page)]="page" [pageSize]="pageSize" [collectionSize]="filterArray.length"></ngb-pagination>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #editTipoCambioModal let-modal>
+
+  <div class="modal-header">
+
+    <h5 class="modal-title" id="editUserLabel">Agregar TC</h5>
+
+    <button type="button" class="close" (click)="closeBtnClick()" aria-label="Close">
+    </button>
+
+  </div>
+
+  <div class="modal-body">
+
+    <form [formGroup]="editTipoCambioDiario" (ngSubmit)="onSubmit()">
+
+
+
+      <div class="mb-3 row">
+        <label for="fecha" class="col-sm-4 col-form-label">Fecha</label>
+        <div class="col-sm-8">
+          <input
+            type="date"
+            class="form-control"
+            formControlName="fecha"
+            [(ngModel)]="fecha"
+            id="fecha"
+            [ngClass]="{ 'is-invalid': submitted && f['fecha'].errors }"
+          />
+          <div
+            *ngIf="submitted && f['fecha'].errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['fecha'].errors['required']">
+              La fecha es obligatoria
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="mb-3 row">
+        <label for="position" class="col-sm-4 col-form-label">Moneda</label>
+        <div class="col-sm-8">
+
+
+          <select name="id_moneda" class="form-select mr-sm-2" formControlName="id_moneda" id="id_moneda"
+          [ngClass]="{ 'is-invalid': submitted && f['id_moneda'].errors }"  >
+            <option value="-1" [ngValue]="-1">Seleccione...</option>
+            <option  *ngFor="let moneda of monedas" 
+            [value]="moneda.id" [ngValue]="moneda.id"  >
+          {{moneda.simbolo}}
+            </option>
+
+            
+          </select>  
+
+
+
+
+          <div
+            *ngIf="submitted && f['id_moneda'].errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['id_moneda'].errors['required']">
+              La moneda es obligatoria
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3 row">
+        <label for="email" class="col-sm-4 col-form-label">Valor</label>
+        <div class="col-sm-8">
+          <input
+            type="valor"
+            class="form-control"
+            formControlName="valor"
+            id="valor"
+            [ngClass]="{ 'is-invalid': submitted && f['valor'].errors }"
+          />
+          <div *ngIf="submitted && f['valor'].errors" class="invalid-feedback">
+            <div *ngIf="f['valor'].errors['required']">Valor es obligatorio</div>
+      
+          </div>
+        </div>
+      </div>
+
+    
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeBtnClick()"
+        >
+          Cerrar
+        </button>
+
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="editTipoCambioDiario.invalid"
+        >
+          Guardar
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>

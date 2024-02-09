@@ -1,0 +1,207 @@
+<div class="card card-body">
+  <form #invoiceForm="ngForm">
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <h4 class="mb-0">
+          Invoice Id : #
+          <span name="id" [(ngModel)]="invoice.id" ngDefaultControl>
+            {{ invoice.id }}</span
+          >
+        </h4>
+      </div>
+      <div class="col-md-6 mt-3 mt-md-0">
+        <div class="row justify-content-end">
+          <div class="col-lg-3 col-md-4 col-6">
+            <a
+              routerLink="/apps/invoice"
+              class="btn btn-outline-danger shadow-sm font-medium d-block w-100"
+            >
+              Cancel
+            </a>
+          </div>
+          <div class="col-lg-3 col-md-4 col-6">
+            <button
+              type="button"
+              class="btn btn-outline-success shadow-sm font-medium d-block w-100"
+              (click)="saveDetail()"
+            >
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex align-items-center border-top pt-3 pb-3 border-bottom">
+
+      <div class="ms-auto">
+        <h5>Fecha factura prov</h5>
+        <span name="date" [(ngModel)]="invoice.fecha" ngDefaultControl>{{
+          invoice.fecha | date : "dd-MM-yyyy"
+        }}</span>
+      </div>
+    </div>
+
+    <div class="row mt-4">
+      <div class="col-md-6">
+        <div class="mb-3">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Proveedor"
+            name="cod_titular"
+            [(ngModel)]="invoice.id_titular"
+          />
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-3">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Bill To"
+            name="nom_titular"
+            [(ngModel)]="invoice.nombre_fantasia"
+          />
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-3">
+          <textarea
+            class="form-control"
+            rows="3"
+            placeholder="Enter From Address"
+            name="nom_titular"
+            [(ngModel)]="invoice.nombre_fantasia"
+          ></textarea>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-3">
+          <textarea
+            class="form-control"
+            rows="3"
+            placeholder="Enter To Address"
+            name="nom_titular"
+            [(ngModel)]="invoice.direccion"
+          ></textarea>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <form [formGroup]="addForm">
+    <div class="table-responsive">
+      <table
+        id="tblAdd"
+        class="table table-hover table-bordered no-wrap align-middle"
+      >
+        <thead>
+          <tr>
+            <th class="border-bottom-0">#</th>
+            <th class="border-bottom-0">Articulo</th>
+            <th class="border-bottom-0">Precio unitario</th>
+            <th class="border-bottom-0">Cantidad</th>
+            <th class="border-bottom-0">Importe</th>
+            <th class="border-bottom-0"></th>
+          </tr>
+        </thead>
+
+        <tbody
+          formArrayName="item"
+          *ngFor="let a of addForm.get('item')?.controls; let i = index"
+        >
+          <tr [formGroupName]="i">
+            <td>
+              {{ i + 1 }}
+            </td>
+            <td>
+              <input
+                type="text"
+                [id]="'txtNameControl' + i"
+                class="form-control"
+                placeholder="Ingresa articulo"
+                formControlName="cod_articulo"
+                (input)="itemsChanged()"
+              />
+            </td>
+            <td>
+              <input
+                type="number"
+                [id]="'txtCostControl' + i"
+                class="form-control"
+                placeholder="Ingresa precio unitario"
+                formControlName="precio_unitario"
+                (input)="itemsChanged()"
+              />
+            </td>
+            <td>
+              <input
+                type="number"
+                [id]="'txtTotalControl' + i"
+                class="form-control"
+                placeholder="Ingresa cantidad"
+                formControlName="cantidad"
+                (input)="itemsChanged()"
+              />
+            </td>
+            <td>
+              <input
+                type="number"
+                formControlName="importe_mo"
+                [id]="'txtitemTotalControl' + i"
+                [value]="
+                  addForm.get('item').value[this.i].precio_unitario *
+                  addForm.get('item').value[this.i].cantidad
+                "
+                class="form-control"
+              />
+            </td>
+
+            <td>
+              <button
+                type="button"
+                *ngIf="addForm.get('item')?.length > 1"
+                class="btn btn-danger btn-sm"
+                (click)="btnRemoveClick(i)"
+              >
+                <span class="glyphicon glyphicon-remove">Borrar</span>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="text-end">
+      <button
+        type="button"
+        class="btn btn-info"
+        (click)="btnAddItemClick()"
+        [disabled]="addForm.get('item')?.invalid"
+      >
+        Agregar Item
+      </button>
+
+      <div class="border-top mt-3 pt-3">
+        <h5><span>Sub total </span> : {{ importe_mo }}</h5>
+      </div>
+      <div class="border-top mt-3 pt-3">
+        <h5>Iva:</h5>
+        <div class="row justify-content-end">
+          <div class="col-lg-2 col-md-4">
+            <div class="input-group mb-3">
+              <input type="number" class="form-control" value="22" />
+              <span class="input-group-text">%</span>
+              <span class="input-group-text bg-white font-medium"
+                >: {{ importe_iva_basico_mo }}</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr />
+      <h3><span class="fw-bold me-2">Total:</span>${{ importe_total_mo }}</h3>
+    </div>
+  </form>
+</div>

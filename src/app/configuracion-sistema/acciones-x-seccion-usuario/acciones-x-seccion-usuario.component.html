@@ -1,0 +1,188 @@
+<div class="row">
+  <div class="col-12">
+    <div class="card card-body">
+      <h4 class="card-title">{{ nombreSeccion   | titlecase }}</h4>
+      <h5 class="card-subtitle">Lista de {{ nombreSeccion  }}.</h5>
+      <div class="d-flex mb-3 mt-3">
+        <input type="text" class="form-control w-25" placeholder="Buscar por nombre" [(ngModel)]='searchTerm'>
+        <button class="btn btn-primary ms-auto" (click)="chequeoApertura(1,editDatoModal, null)">Agregar {{ nombreSeccion  }}</button>
+      </div>
+      <div class="table-responsive table-bordered">
+        <table class="table table-striped mb-0 no-wrap align-middle">
+          <thead>
+            <tr>
+              <th class="text-center" scope="col">#</th>
+              <th scope="col">Usuario</th>
+              <th scope="col">Seccion</th>
+              <th scope="col">Accion</th>
+            </tr>
+                     
+          </thead>
+          <tbody>
+            <tr *ngFor="let dato of filterArray | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
+       
+            
+              <td class="text-center">
+                {{dato.id}}
+              </td>
+              <td>{{ dato.id_usuario }}</td>
+              <td>{{ dato.id_seccion }}</td>
+              <td>{{ dato.id_accion }}</td>
+         
+
+     
+              <td>
+                <a href="javascript: void(0);" (click)="chequeoApertura(3,editDatoModal, dato)" class="link me-2"
+                  placement="top" ngbTooltip="Edit">
+                  <!-- <i class="far fa-edit"></i> -->
+                  <i-feather name="edit-2" class="feather-sm"></i-feather>
+                </a>
+                <a href="javascript: void(0);" class="link" (click)="deleteDato(3,dato.id)" placement="top"
+                  ngbTooltip="Delete">
+                  <i-feather name="trash-2" class="feather-sm"></i-feather>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="d-flex justify-content-center mt-5">
+        <ngb-pagination [(page)]="page" [pageSize]="pageSize" [collectionSize]="filterArray.length"></ngb-pagination>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #editDatoModal let-modal>
+
+  <div class="modal-header">
+
+    <h5 class="modal-title" id="editUserLabel">Agregar</h5>
+
+    <button type="button" class="close" (click)="closeBtnClick()" aria-label="Close">
+    </button>
+
+  </div>
+
+  <div class="modal-body">
+
+    <form [formGroup]="editDato" (ngSubmit)="onSubmit()">
+
+
+
+      <div class="mb-3 row">
+        <label for="position" class="col-sm-4 col-form-label">Usuario</label>
+        <div class="col-sm-8">
+
+
+          <select name="id_usuario" class="form-select mr-sm-2" formControlName="id_usuario" id="id_usuario"
+          [ngClass]="{ 'is-invalid': submitted && f['id_usuario'].errors }"  >
+            <option value="-1" [ngValue]="-1">Seleccione...</option>
+            <option  *ngFor="let usu of usuarios" 
+            [value]="usu.id" [ngValue]="usu.id"  >
+          {{usu.nombre}} {{usu.apellido}}
+            </option>
+
+            
+          </select>  
+
+
+
+
+          <div
+            *ngIf="submitted && f['id_usuario'].errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['id_usuario'].errors['required']">
+              El usuario es obligatorio
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="mb-3 row">
+        <label for="position" class="col-sm-4 col-form-label">Seccion</label>
+        <div class="col-sm-8">
+
+
+          <select name="id_seccion" class="form-select mr-sm-2" formControlName="id_seccion" id="id_seccion"
+          [ngClass]="{ 'is-invalid': submitted && f['id_seccion'].errors }"  >
+            <option value="-1" [ngValue]="-1">Seleccione...</option>
+            <option  *ngFor="let sec of secciones" 
+            [value]="sec.id" [ngValue]="sec.id"  >
+            {{sec.descripcion}}
+            </option>
+
+            
+          </select>  
+
+
+
+
+          <div
+            *ngIf="submitted && f['id_seccion'].errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['id_seccion'].errors['required']">
+              La seccion es obligatoria
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="mb-3 row">
+        <label for="position" class="col-sm-4 col-form-label">Accion</label>
+        <div class="col-sm-8">
+
+
+          <select name="id_accion" class="form-select mr-sm-2" formControlName="id_accion" id="id_accion"
+          [ngClass]="{ 'is-invalid': submitted && f['id_accion'].errors }"  >
+            <option value="-1" [ngValue]="-1">Seleccione...</option>
+            <option  *ngFor="let acc of acciones" 
+            [value]="acc.id" [ngValue]="acc.id"  >
+            {{acc.descripcion}}
+            </option>
+
+            
+          </select>  
+
+
+
+
+          <div
+            *ngIf="submitted && f['id_accion'].errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['id_accion'].errors['required']">
+              La accion es obligatoria
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeBtnClick()"
+        >
+          Cerrar
+        </button>
+
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="editDato.invalid"
+        >
+          Guardar
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>

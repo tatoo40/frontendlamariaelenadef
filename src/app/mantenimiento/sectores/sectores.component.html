@@ -1,0 +1,166 @@
+<div class="row">
+  <div class="col-12">
+    <div class="card card-body">
+      <h4 class="card-title">{{ nombreSeccion   | titlecase }}</h4>
+      <h5 class="card-subtitle">Lista de {{ nombreSeccion  }}.</h5>
+      <div class="d-flex mb-3 mt-3">
+        <input type="text" class="form-control w-25" placeholder="Buscar por nombre" [(ngModel)]='searchTerm'>
+        <button class="btn btn-primary ms-auto" (click)="chequeoApertura(1,editDatoModal, null)">Agregar {{ nombreSeccion  }}</button>
+      </div>
+      <div class="table-responsive table-bordered">
+        <table class="table table-striped mb-0 no-wrap align-middle">
+          <thead>
+            <tr>
+              <th class="text-center" scope="col">#</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Superficie</th>
+              <th scope="col">Deposito</th>
+         
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let dato of filterArray | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
+       
+            
+              <td class="text-center">
+                {{dato.id}}
+              </td>
+
+              <td>{{ dato.nombre }}</td>
+         
+              <td>{{ dato.superficie }}</td>
+              <td>{{ dato.id_deposito }}</td>
+                     
+     
+              <td>
+                <a href="javascript: void(0);" (click)="chequeoApertura(3,editDatoModal, dato)" class="link me-2"
+                  placement="top" ngbTooltip="Edit">
+                  <!-- <i class="far fa-edit"></i> -->
+                  <i-feather name="edit-2" class="feather-sm"></i-feather>
+                </a>
+                <a href="javascript: void(0);" class="link" (click)="deleteDato(3,dato.id)" placement="top"
+                  ngbTooltip="Delete">
+                  <i-feather name="trash-2" class="feather-sm"></i-feather>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="d-flex justify-content-center mt-5">
+        <ngb-pagination [(page)]="page" [pageSize]="pageSize" [collectionSize]="filterArray.length"></ngb-pagination>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #editDatoModal let-modal>
+
+  <div class="modal-header">
+
+    <h5 class="modal-title" id="editUserLabel">Agregar</h5>
+
+    <button type="button" class="close" (click)="closeBtnClick()" aria-label="Close">
+    </button>
+
+  </div>
+
+  <div class="modal-body">
+
+    <form [formGroup]="editDato" (ngSubmit)="onSubmit()">
+
+
+
+      <div class="mb-3 row">
+        <label for="nombre" class="col-sm-4 col-form-label">Nombre</label>
+        <div class="col-sm-8">
+          <input
+            type="text"
+            class="form-control"
+            formControlName="nombre"
+            id="nombre"
+            [ngClass]="{ 'is-invalid': submitted && f['nombre'].errors }"
+          />
+          <div *ngIf="submitted && f['nombre'].errors" class="invalid-feedback">
+            <div *ngIf="f['nombre'].errors['required']">Nombre es obligatorio</div>
+      
+          </div>
+        </div>
+      </div>
+
+
+
+
+      <div class="mb-3 row">
+        <label for="superficie" class="col-sm-4 col-form-label">Superficie</label>
+        <div class="col-sm-8">
+          <input
+            type="text"
+            class="form-control"
+            formControlName="superficie"
+            id="superficie"
+            [ngClass]="{ 'is-invalid': submitted && f['superficie'].errors }"
+          />
+          <div *ngIf="submitted && f['superficie'].errors" class="invalid-feedback">
+            <div *ngIf="f['superficie'].errors['required']">Superficie es obligatorio</div>
+      
+          </div>
+        </div>
+      </div>
+
+      
+
+
+      <div class="mb-3 row">
+        <label for="position" class="col-sm-4 col-form-label">Deposito</label>
+        <div class="col-sm-8">
+
+
+          <select name="id_deposito" class="form-select mr-sm-2" formControlName="id_deposito" id="id_deposito"
+          [ngClass]="{ 'is-invalid': submitted && f['id_deposito'].errors }"  >
+            <option value="-1" [ngValue]="-1">Seleccione...</option>
+            <option  *ngFor="let tt of depositos" 
+            [value]="tt.id" [ngValue]="tt.id"  >
+          {{tt.nombre}}
+            </option>
+
+            
+          </select>  
+
+
+          <div
+            *ngIf="submitted && f['id_deposito'].errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['id_deposito'].errors['required']">
+              Deposito es obligatorio
+            </div>
+          </div>
+        </div>
+      </div>
+
+    
+
+
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeBtnClick()"
+        >
+          Cerrar
+        </button>
+
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="editDato.invalid"
+        >
+          Guardar
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>

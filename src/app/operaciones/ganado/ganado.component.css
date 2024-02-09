@@ -1,0 +1,69 @@
+#fileInput{
+    display: none;
+  }
+  #icon{
+    width: 100px;
+    cursor: pointer;
+  }
+  #formInputRapido{
+    text-align: center;
+  }
+
+  .texto-centrado{
+    text-align: center !important;
+  }
+
+  .mdi-thumb-up{
+    font-size: 4em !important;
+  }
+
+.mdi-weight-kilogram{
+    font-size: 1.5em !important;
+  }
+
+  .mdi-cow{
+    font-size: 1.5em !important;
+  }
+  .mdi-scale{
+    font-size: 1.5em !important;
+  }
+
+.control-chico{
+  width:15%;
+  margin-right: 5px;
+  float:left;
+}
+
+.control-gde{
+  width:80%;
+  float:left;
+}
+
+.contendor-guia{
+  position: relative;
+    float: left;
+}
+
+
+#id_propiedad_ganado{
+  display: none;
+}
+
+.icono-opciones{
+  font-size: 6rem;
+}
+
+.border-rounded {
+  border: 1px solid #ccc; /* Borde fino */
+  border-radius: 4px; /* Bordes redondeados */
+  padding: 8px; /* Espaciado interno */
+  transition: background-color 0.3s ease; /* Efecto de transición al hacer hover */
+}
+
+.border-rounded:hover {
+  background-color: #f0f0f0; /* Color de fondo al hacer hover (efecto de botón) */
+}
+
+.justify-content-center {
+  text-align: center;
+}

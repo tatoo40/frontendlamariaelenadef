@@ -1,0 +1,81 @@
+<div class="card mb-0">
+    <div class="card-body">
+        <div class="d-md-flex align-items-center">
+            <div class="form-group mb-0">
+                <input type="text" placeholder="Search Invoice" class="form-control" [(ngModel)]='searchTerm'>
+            </div>
+            <div class="ms-auto mt-4 mt-md-0">
+                <a routerLink='/administracion/agregarFacturaProveedor'>
+                    <button type="button" class="btn btn-info"> <i class="me-2 mdi mdi-plus"></i> Agregar</button>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card pt-3">
+    <div class="table-responsive">
+        <table class="table table-borderless table-hover align-middle no-wrap">
+            <thead>
+                <tr class="border-bottom">
+                    <th scope="col">
+                        <input type="checkbox" [(ngModel)]="isMasterSel" name="list_name" value="h1"
+                            (change)="checkUncheckAll()" />
+                    </th>
+                    <th scope="col">Factura</th>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Proveedor</th>
+                    <th scope="col">Nro Factura</th>
+                    <th scope="col">Importe</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="border-bottom "
+                    *ngFor="let invoice of compInvoice|slice: (page-1) * pageSize : (page-1) * pageSize + pageSize; index as i">
+
+                    <td class="py-4">
+                        <input type="checkbox" [(ngModel)]="invoice.isSelected" name="list_name" value="{{invoice.id}}"
+                            (change)="isAllSelected()" />
+                    </td>
+                    <td class="py-4">{{ invoice.serie_fact_prov }} - {{ invoice.nro_fact_prov }}  </td>
+                    <td class="py-4">{{ invoice.fecha  | date : "dd/MM/yyyy"  }}  </td>
+
+                    <td class="py-4">
+                        <ngb-highlight [result]="invoice.nombre_fantasia" [term]="searchTerm"></ngb-highlight>
+                    </td>
+
+                    <td class="py-4">{{ invoice.serie_fact_prov }} - {{ invoice.nro_fact_prov }}  </td>
+
+                    <td class="py-4">
+                        {{ invoice.simbolo_moneda }}
+                        <ngb-highlight [result]="invoice.importe_total_mo | number" [term]="searchTerm"></ngb-highlight>
+                    </td>
+
+
+                    <td class="py-4">
+                        <!-- <a routerLink='/apps/viewinvoice/'>View</a> -->
+
+                        <a [routerLink]="['/administracion/verFacturaProveedor/',invoice.id]" class="text-info mx-2">
+                            <i-feather name="eye" class="feather-sm"></i-feather>
+                        </a>
+
+                        <a href="javascript:void(0)" class="text-danger mx-2 ps-3 border-start"
+                            (click)="deleteInvoice(invoice.id)">
+                            <i-feather name="trash-2" class="feather-sm"></i-feather>
+                        </a>
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="card-body">
+        <div class="d-flex justify-content-center">
+            <ngb-pagination [(page)]="page" [pageSize]="pageSize" [collectionSize]="totalLengthOfCollection">
+            </ngb-pagination>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,108 @@
+
+
+<div class="auth-wrapper d-flex no-block justify-content-center align-items-center" style="background:url(assets/images/background/login-register.jpg) no-repeat center center;">
+    <div class="auth-box on-sidebar m-3 m-md-0">
+        <div>
+            <div class="text-center">
+                <span class="db"><img src="assets/images/logo-icon.png" alt="logo" /></span>
+                <h5 class="font-medium mb-4">Registrate a Ganao</h5>
+
+       
+
+
+            </div>
+            <!-- Form -->
+            <div class="row">
+                <div class="col-12">
+                    <form class="form-horizontal form-material" 
+                    id="registerform" 
+                    autocomplete="off"
+                    [formGroup]="registerForm"
+                    (ngSubmit)="crearUsuario()">
+
+
+                    <div class="mb-3 row">
+                        <div class="col-12 ">
+                    <input class="form-control" type="text"  hidden
+                    placeholder="Nombre"
+                    formControlName="id_empresa">
+                        </div>
+                    </div>
+  
+                        <div class="mb-3 row">
+                            <div class="col-12 ">
+                        <input class="form-control" type="text"  
+                        placeholder="Nombre"
+                        formControlName="nombre">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <div class="col-12 ">
+                                <input class="form-control" type="text"  
+                                placeholder="Apellido"
+                                formControlName="apellido">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <div class="col-12 ">
+                                <input class="form-control" type="email"  
+                                placeholder="Correo electronico"
+                                formControlName="email">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <div class="col-12 ">
+                                <input class="form-control" type="password"  
+                                placeholder="Contrasena" formControlName="hash">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <div class="col-12 ">
+                                <input class="form-control" type="password" formControlName="password2" required="" placeholder="Confirmacion contrasena">
+                            </div>
+                        </div>                        
+
+
+                        <div class="mb-3 row">
+                            <div class="col-md-12 ">
+                                <div class="form-check">
+
+
+                                
+
+                                    <input id="checkbox-signup" type="checkbox" class="form-check-input" formControlName="terminos">
+                                    <label for="checkbox-signup"  class="form-check-label"> Estoy de acuerdo con los <a href="#">terminos y condiciones</a></label>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col text-danger">
+                                <p *ngIf="campoNoValido('nombre')">El nombre es obligatorio</p>
+                                <p *ngIf="campoNoValido('email')">El email es obligatorio y tiene que ser valido</p>
+                                <p *ngIf="aceptaTerminos()">Debe aceptar los terminos y condiciones</p>
+                                <p *ngIf="contrasenasNoValidas()">La contrasena y su confirmacion deben ser iguales</p>
+                      
+        
+                            </div>
+                        </div>
+
+
+
+                        <div class="mb-3 text-center ">
+                            <div class="col-xs-12 mb-4">
+                                <button class="btn btn-info btn-lg btn-block waves-effect waves-light" type="submit">Registrarme</button>
+                            </div>
+                        </div>
+                        <div class="mb-3 mb-0 mt-2 ">
+                            <div class="col-sm-12 text-center ">
+                                Ya tenes cuenta? <a [routerLink]="['/authentication/login']"class="text-info ms-1 "><b>Login</b></a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

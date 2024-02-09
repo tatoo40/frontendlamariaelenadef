@@ -1,0 +1,1173 @@
+<div class="row">
+  <div class="col-12">
+    <div class="card card-body">
+      <h4 class="card-title">{{ nombreSeccion   | titlecase }}</h4>
+      <h5 class="card-subtitle">Lista de {{ nombreSeccion  }}.</h5>
+      <div class="d-flex mb-3 mt-3">
+        <input type="text" class="form-control w-25" placeholder="Buscar por nombre" [(ngModel)]='searchTerm'>
+        <button class="btn btn-primary ms-auto" (click)="chequeoApertura(1,editDatoModal, null)">Agregar individuo</button>
+      </div>
+      <div class="table-responsive table-bordered">
+        <table class="table table-striped mb-0 no-wrap align-middle">
+          <thead>
+            <tr>
+
+              
+              <th class="text-center" scope="col">#</th>
+              <th scope="col">Fecha</th>
+              <th scope="col">Caravana </th>
+              <th scope="col">Peso</th>
+              <th scope="col">Observaciones</th>
+    
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let dato of filterArray | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
+       
+            
+              <td class="text-center">
+                {{dato.id}}
+              </td>
+
+              <td>{{ dato.fecha | date :'fullDate' }}</td>
+              <td>{{ dato.cod_identidad }}</td>   
+              
+              <td>{{ dato.peso }}</td>
+              <td>{{ dato.observaciones }}</td>
+           
+     
+              <td>
+
+                <a href="javascript: void(0);" class="link" (click)="accionesDato(2,optionsDatoModal,dato.cod_identidad)" placement="top"
+                  ngbTooltip="Acciones">
+                  <i-feather name="plus" class="feather-sm"></i-feather>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="d-flex justify-content-center mt-5">
+        <ngb-pagination [(page)]="page" [pageSize]="pageSize" [collectionSize]="filterArray.length"></ngb-pagination>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #editDatoModal let-modal>
+
+  <div class="modal-header">
+
+    <h5 class="modal-title" id="editUserLabel">Agregar</h5>
+
+    <button type="button" class="close" (click)="closeBtnClick()" aria-label="Close">
+    </button>
+
+  </div>
+
+  <div class="modal-body">
+
+    <form [formGroup]="editDato" (ngSubmit)="onSubmit()">
+
+
+
+      <div class="mb-3 row">
+        <label for="fecha" class="col-sm-4 col-form-label">Fecha entrada</label>
+        <div class="col-sm-8">
+          <input
+            type="date"
+            class="form-control"
+            formControlName="fecha"
+            id="fecha"
+            [ngClass]="{ 'is-invalid': submitted && f['fecha'].errors }"
+          />
+          <div *ngIf="submitted && f['fecha'].errors" class="invalid-feedback">
+            <div *ngIf="f['fecha'].errors['required']">Fecha es obligatorio</div>
+      
+          </div>
+        </div>
+      </div>
+
+
+      <div class="mb-3 row">
+        <label for="position" class="col-sm-4 col-form-label">Raza</label>
+        <div class="col-sm-8">
+  
+  
+          <select name="id_marca_ganado" class="form-select mr-sm-2" formControlName="id_marca_ganado" id="id_marca_ganado"
+          [ngClass]="{ 'is-invalid': submitted && f['id_marca_ganado'].errors }" >
+          <option value="-1" selected>Seleccione...</option>
+          <option  *ngFor="let raza of razaGanado" 
+          [value]="raza.id" >
+        {{raza.descripcion}}
+          </option>
+  
+            
+          </select>  
+  
+  
+          <div
+            *ngIf="submitted && f['id_marca_ganado'].errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['id_marca_ganado'].errors['required']">
+             Raza de ganando es obligatorio
+            </div>
+          </div>
+        </div>
+      </div>
+  
+  
+  
+  
+      <div class="mb-3 row">
+        <label for="position" class="col-sm-4 col-form-label">Categoria</label>
+        <div class="col-sm-8">
+  
+  
+          <select name="id_categoria_ganado" class="form-select mr-sm-2" formControlName="id_categoria_ganado" id="id_categoria_ganado"
+          [ngClass]="{ 'is-invalid': submitted && f['id_categoria_ganado'].errors }"  >
+          <option value="-1" selected>Seleccione...</option>
+          <option  *ngFor="let categoria of categoriaGanado" 
+          [value]="categoria.id" >
+        {{categoria.descripcion}}
+          </option>
+  
+            
+          </select>  
+  
+  
+          <div
+            *ngIf="submitted && f['id_categoria_ganado'].errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['id_categoria_ganado'].errors['required']">
+             La categoria de ganando es obligatorio
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="mb-3 row">
+        <label for="cod_identidad" class="col-sm-4 col-form-label">Caravana</label>
+        <div class="col-sm-8">
+          <input
+            type="text"
+            class="form-control"
+            formControlName="cod_identidad"
+            id="cod_identidad"
+            [ngClass]="{ 'is-invalid': submitted && f['cod_identidad'].errors }"
+          />
+          <div *ngIf="submitted && f['cod_identidad'].errors" class="invalid-feedback">
+            <div *ngIf="f['cod_identidad'].errors['required']">Caravana es obligatorio</div>
+      
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+      <div class="mb-3 row">
+        <label for="dias" class="col-sm-4 col-form-label">Dias</label>
+        <div class="col-sm-8">
+          <input
+            type="number"
+            class="form-control"
+            formControlName="dias"
+            id="dias"
+            [ngClass]="{ 'is-invalid': submitted && f['dias'].errors }"
+          />
+          <div *ngIf="submitted && f['dias'].errors" class="invalid-feedback">
+            <div *ngIf="f['dias'].errors['required']">Dias es obligatorio</div>
+      
+          </div>
+        </div>
+      </div>
+    
+
+
+
+
+
+      <div class="mb-3 row">
+        <label for="position" class="col-sm-4 col-form-label">Propietario</label>
+        <div class="col-sm-8">
+  
+  
+          <select name="propietario" class="form-select mr-sm-2" formControlName="propietario" id="propietario"
+          [ngClass]="{ 'is-invalid': submitted && f['propietario'].errors }"  >
+          <option value="-1" selected>Seleccione...</option>
+          <option  *ngFor="let dicose of dicoses" 
+          [value]="dicose.id" >
+        {{dicose.valor}}
+          </option>
+  
+            
+          </select>  
+  
+  
+          <div
+            *ngIf="submitted && f['propietario'].errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['propietario'].errors['required']">
+             El dicose es obligatorio
+            </div>
+          </div>
+        </div>
+      </div>     
+
+
+
+
+
+      <div class="mb-3 row">
+        <label for="fecha_ingreso" class="col-sm-4 col-form-label">Fecha ingreso</label>
+        <div class="col-sm-8">
+          <input
+            type="date"
+            class="form-control"
+            formControlName="fecha_ingreso"
+            id="fecha_ingreso"
+            [ngClass]="{ 'is-invalid': submitted && f['fecha_ingreso'].errors }"
+          />
+          <div *ngIf="submitted && f['fecha_ingreso'].errors" class="invalid-feedback">
+            <div *ngIf="f['fecha_ingreso'].errors['required']">Fecha de ingreso es obligatorio</div>
+      
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="mb-3 row">
+        <label for="fecha_registro" class="col-sm-4 col-form-label">Fecha de registro</label>
+        <div class="col-sm-8">
+          <input
+            type="date"
+            class="form-control"
+            formControlName="fecha_registro"
+            id="fecha_registro"
+            [ngClass]="{ 'is-invalid': submitted && f['fecha_registro'].errors }"
+          />
+          <div *ngIf="submitted && f['fecha_registro'].errors" class="invalid-feedback">
+            <div *ngIf="f['fecha_registro'].errors['required']">Fecha registro es obligatorio</div>
+      
+          </div>
+        </div>
+      </div>
+
+
+    <div class="mb-3 row">
+      <label for="peso" class="col-sm-4 col-form-label">Peso</label>
+      <div class="col-sm-8">
+        <input
+          type="number"
+          class="form-control"
+          formControlName="peso"
+          id="peso"
+          [ngClass]="{ 'is-invalid': submitted && f['peso'].errors }"
+        />
+        <div *ngIf="submitted && f['peso'].errors" class="invalid-feedback">
+          <div *ngIf="f['peso'].errors['required']">Peso es obligatorio</div>
+    
+        </div>
+      </div>
+    </div>
+
+
+    <div class="mb-3 row">
+      <label for="nro_lote" class="col-sm-4 col-form-label">Nro. lote</label>
+      <div class="col-sm-8">
+        <input
+          type="text"
+          class="form-control"
+          formControlName="nro_lote"
+          id="nro_lote"
+          [ngClass]="{ 'is-invalid': submitted && f['nro_lote'].errors }"
+        />
+        <div *ngIf="submitted && f['nro_lote'].errors" class="invalid-feedback">
+          <div *ngIf="f['nro_lote'].errors['required']">Nro lote es obligatorio</div>
+    
+        </div>
+      </div>
+    </div>
+
+
+      <div class="mb-3 row">
+        <label for="observaciones" class="col-sm-4 col-form-label">Observaciones</label>
+        <div class="col-sm-8">
+          <input
+            type="text"
+            class="form-control"
+            formControlName="observaciones"
+            id="observaciones"
+            [ngClass]="{ 'is-invalid': submitted && f['observaciones'].errors }"
+          />
+          <div *ngIf="submitted && f['observaciones'].errors" class="invalid-feedback">
+            <div *ngIf="f['observaciones'].errors['required']">Observaciones es obligatorio</div>
+      
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3 row">
+        <label for="position" class="col-sm-4 col-form-label">Motivo de alta</label>
+        <div class="col-sm-8">
+  
+  
+          <select name="id_motivos_stk" class="form-select mr-sm-2" formControlName="id_motivos_stk" id="id_motivos_stk"
+          [ngClass]="{ 'is-invalid': submitted && f['id_motivos_stk'].errors }" >
+          <option value="-1" selected>Seleccione...</option>
+          <option  *ngFor="let motivo of motivoStock" 
+          [value]="motivo.id" >
+        {{motivo.descripcion}}
+          </option>
+  
+            
+          </select>  
+  
+  
+          <div
+            *ngIf="submitted && f['id_motivos_stk'].errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['id_motivos_stk'].errors['required']">
+             El motivo de entrada es obligatorio
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="mb-3 row" *ngIf="editDato.get('id_motivos_stk').value === '4'">
+        <label for="position" class="col-sm-4 col-form-label">Caravana de la madre</label>
+        <div class="col-sm-8">
+  
+  
+          <select name="cod_identidad_madre" class="form-select mr-sm-2" formControlName="cod_identidad_madre" id="cod_identidad_madre"
+          [ngClass]="{ 'is-invalid': submitted && f['cod_identidad_madre'].errors }" >
+          <option value="-1" selected>Seleccione...</option>
+          <option  *ngFor="let madre of madres" 
+          [value]="madre.cod_identidad" >
+        {{madre.cod_identidad}}
+          </option>
+  
+            
+          </select>  
+  
+  
+          <div
+            *ngIf="submitted && f['cod_identidad_madre'].errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['cod_identidad_madre'].errors['required']">
+             La caravana de la madre debe ser obligatoria
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="mb-3 row">
+        <label for="position" class="col-sm-4 col-form-label">Potrero</label>
+        <div class="col-sm-8">
+  
+  
+          <select name="id_sector" class="form-select mr-sm-2" formControlName="id_sector" id="id_sector"
+          [ngClass]="{ 'is-invalid': submitted && f['id_sector'].errors }" >
+          <option value="-1" selected>Seleccione...</option>
+          <option  *ngFor="let sector of sectores" 
+          [value]="sector.id" >
+        {{sector.nombre}}
+          </option>
+  
+            
+          </select>  
+  
+  
+          <div
+            *ngIf="submitted && f['id_sector'].errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['id_sector'].errors['required']">
+             El potrero es obligatorio
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+
+
+      <div class="mt-4 text-center">
+        <div class="col-md-6  text-center">
+            <div class="form-check  text-center">
+
+                <input id="bania_garrapata" name="bania_garrapata" type="checkbox" class="form-check-input" formControlName="bania_garrapata">
+                <label for="bania_garrapata"  class="form-check-label"> Baño contra garrapata</label>
+            </div>
+        </div>
+        <div class="col-md-6  text-center">
+          <div class="form-check  text-center">
+
+              <input id="parasitos_internos" name="parasitos_internos" type="checkbox" class="form-check-input" formControlName="parasitos_internos">
+              <label for="parasitos_internos"  class="form-check-label"> Parasitos internos</label>
+          </div>
+      </div>
+      <div class="col-md-6  text-center">
+        <div class="form-check  text-center">
+
+            <input id="carbunco" name="carbunco" type="checkbox" class="form-check-input" formControlName="carbunco">
+            <label for="carbunco"  class="form-check-label"> Carbunco</label>
+        </div>
+    </div>
+    <div class="col-md-6  text-center">
+      <div class="form-check  text-center">
+
+          <input id="clostridiosis" name="clostridiosis" type="checkbox" class="form-check-input" formControlName="clostridiosis">
+          <label for="clostridiosis"  class="form-check-label"> Clostridiosis</label>
+      </div>
+  </div>                                                  
+
+    </div>
+   
+
+
+
+
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <div class="modal-footer">
+        
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeBtnClick()"
+        >
+          Cerrar
+        </button>
+
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="editDato.invalid"
+        >
+          Guardar
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<ng-template #optionsDatoModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="editUserLabel">Opciones</h5>
+    <button type="button" class="close" (click)="closeBtnClick()" aria-label="Close"></button>
+  </div>
+
+  <div class="modal-body">
+
+
+
+
+
+
+
+
+
+
+
+
+    <form *ngIf="inicio"  [formGroup]="optionsDato" (ngSubmit)="onSubmit()">
+
+      <div class="row">
+        <!-- Primera columna -->
+        <div   class="col-md-6">
+          <!-- Primer ícono con descripción -->
+          <div (click)="mostrarFormularioInfo(CaravanaSeleccionada)" class="mb-4 d-flex flex-column align-items-center text-center border-rounded">
+            <i class="me-2 mdi mdi-information-outline icono-opciones"></i>
+            <span>Informacion</span>
+          </div>
+        
+          <!-- Segundo ícono con descripción -->
+          <div (click)="mostrarFormularioSanidad(CaravanaSeleccionada)"  class="mb-4 d-flex flex-column align-items-center text-center border-rounded">
+            <i class="me-2 mdi mdi-hospital icono-opciones"></i>
+            <span>Sanidad</span>
+          </div>
+        </div>
+      
+        <!-- Segunda columna -->
+        <div class="col-md-6">
+          <!-- Tercer ícono con descripción -->
+          <div (click)="mostrarFormularioBaja(CaravanaSeleccionada)"  class="mb-4 d-flex flex-column align-items-center text-center border-rounded">
+            <i class="me-2 mdi mdi-arrow-down icono-opciones"></i>
+            <span>Dar de baja</span>
+          </div>
+        
+          <!-- Cuarto ícono con descripción -->
+          <div (click)="mostrarFormularioTraslado(CaravanaSeleccionada)" class="mb-4 d-flex flex-column align-items-center text-center border-rounded">
+            <i class="me-2 mdi mdi-cursor-move icono-opciones"></i>
+            <span>Trasladar</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row">
+        <!-- Tercera columna -->
+        <div class="col-md-6">
+          <!-- Quinto ícono con descripción -->
+          <div (click)="mostrarFormularioPesada(CaravanaSeleccionada)" class="mb-4 d-flex flex-column align-items-center text-center border-rounded">
+            <i class="me-2 mdi mdi-weight icono-opciones"></i>
+            <span>Pesada</span>
+          </div>
+        </div>
+      
+        <!-- Cuarta columna -->
+        <div class="col-md-6">
+          <!-- Sexto ícono con descripción -->
+          <div (click)="mostrarFormularioRecaravaneo(CaravanaSeleccionada)" class="mb-4 d-flex flex-column align-items-center text-center border-rounded">
+            <i class="me-2 mdi mdi-cards-outline icono-opciones"></i>
+            <span>Recaravaneo</span>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <!-- Tercera columna -->
+        <div class="col-md-6">
+          <!-- Quinto ícono con descripción -->
+          <div (click)="mostrarFormularioRecategoria(CaravanaSeleccionada)" class="mb-4 d-flex flex-column align-items-center text-center border-rounded">
+            <i class="me-2 mdi mdi-crop-rotate icono-opciones"></i>
+            <span>Recategoria</span>
+          </div>
+        </div>
+      
+
+      </div>   
+
+    </form>
+
+
+    <form *ngIf="recaravaneo" [formGroup]="recaravaneoForm" novalidate class="editForm">
+      <div class="modal-header justify-content-center mt-2">
+        <a href="">
+          <h1 class="texto-centrado">Recaravaneo de ganado</h1>
+          <span>Informacion del ganado cargado</span>
+        </a>
+      </div>
+      <div class="card">
+        <div class="card-body">
+            <div class="mt-4">
+              <div class="form-group  mb-3">
+                <label for="exampleInputPassword1">
+                  <strong>Caravana: </strong>{{CaravanaSeleccionada}}<br>
+                  <strong>Categoria: </strong> {{categoriaCaravanaEncontrada}}<br>
+                  <strong>Raza: </strong> {{razaCaravanaEncontrada}}<br>
+                  <strong>Peso: </strong>{{pesoCaravanaEncontrada}}<br>
+                  <strong>Sector: </strong>{{sectorCaravanaEncontrada}}
+  
+                </label>
+                     
+            </div>               
+
+            <div class="mb-3 row">
+              <label for="cod_identidad_nueva" class="col-sm-4 col-form-label">Nuevo caravana</label>
+              <div class="col-sm-12">
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="cod_identidad_nueva"
+                  id="cod_identidad_nueva"
+                  [ngClass]="{ 'is-invalid': submitted && f['cod_identidad_nueva'].errors }"
+                />
+                <div *ngIf="submitted && f['cod_identidad_nueva'].errors" class="invalid-feedback">
+                  <div *ngIf="f['cod_identidad_nueva'].errors['required']">Codigo de identidad es obligatorio</div>
+            
+                </div>
+              </div>
+            </div>
+          <div class="mb-3 row">
+            <label for="observaciones" class="col-sm-4 col-form-label">Observaciones</label>
+            <div class="col-sm-12">
+              <input
+                type="text"
+                class="form-control"
+                formControlName="observaciones"
+                id="observaciones"
+                [ngClass]="{ 'is-invalid': submitted && f['observaciones'].errors }"
+              />
+              <div *ngIf="submitted && f['observaciones'].errors" class="invalid-feedback">
+                <div *ngIf="f['observaciones'].errors['required']">Observaciones es obligatorio</div>
+          
+              </div>
+            </div>
+          </div>
+
+
+
+
+            </div>
+      <div class="modal-footer justify-content-center">
+
+        <button type="submit" (click)="submitRecaravaneo(pesadaForm)"
+        [disabled]="recaravaneoForm.pristine || recaravaneoForm.invalid" class="btn btn-primary">
+        Continuar
+        </button>
+                  
+      </div>
+
+    </div>
+  </div>   
+
+    </form>
+
+
+
+    <form *ngIf="recategoria" [formGroup]="recategoriaForm" novalidate class="editForm">
+      <div class="modal-header justify-content-center mt-2">
+        <a href="">
+          <h1 class="texto-centrado">Recategoria de ganado</h1>
+          <span>Informacion del ganado cargado</span>
+        </a>
+      </div>
+      <div class="card">
+        <div class="card-body">
+            <div class="mt-4">
+              <div class="form-group  mb-3">
+                <label for="exampleInputPassword1">
+                  <strong>Caravana: </strong>{{CaravanaSeleccionada}}<br>
+                  <strong>Categoria: </strong> {{categoriaCaravanaEncontrada}}<br>
+                  <strong>Raza: </strong> {{razaCaravanaEncontrada}}<br>
+                  <strong>Peso: </strong>{{pesoCaravanaEncontrada}}<br>
+                  <strong>Sector: </strong>{{sectorCaravanaEncontrada}}
+  
+                </label>
+                     
+            </div>               
+
+
+
+            
+            <div class="form-group  mb-3">
+              <label for="position" class="col-sm-4 col-form-label">Categoria</label>
+              <div class="col-sm-8">
+        
+        
+                <select name="id_categoria_ganado" class="form-select mr-sm-2" formControlName="id_categoria_ganado" id="id_categoria_ganado"
+                [ngClass]="{ 'is-invalid': submitted && f['id_categoria_ganado'].errors }"  >
+                <option value="-1" selected>Seleccione...</option>
+                <option  *ngFor="let categoria of categoriaGanado" 
+                [value]="categoria.id" >
+              {{categoria.descripcion}}
+                </option>
+        
+                  
+                </select>  
+        
+        
+                <div
+                  *ngIf="submitted && f['id_categoria_ganado'].errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f['id_categoria_ganado'].errors['required']">
+                   La categoria de ganando es obligatorio
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+
+
+          <div class="mb-3 row">
+            <label for="observaciones" class="col-sm-4 col-form-label">Observaciones</label>
+            <div class="col-sm-12">
+              <input
+                type="text"
+                class="form-control"
+                formControlName="observaciones"
+                id="observaciones"
+                [ngClass]="{ 'is-invalid': submitted && f['observaciones'].errors }"
+              />
+              <div *ngIf="submitted && f['observaciones'].errors" class="invalid-feedback">
+                <div *ngIf="f['observaciones'].errors['required']">Observaciones es obligatorio</div>
+          
+              </div>
+            </div>
+          </div>
+
+
+
+
+            </div>
+      <div class="modal-footer justify-content-center">
+
+        <button type="submit" (click)="submitRecategoria(recategoriaForm)"
+        [disabled]="recategoriaForm.pristine || recategoriaForm.invalid" class="btn btn-primary">
+        Continuar
+        </button>
+                  
+      </div>
+
+    </div>
+  </div>   
+
+    </form>
+
+
+
+
+
+    <form *ngIf="pesada" [formGroup]="pesadaForm" novalidate class="editForm">
+      <div class="modal-header justify-content-center mt-2">
+        <a href="">
+          <h1 class="texto-centrado">Pesada de ganado</h1>
+          <span>Informacion del ganado cargado</span>
+        </a>
+      </div>
+      <div class="card">
+        <div class="card-body">
+            <div class="mt-4">
+              <div class="form-group  mb-3">
+                <label for="exampleInputPassword1">
+                  <strong>Caravana: </strong>{{CaravanaSeleccionada}}<br>
+                  <strong>Categoria: </strong> {{categoriaCaravanaEncontrada}}<br>
+                  <strong>Raza: </strong> {{razaCaravanaEncontrada}}<br>
+                  <strong>Peso: </strong>{{pesoCaravanaEncontrada}}<br>
+                  <strong>Sector: </strong>{{sectorCaravanaEncontrada}}
+  
+                </label>
+                     
+            </div>               
+
+            <div class="mb-3 row">
+              <label for="nuevo_peso" class="col-sm-4 col-form-label">Nuevo peso</label>
+              <div class="col-sm-12">
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="nuevo_peso"
+                  id="nuevo_peso"
+                  [ngClass]="{ 'is-invalid': submitted && f['nuevo_peso'].errors }"
+                />
+                <div *ngIf="submitted && f['nuevo_peso'].errors" class="invalid-feedback">
+                  <div *ngIf="f['nuevo_peso'].errors['required']">Nuevo peso es obligatorio</div>
+            
+                </div>
+              </div>
+            </div>
+          <div class="mb-3 row">
+            <label for="observaciones" class="col-sm-4 col-form-label">Observaciones</label>
+            <div class="col-sm-12">
+              <input
+                type="text"
+                class="form-control"
+                formControlName="observaciones"
+                id="observaciones"
+                [ngClass]="{ 'is-invalid': submitted && f['observaciones'].errors }"
+              />
+              <div *ngIf="submitted && f['observaciones'].errors" class="invalid-feedback">
+                <div *ngIf="f['observaciones'].errors['required']">Observaciones es obligatorio</div>
+          
+              </div>
+            </div>
+          </div>
+
+
+
+
+            </div>
+      <div class="modal-footer justify-content-center">
+
+        <button type="submit" (click)="submitPesada(pesadaForm)"
+        [disabled]="pesadaForm.pristine || pesadaForm.invalid" class="btn btn-primary">
+        Continuar
+        </button>
+                  
+      </div>
+
+    </div>
+  </div>   
+
+    </form>
+
+
+
+
+
+
+    <form *ngIf="sanidad" [formGroup]="sanidadForm" novalidate class="editForm">
+      <div class="modal-header justify-content-center mt-2">
+        <a href="">
+          <h1 class="texto-centrado">Sanidad de ganado</h1>
+          <span>Informacion del ganado cargado</span>
+        </a>
+      </div>
+      <div class="card">
+        <div class="card-body">
+            <div class="mt-4">
+              <div class="form-group  mb-3">
+                <label for="exampleInputPassword1">
+                  <strong>Caravana: </strong>{{CaravanaSeleccionada}}<br>
+                  <strong>Categoria: </strong> {{categoriaCaravanaEncontrada}}<br>
+                  <strong>Raza: </strong> {{razaCaravanaEncontrada}}<br>
+                  <strong>Peso: </strong>{{pesoCaravanaEncontrada}}<br>
+                  <strong>Sector: </strong>{{sectorCaravanaEncontrada}}
+  
+                </label>
+                     
+            </div>               
+
+          <div class="form-group  mb-3">
+            <label for="exampleInputPassword1">Motivo sanitario:</label>
+           
+            <select name="id_motivo_sanitario" class="form-select mr-sm-2" 
+            formControlName="id_motivo_sanitario">
+              <option value="-1">Seleccione...</option>
+              <option  *ngFor="let motivo_sanitario of motivos_sanitarios" 
+              [value]="motivo_sanitario.id" [selected]="motivo_sanitario.id ==1" >
+            {{motivo_sanitario.descripcion}}
+              </option>
+
+              </select>
+
+
+
+
+            <small class="form-text text-danger"
+               *ngIf="sanidadForm.controls['id_motivo_sanitario'].invalid && (sanidadForm.controls['id_motivo_sanitario'].dirty || sanidadForm.controls['id_motivo_sanitario'].touched)">Por favor ingrese un motivo sanitario valido
+            </small>                  
+          </div> 
+          
+          <div class="form-group  mb-3"  *ngIf="sanidadForm.get('id_motivo_sanitario').value === '6'">
+            <label for="exampleInputPassword1">Resultado Test:</label>
+           
+            <select name="resultadoTest" class="form-select mr-sm-2" 
+            formControlName="resultadoTest">
+              <option value="-1">Seleccione...</option>
+              <option  
+              value="false"  >
+            Falso
+              </option>
+              <option  
+              value="verdadero"  >
+            Verdadero
+              </option>
+              </select>
+
+
+
+
+            <small class="form-text text-danger"
+               *ngIf="sanidadForm.controls['resultadoTest'].invalid && (sanidadForm.controls['resultadoTest'].dirty || sanidadForm.controls['resultadoTest'].touched)">Por favor ingrese un motivo sanitario valido
+            </small>                  
+          </div> 
+
+
+          <div class="mb-3 row">
+            <label for="observaciones" class="col-sm-4 col-form-label">Observaciones</label>
+            <div class="col-sm-12">
+              <input
+                type="text"
+                class="form-control"
+                formControlName="observaciones"
+                id="observaciones"
+                [ngClass]="{ 'is-invalid': submitted && f['observaciones'].errors }"
+              />
+              <div *ngIf="submitted && f['observaciones'].errors" class="invalid-feedback">
+                <div *ngIf="f['observaciones'].errors['required']">Observaciones es obligatorio</div>
+          
+              </div>
+            </div>
+          </div>
+
+
+
+
+            </div>
+      <div class="modal-footer justify-content-center">
+
+        <button type="submit" (click)="submitSanidad(sanidadForm)"
+        [disabled]="sanidadForm.pristine || sanidadForm.invalid" class="btn btn-primary">
+        Continuar
+        </button>
+                  
+      </div>
+
+    </div>
+  </div>   
+
+    </form>
+
+
+
+
+
+
+    <form *ngIf="traslado" [formGroup]="trasladoForm" novalidate class="editForm">
+      <div class="modal-header justify-content-center mt-2">
+        <a href="">
+          <h1 class="texto-centrado">Traslado de ganado</h1>
+          <span>Informacion del ganado cargado</span>
+        </a>
+      </div>
+      <div class="card">
+        <div class="card-body">
+            <div class="mt-4">
+          <div class="form-group  mb-3">
+              <label for="exampleInputPassword1">El ganado esta ubicado en el sector(s) <b>{{strArrayDepositosOrigenes}}</b>. Seleccion hacia donde lo quiere trasladar.</label>
+                   
+          </div>            
+
+          <div class="form-group  mb-3">
+            <label for="exampleInputPassword1">Destino:</label>
+           
+            <select name="id_sector_destino" class="form-select mr-sm-2" 
+            formControlName="id_sector_destino">
+              <option value="-1">Seleccione...</option>
+              <option  *ngFor="let sec of sectores" 
+              [value]="sec.id" [selected]="sec.id ==1" >
+            {{sec.nombre}}
+              </option>
+
+              </select>
+
+
+
+
+            <small class="form-text text-danger"
+               *ngIf="trasladoForm.controls['id_sector_destino'].invalid && (trasladoForm.controls['id_sector_destino'].dirty || trasladoForm.controls['id_sector_destino'].touched)">Por favor ingrese un sector valido
+            </small>                  
+          </div> 
+          <div class="mb-3 row">
+            <label for="observaciones" class="col-sm-4 col-form-label">Observaciones</label>
+            <div class="col-sm-12">
+              <input
+                type="text"
+                class="form-control"
+                formControlName="observaciones"
+                id="observaciones"
+                [ngClass]="{ 'is-invalid': submitted && f['observaciones'].errors }"
+              />
+              <div *ngIf="submitted && f['observaciones'].errors" class="invalid-feedback">
+                <div *ngIf="f['observaciones'].errors['required']">Observaciones es obligatorio</div>
+          
+              </div>
+            </div>
+          </div>
+
+
+
+
+            </div>
+      <div class="modal-footer justify-content-center">
+
+        <button type="submit" (click)="submitTraslado(trasladoForm)"
+        [disabled]="trasladoForm.pristine || trasladoForm.invalid" class="btn btn-primary">
+        Continuar
+        </button>
+                  
+      </div>
+
+    </div>
+  </div>   
+
+    </form>
+
+
+    <form *ngIf="baja" [formGroup]="bajaForm" novalidate class="editForm">
+      <div class="modal-header justify-content-center mt-2">
+        <a href="">
+          <h1 class="texto-centrado">Baja de ganado</h1>
+          <span>Informacion del ganado cargado</span>
+        </a>
+      </div>
+      <div class="card">
+        <div class="card-body">
+            <div class="mt-4">
+          <div class="form-group  mb-3">
+              <label for="exampleInputPassword1">
+                <strong>Caravana: </strong>{{CaravanaSeleccionada}}<br>
+                <strong>Categoria: </strong> {{categoriaCaravanaEncontrada}}<br>
+                <strong>Raza: </strong> {{razaCaravanaEncontrada}}<br>
+                <strong>Peso: </strong>{{pesoCaravanaEncontrada}}<br>
+                <strong>Sector: </strong>{{sectorCaravanaEncontrada}}
+
+              </label>
+                   
+          </div>            
+
+          <div class="mb-3 row">
+            <label for="position" class="col-sm-4 col-form-label">Motivo de baja</label>
+            <div class="col-sm-8">
+      
+      
+              <select name="id_motivos_stk" class="form-select mr-sm-2" formControlName="id_motivos_stk" id="id_motivos_stk"
+              [ngClass]="{ 'is-invalid': submitted && f['id_motivos_stk'].errors }" >
+              <option value="-1" selected>Seleccione...</option>
+              <option  *ngFor="let motivo of motivoStockBaja" 
+              [value]="motivo.id" >
+            {{motivo.descripcion}}
+              </option>
+      
+                
+              </select>  
+      
+      
+              <div
+                *ngIf="submitted && f['id_motivos_stk'].errors"
+                class="invalid-feedback"
+              >
+                <div *ngIf="f['id_motivos_stk'].errors['required']">
+                 El motivo de salida es obligatorio
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3 row" *ngIf="bajaForm.get('id_motivos_stk').value === '2'">
+            <label for="nro_lote" class="col-sm-4 col-form-label">Lote salida</label>
+            <div class="col-sm-12">
+              <input
+                type="text"
+                class="form-control"
+                formControlName="nro_lote"
+                id="nro_lote"
+                [ngClass]="{ 'is-invalid': submitted && f['observaciones'].errors }"
+              />
+              <div *ngIf="submitted && f['nro_lote'].errors" class="invalid-feedback">
+                <div *ngIf="f['nro_lote'].errors['required']">Lote de salida es obligatorio</div>
+          
+              </div>
+            </div>
+          </div>
+
+
+          <div class="mb-3 row">
+            <label for="observaciones" class="col-sm-4 col-form-label">Observaciones</label>
+            <div class="col-sm-12">
+              <input
+                type="text"
+                class="form-control"
+                formControlName="observaciones"
+                id="observaciones"
+                [ngClass]="{ 'is-invalid': submitted && f['observaciones'].errors }"
+              />
+              <div *ngIf="submitted && f['observaciones'].errors" class="invalid-feedback">
+                <div *ngIf="f['observaciones'].errors['required']">Observaciones es obligatorio</div>
+          
+              </div>
+            </div>
+          </div>
+
+
+
+
+            </div>
+      <div class="modal-footer justify-content-center">
+
+        <button type="submit" (click)="submitBaja(bajaForm)"
+        [disabled]="bajaForm.pristine || bajaForm.invalid" class="btn btn-primary">
+        Continuar
+        </button>
+                  
+      </div>
+
+    </div>
+  </div>   
+
+    </form>
+
+
+
+
+    <form *ngIf="info" [formGroup]="infoForm" novalidate class="editForm">
+      <div class="modal-header justify-content-center mt-2">
+        <a href="">
+          <h1 class="texto-centrado">Informacion del ganado</h1>
+          <span>Informacion del ganado cargado seleccionado</span>
+        </a>
+      </div>
+      <div class="card">
+        <div class="card-body">
+            <div class="mt-4">
+          <div class="form-group  mb-3">
+            <label for="exampleInputPassword1">
+              <strong>Caravana: </strong>{{CaravanaSeleccionada}}<br>
+              <strong>Categoria: </strong> {{categoriaCaravanaEncontrada}}<br>
+              <strong>Raza: </strong> {{razaCaravanaEncontrada}}<br>
+              <strong>Peso: </strong>{{pesoCaravanaEncontrada}}<br>
+              <strong>Sector: </strong>{{sectorCaravanaEncontrada}}
+
+            </label>
+                   
+          </div>            
+
+          
+
+
+
+            </div>
+      <div class="modal-footer justify-content-center">
+
+
+                  
+      </div>
+
+    </div>
+  </div>   
+
+    </form>
+
+
+
+
+
+
+
+
+
+  </div>
+</ng-template>

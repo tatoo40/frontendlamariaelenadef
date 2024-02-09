@@ -1,0 +1,96 @@
+<div class="card">
+
+    <!-- card Header-->
+    <div class="p-3">
+        <div class="d-md-flex align-items-center">
+            <div class="btn-group">
+                <a routerLink='/administracion/ingreso-romaneo'
+                    class="btn btn-default bg-white text-info d-flex align-items-center shadow-sm me-2">
+                    <i class="mdi mdi-chevron-left fs-6 me-1"></i> <span>Volver</span>
+                </a>
+   
+            </div>
+            <div class="ms-auto mt-3 mt-md-0">
+                <h4 class="mb-0">Transaccion: #{{romaneoDetail.nro_trans}}</h4>
+            </div>
+        </div>
+    </div>
+
+    <!-- card Body-->
+    <div class="card-body">
+        <div class="row">
+
+            <div class="col-md-6 text-start text-md-right">
+                <h5 class="mt-2">Fecha romaneo:</h5>
+                <span>
+                    <i class="mdi mdi-calendar me-1 text-dark fs-5"></i>
+                    {{romaneoDetail.fecha| date:'fullDate'}}
+                </span>
+            </div>
+        </div>
+        <hr />
+        <div class="row mb-3">
+            <div class="col-md-6 text-start">
+                <h5>Cliente:</h5>
+                <span>{{ romaneoDetail.id_titular }} - {{ romaneoDetail.nombre_fantasia }}</span>
+                <span class="d-block">{{ romaneoDetail.rut }}</span>
+                <span class="d-block">{{ romaneoDetail.direccion }}</span>
+                <span class="d-block">{{ romaneoDetail.email }}</span>
+            </div>
+            <div class="col-md-6 text-start">
+                <h5>&nbsp;</h5>
+               
+                <span class="d-block"><strong>Nro trans. afectado:</strong> {{ romaneoDetail.nro_trans_ref }}</span>
+            
+    
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 text-start">
+                <h5>Dastos romaneo:</h5>
+                <span class="d-block"><strong>Romaneo / tropa:</strong>{{ romaneoDetail.nro_romaneo }}/{{ romaneoDetail.nro_tropa }}</span>
+                <span class="d-block"><strong>Kilos totales:</strong>{{ romaneoDetail.cantidad_kilos_declarados | number: '1.2-2'  }}  kg</span>
+                <span class="d-block"><strong>Kilos 4ta balanza:</strong>{{ romaneoDetail.cantidad_kilos_cuarta_balanza | number: '1.2-2'  }}  kg</span>
+
+            </div>
+            <div class="col-md-6 text-start">
+                <h5>&nbsp;</h5>
+                <span class="d-block"><strong>Cantidad animales:</strong> {{ romaneoDetail.cantidad_animales }} Un.</span>
+                <span class="d-block"><strong>Cantidad kilos salida:</strong>{{ romaneoDetail.cantidad_kilos_salida | number: '1.2-2'  }} kg</span>
+                <span class="d-block"><strong>Porcentaje rendimiento:</strong>{{ romaneoDetail.porcentaje_rendimiento | number: '1.2-2'  }} %</span>
+       
+    
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover no-wrap align-middle">
+                    <thead>
+                        <tr>
+                            <th class="border-bottom-0">Producto</th>
+                            <th class="border-bottom-0">Caravana</th>
+                            <th class="border-bottom-0 text-center">Kilos salida</th>
+                            <th class="border-bottom-0 text-center">Kilos llegada</th>
+                            <th class="border-bottom-0 text-info text-center">Kilos 4ta balanza</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngFor="let order of romaneoDetail.lineasRomaneo">
+                        <tr>
+                            <td>{{ order.cod_articulo }} - {{ order.nom_articulo }} </td>
+                            <td>{{ order.cod_identidad}} </td>
+                            <td class="text-center">{{ order.kilos_salida }} </td>
+                            <td class="text-center">{{ order.kilos_calc_declarado }}</td>
+                            <td class="text-center">{{ order.kilos_calc_cuarta_balanza }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+
+    </div>
+
+
+</div>

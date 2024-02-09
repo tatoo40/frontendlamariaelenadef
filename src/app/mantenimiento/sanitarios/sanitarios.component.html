@@ -1,0 +1,251 @@
+<div class="row">
+  <div class="col-12">
+    <div class="card card-body">
+      <h4 class="card-title">{{ nombreSeccion   | titlecase }}</h4>
+      <h5 class="card-subtitle">Lista de {{ nombreSeccion  }}.</h5>
+      <div class="d-flex mb-3 mt-3">
+        <input type="text" class="form-control w-25" placeholder="Buscar por nombre" [(ngModel)]='searchTerm'>
+        <button class="btn btn-primary ms-auto" (click)="chequeoApertura(1,editDatoModal, null)">Agregar {{ nombreSeccion  }}</button>
+      </div>
+      <div class="table-responsive table-bordered">
+        <table class="table table-striped mb-0 no-wrap align-middle">
+          <thead>
+            <tr>
+              <th class="text-center" scope="col">#</th>
+              <th scope="col">Descripcion</th>
+              <th scope="col">Frecuencia</th>
+              <th scope="col">Recurrente</th>
+              <th scope="col">Unidad de frecuencia</th>
+
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let dato of filterArray | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
+       
+            
+              <td class="text-center">
+                {{dato.id}}
+              </td>
+
+              <td>{{ dato.descripcion }}</td>
+         
+              <td>{{ dato.frecuencia }}</td>
+              <td>{{ dato.recurrente }}</td>
+              <td>{{ dato.unidad_frecuencia }}</td>         
+     
+              <td>
+                <a href="javascript: void(0);" (click)="chequeoApertura(3,editDatoModal, dato)" class="link me-2"
+                  placement="top" ngbTooltip="Edit">
+                  <!-- <i class="far fa-edit"></i> -->
+                  <i-feather name="edit-2" class="feather-sm"></i-feather>
+                </a>
+                <a href="javascript: void(0);" class="link" (click)="deleteDato(3,dato.id)" placement="top"
+                  ngbTooltip="Delete">
+                  <i-feather name="trash-2" class="feather-sm"></i-feather>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="d-flex justify-content-center mt-5">
+        <ngb-pagination [(page)]="page" [pageSize]="pageSize" [collectionSize]="filterArray.length"></ngb-pagination>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #editDatoModal let-modal>
+
+  <div class="modal-header">
+
+    <h5 class="modal-title" id="editUserLabel">Agregar</h5>
+
+    <button type="button" class="close" (click)="closeBtnClick()" aria-label="Close">
+    </button>
+
+  </div>
+
+  <div class="modal-body">
+
+    <form [formGroup]="editDato" (ngSubmit)="onSubmit()">
+
+
+
+      <div class="mb-3 row">
+        <label for="descripcion" class="col-sm-4 col-form-label">Descripcion</label>
+        <div class="col-sm-8">
+          <input
+            type="text"
+            class="form-control"
+            formControlName="descripcion"
+            id="descripcion"
+            [ngClass]="{ 'is-invalid': submitted && f['descripcion'].errors }"
+          />
+          <div *ngIf="submitted && f['descripcion'].errors" class="invalid-feedback">
+            <div *ngIf="f['descripcion'].errors['required']">Descripcion es obligatorio</div>
+      
+          </div>
+        </div>
+      </div>
+
+
+
+
+      <div class="mb-3 row">
+        <label for="frecuencia" class="col-sm-4 col-form-label">Frecuencia</label>
+        <div class="col-sm-8">
+          <input
+            type="text"
+            class="form-control"
+            formControlName="frecuencia"
+            id="frecuencia"
+            [ngClass]="{ 'is-invalid': submitted && f['frecuencia'].errors }"
+          />
+          <div *ngIf="submitted && f['frecuencia'].errors" class="invalid-feedback">
+            <div *ngIf="f['frecuencia'].errors['required']">Frecuencia es obligatorio</div>
+      
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="mb-3 row">
+        <label for="dosis" class="col-sm-4 col-form-label">Dosis (l/animal)</label>
+        <div class="col-sm-8">
+          <input
+            type="text"
+            class="form-control"
+            formControlName="dosis"
+            id="dosis"
+            [ngClass]="{ 'is-invalid': submitted && f['dosis'].errors }"
+          />
+          <div *ngIf="submitted && f['dosis'].errors" class="invalid-feedback">
+            <div *ngIf="f['dosis'].errors['required']">Dosis es obligatorio</div>
+      
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3 row">
+        <label for="position" class="col-sm-4 col-form-label">Recurrente</label>
+        <div class="col-sm-8">
+
+
+          <select name="recurrente" class="form-select mr-sm-2" formControlName="recurrente" id="recurrente"
+          [ngClass]="{ 'is-invalid': submitted && f['recurrente'].errors }"  >
+            <option value="-1" [ngValue]="-1">Seleccione...</option>
+            <option  
+            [value]="true" [ngValue]="true"  >
+          Si
+            </option>
+
+            <option  
+            [value]="false" [ngValue]="false"  >
+          No
+            </option>          
+          </select>  
+          <div
+            *ngIf="submitted && f['recurrente'].errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['recurrente'].errors['required']">
+              Recurrente es obligatorio
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3 row">
+        <label for="position" class="col-sm-4 col-form-label">Unidad frecuencia</label>
+        <div class="col-sm-8">
+
+
+          <select name="unidad_frecuencia" class="form-select mr-sm-2" formControlName="unidad_frecuencia" id="unidad_frecuencia"
+          [ngClass]="{ 'is-invalid': submitted && f['unidad_frecuencia'].errors }"  >
+            <option value="-1" [ngValue]="-1">Seleccione...</option>
+            <option  
+            [value]="dias" [ngValue]="dias"  >
+          Dias
+            </option>
+
+            <option  
+            [value]="semanal" [ngValue]="semanal"  >
+          Semanal
+            </option> 
+            <option  
+            [value]="mensual" [ngValue]="mensual"  >
+            Mensual
+            </option>            
+            
+          </select>  
+          <div
+            *ngIf="submitted && f['unidad_frecuencia'].errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['unidad_frecuencia'].errors['required']">
+              Unidad de frecuencia es obligatoria
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="mb-3 row">
+        <label for="position" class="col-sm-4 col-form-label">Articulo suministrado:</label>
+        <div class="col-sm-8">
+
+
+          <select name="cod_articulo" class="form-select mr-sm-2" formControlName="cod_articulo" id="cod_articulo"
+          [ngClass]="{ 'is-invalid': submitted && f['cod_articulo'].errors }"  >
+            <option value="-1" [ngValue]="-1">Seleccione...</option>
+            <option  *ngFor="let art of filteredArticulos" 
+            [value]="art.cod_articulo" [ngValue]="art.cod_articulo"  >
+          {{art.nombre}}
+            </option>
+
+            
+          </select>  
+
+
+
+
+          <div
+            *ngIf="submitted && f['cod_articulo'].errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['cod_articulo'].errors['required']">
+              Articulo es obligatorio
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+
+
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeBtnClick()"
+        >
+          Cerrar
+        </button>
+
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="editDato.invalid"
+        >
+          Guardar
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>

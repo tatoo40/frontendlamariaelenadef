@@ -1,0 +1,55 @@
+
+
+    <div class="col-md-12">
+        <div class="card bg-info">
+            <div class="card-body">
+                <div class="text-center text-white">
+                    <h4 class="card-title text-white">La Calera, Rivera</h4>
+                    <h5 class="fw-light text-white">{{ this.dia | date :'fullDate' }}</h5>
+                    <div class="mt-4">
+      
+                        <div class="d-inline-block m-l-30">
+                            <h2 class=" text-white"> {{this.temperatura_hoy_maxima}}° C / {{this.temperatura_hoy_minima}}° C</h2>
+                            <h4 class="fw-light text-white">{{this.descripcion_clima_hoy}}</h4>
+                            <div>Lluvia {{ weatherData?.DailyForecasts[0].Day.RainProbability }}%</div>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <div class="row text-center">
+
+
+                                <div class="col-6 col-md-3" *ngFor="let dailyForecast of weatherDataOtros || [] let i = index">
+                       
+                                        <div class="mb-2">{{ dailyForecast.Date | date :'EEE' }}</div>
+
+            
+                                        <i [ngSwitch]="dailyForecast?.Day?.Icon" class="wi fs-6 mb-2" 
+                                        [class.wi-day-thunderstorm]="dailyForecast?.Day?.Icon === 17" 
+                                        [class.wi-day-sunny]="dailyForecast?.Day?.Icon === 1"
+                                        [class.wi-day-sunny-overcast]="dailyForecast?.Day?.Icon === 4"
+                                        [class.wi-day-rain-mix]="dailyForecast?.Day?.Icon === 14"
+                                        [class.wi-day-cloud]="dailyForecast?.Day?.Icon === 7"     
+                                        [class.wi-day-showers]="dailyForecast?.Day?.Icon === 12"   
+                                        [class.wi-day-storm-showers]="dailyForecast?.Day?.Icon === 15"   
+                                        [class.wi-day-cloudy]="dailyForecast?.Day?.Icon === 3"   
+                                        [class.wi-day-cloudy-high]="dailyForecast?.Day?.Icon === 6"   
+                                        [class.wi-day-sunny-overcast]="dailyForecast?.Day?.Icon === 2"   
+  
+                                        
+                                        ></i>
+                                        <div>{{ dailyForecast.Temperature.Maximum.Value }}°<span>C</span> / {{ dailyForecast.Temperature.Minimum.Value }}°<span>C</span></div>
+                                        <div>Lluvia {{ dailyForecast.Day.RainProbability }}%</div>
+                                 
+
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+

@@ -1,0 +1,908 @@
+<form *ngIf="pasoUno" #accionRapidaFormPasoUno="ngForm" class="editForm" novalidate>
+      <div class="modal-header justify-content-center mt-2">
+        <a href="index.html">
+          <h1>PASO 1</h1>
+          <span>Subir archivo csv</span>
+        </a>
+      </div>
+      <div class="modal-body px-4 texto-centrado">
+       
+        <form id="formInputRapido" class="mt-3">
+          <label for="fileInput"> 
+            <img id="icon" src="https://image.freepik.com/free-icon/upload-arrow_318-26670.jpg">
+          </label>
+            <input  
+            #fileUploadSimple
+            [accept]="'.csv'"
+            type="file"
+            class="file-input"
+            (change)="importDataFromCSV($event)"
+             class="form-control" type="file" id="fileInput">
+             
+        </form>
+        <div class="p-3">
+          <p class="card-title mb-0 justify-content-center">Presione sobre el boton para subir el csv</p>
+        </div>
+        <div>Datos cargados</div>
+        <form class="w-100 mb-4">
+          <input type='text' class="form-control" placeholder='Filtro por caravana.' (keyup)='updateFilter($event)' />
+        </form>
+  
+
+        <ngx-datatable #table_suba_rapido class='material' [columns]="this.columns" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50"
+        [rowHeight]="'auto'" [limit]="10" [rows]='rows'>
+      </ngx-datatable>
+      
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button *ngIf="!existeCaravana &&  noPasoAun"
+          class="btn btn-primary"
+          type="submit"
+          (click)="submitPasoUno(accionRapidaFormPasoUno,1)">
+          Dar de alta
+        </button>
+        <button *ngIf="existeCaravana  &&  noPasoAun"
+          class="btn btn-primary"
+          type="submit"
+          (click)="submitPasoUnoRegSanitario(accionRapidaFormPasoUno,4)">
+        
+          Registro sanitario
+        </button>   
+        <button *ngIf="existeCaravana  &&  noPasoAun"
+          class="btn btn-primary"
+          type="submit"
+          (click)="submitPasoUno(accionRapidaFormPasoUno,3)">
+          Trasladar
+        </button>   
+        <button *ngIf="existeCaravana  &&  noPasoAun"
+          class="btn btn-primary"
+          type="submit"
+          (click)="submitPasoUno(accionRapidaFormPasoUno,2)">
+          Salida
+        </button>         
+        <button *ngIf="existeCaravana  &&  noPasoAun"
+          class="btn btn-primary"
+          type="submit"
+          (click)="submitPasoUnoRegPesada(accionRapidaFormPasoUno,5)">
+          Pesada
+        </button>               
+      </div>
+    </form>
+
+
+
+
+    <form *ngIf="pasoDosRegistroSanitario"  class="editForm" [formGroup]="segundoPasoFormRegSanitario" novalidate>
+      <div class="modal-header justify-content-center mt-2">
+        <a href="">
+          <h1 class="texto-centrado">PASO 2</h1>
+          <span>Cargar informacion de la sanidad</span>
+        </a>
+      </div>
+      <div class="card">
+        <div class="card-body">
+            <div class="mt-4">
+
+            <div class="form-group mb-3">
+                <label for="fecha">Fecha</label>
+
+                <input type="date" name="fecha" id="fecha" 
+                class="form-control" [value]="" formControlName="fecha">
+                
+   
+                <small class="form-text text-danger"
+                *ngIf="segundoPasoFormRegSanitario.controls['fecha'].invalid && (segundoPasoFormRegSanitario.controls['fecha'].dirty || segundoPasoFormRegSanitario.controls['fecha'].touched)">Por favor ingrese una fecha valida!
+              </small>             
+            </div>
+           <div class="form-group  mb-3">
+                <label for="id_motivo_sanitario">Sanidad aplicada al lote</label>
+                <select id="id_motivo_sanitario" name="id_motivo_sanitario" class="form-select mr-sm-2"  formControlName="id_motivo_sanitario" >
+                  <option value="-1" selected>Seleccione...</option>
+                  <option  *ngFor="let motivo of motivosSanitarios" 
+                  [value]="motivo.id" >
+                {{motivo.descripcion}}
+              </option>
+ 
+                  
+                </select>
+                <small class="form-text text-danger"
+                *ngIf="segundoPasoFormRegSanitario.controls['id_motivo_sanitario'].invalid && (segundoPasoFormRegSanitario.controls['id_motivo_sanitario'].dirty || segundoPasoFormRegSanitario.controls['id_motivo_sanitario'].touched)">Por favor ingrese motivo_sanitario
+              </small>                  
+            </div>
+
+
+
+            <div  class="form-group  mb-3">
+              <label for="exampleInputEmail1">Observaciones </label><br>
+              <input type="text" name="observaciones" class="form-control" value=""  formControlName="observaciones">
+    
+              <small class="form-text text-danger"
+             
+             
+             
+              *ngIf="segundoPasoFormRegSanitario.controls['observaciones'].invalid && (segundoPasoFormRegSanitario.controls['observaciones'].dirty || segundoPasoFormRegSanitario.controls['observaciones'].touched)">Por favor ingrese la observacion
+            </small>  
+                
+
+            </div>
+
+
+
+
+
+
+            <div  class="form-group  mb-3">
+                  <div class="form-check">
+
+                      <input id="checkbox-signup" name="pesada_muestra" type="checkbox" class="form-check-input" formControlName="pesada_muestra">
+                      <label for="checkbox-signup"  class="form-check-label"> Con pesada de muestra al lote</label>
+                  </div>
+              </div>
+          
+
+
+
+
+      
+            </div>
+   
+      <div class="modal-footer justify-content-center">
+
+        <button type="submit" (click)="submitPasoTresRegistroSanitario(segundoPasoFormRegSanitario)"
+        [disabled]="segundoPasoFormRegSanitario.pristine || segundoPasoFormRegSanitario.invalid" class="btn btn-primary">
+        Continuar
+        </button>
+      </div>
+
+
+
+
+    </div>
+  </div>   
+
+    </form>
+
+
+
+
+
+
+
+
+    <form *ngIf="pasoDosRegistroPesada"  class="editForm" [formGroup]="segundoPasoFormRegPesada" novalidate>
+      <div class="modal-header justify-content-center mt-2">
+        <a href="">
+          <h1 class="texto-centrado">PASO 2</h1>
+          <span>Cargar informacion de la pesada</span>
+        </a>
+      </div>
+      <div class="card">
+        <div class="card-body">
+            <div class="mt-4">
+
+            <div class="form-group mb-3">
+                <label for="fecha">Fecha</label>
+
+                <input type="date" name="fecha" id="fecha" 
+                class="form-control" [value]="" formControlName="fecha">
+                
+   
+                <small class="form-text text-danger"
+                *ngIf="segundoPasoFormRegPesada.controls['fecha'].invalid && (segundoPasoFormRegPesada.controls['fecha'].dirty || segundoPasoFormRegPesada.controls['fecha'].touched)">Por favor ingrese una fecha valida!
+              </small>             
+            </div>
+
+
+
+
+            <div  class="form-group  mb-3">
+              <label for="exampleInputEmail1">Observaciones </label><br>
+              <input type="text" name="observaciones" class="form-control" value=""  formControlName="observaciones">
+    
+              <small class="form-text text-danger"
+             
+             
+             
+              *ngIf="segundoPasoFormRegPesada.controls['observaciones'].invalid && (segundoPasoFormRegPesada.controls['observaciones'].dirty || segundoPasoFormRegPesada.controls['observaciones'].touched)">Por favor ingrese la observacion
+            </small>  
+                
+
+            </div>
+
+
+
+
+
+
+      
+            </div>
+   
+      <div class="modal-footer justify-content-center">
+
+        <button type="submit" (click)="submitPasoTresRegistroPesada(segundoPasoFormRegPesada)"
+        [disabled]="segundoPasoFormRegPesada.pristine || segundoPasoFormRegPesada.invalid" class="btn btn-primary">
+        Continuar
+        </button>
+      </div>
+
+
+
+
+    </div>
+  </div>   
+
+    </form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <form *ngIf="pasoDos"  class="editForm" [formGroup]="segundoPasoForm" novalidate>
+      <div class="modal-header justify-content-center mt-2">
+        <a href="">
+          <h1 class="texto-centrado">PASO 2</h1>
+          <span>Cargar informacion general</span>
+        </a>
+      </div>
+      <div class="card">
+        <div class="card-body">
+            <div class="mt-4">
+
+            <div class="form-group mb-3">
+                <label for="fecha">Fecha</label>
+
+                <input type="date" name="fecha" id="fecha" 
+                class="form-control" [value]="" formControlName="fecha">
+                
+   
+                <small class="form-text text-danger"
+                *ngIf="segundoPasoForm.controls['fecha'].invalid && (segundoPasoForm.controls['fecha'].dirty || segundoPasoForm.controls['fecha'].touched)">Por favor ingrese una fecha valida!
+              </small>             
+            </div>
+           <div class="form-group  mb-3">
+                <label for="id_motivo_mov_stk">Motivo</label>
+                <select id="id_motivo_mov_stk" name="id_motivo_mov_stk" class="form-select mr-sm-2"  formControlName="id_motivo_mov_stk" (change)="onSelected(segundoPasoForm.controls['id_motivo_mov_stk'].value)">
+                  <option value="-1" selected>Seleccione...</option>
+                  <option  *ngFor="let motivo of filtrarMotivo(motivosMovimiento)" 
+                  [value]="motivo.id" >
+                {{motivo.descripcion}}
+              </option>
+ 
+                  
+                </select>
+                <small class="form-text text-danger"
+                *ngIf="segundoPasoForm.controls['id_motivo_mov_stk'].invalid && (segundoPasoForm.controls['id_motivo_mov_stk'].dirty || segundoPasoForm.controls['id_motivo_mov_stk'].touched)">Por favor ingrese el tipo de ganado
+              </small>                  
+            </div>
+
+
+
+            <div *ngIf="segundoPasoForm.controls['id_motivo_mov_stk'].value==3 || segundoPasoForm.controls['id_motivo_mov_stk'].value==4 || 
+            segundoPasoForm.controls['id_motivo_mov_stk'].value==12 || segundoPasoForm.controls['id_motivo_mov_stk'].value==15 || segundoPasoForm.controls['id_motivo_mov_stk'].value==19 || 
+            segundoPasoForm.controls['id_motivo_mov_stk'].value==7 || segundoPasoForm.controls['id_motivo_mov_stk'].value==5" class="form-group  mb-3">
+              <label for="exampleInputEmail1">Observaciones </label><br>
+              <input type="text" name="observaciones" class="form-control" value=""  formControlName="observaciones">
+    
+              <small class="form-text text-danger"
+             
+             
+             
+              *ngIf="segundoPasoForm.controls['observaciones'].invalid && (segundoPasoForm.controls['observaciones'].dirty || segundoPasoForm.controls['observaciones'].touched)">Por favor ingrese la observacion
+            </small>  
+                
+
+            </div>
+
+
+
+
+
+            <div *ngIf="segundoPasoForm.controls['id_motivo_mov_stk'].value==1 || segundoPasoForm.controls['id_motivo_mov_stk'].value==2" class="form-group  mb-3 contendor-guia">
+              <label for="exampleInputEmail1">Guia </label><br>
+              <input type="text" name="serie_guia" class="form-control control-chico" value=""  formControlName="serie_guia">
+              <input type="text" name="nro_guia" class="form-control control-gde" value="" formControlName="nro_guia">
+              <small class="form-text text-danger"
+             
+             
+             
+              *ngIf="segundoPasoForm.controls['serie_guia'].invalid && (segundoPasoForm.controls['serie_guia'].dirty || segundoPasoForm.controls['serie_guia'].touched)">Por favor ingrese la serie de la guia
+            </small>  
+            <small class="form-text text-danger"
+            *ngIf="segundoPasoForm.controls['nro_guia'].invalid && (segundoPasoForm.controls['nro_guia'].dirty || segundoPasoForm.controls['nro_guia'].touched)">Por favor ingrese el nro de la guia
+          </small>              
+
+            </div>
+
+
+            <div *ngIf="segundoPasoForm.controls['id_motivo_mov_stk'].value==3 || segundoPasoForm.controls['id_motivo_mov_stk'].value==4 || 
+            segundoPasoForm.controls['id_motivo_mov_stk'].value==12 || segundoPasoForm.controls['id_motivo_mov_stk'].value==15 || segundoPasoForm.controls['id_motivo_mov_stk'].value==1 || segundoPasoForm.controls['id_motivo_mov_stk'].value==2"  class="form-group  mb-3">
+              <label for="dicose">Dicose</label>
+              <select id="dicose" name="dicose" class="form-select mr-sm-2"  formControlName="dicose">
+                <option value="-1" selected>Seleccione...</option>
+                <option  *ngFor="let dicose of dicoses"  
+                [value]="dicose.id" [selected]="dicose.id===1" >
+              {{dicose.valor}}
+            </option>
+
+                
+              </select>
+              <small class="form-text text-danger"
+              *ngIf="segundoPasoForm.controls['dicose'].invalid && (segundoPasoForm.controls['dicose'].dirty || segundoPasoForm.controls['dicose'].touched)">Por favor ingrese el dicose
+            </small>                  
+          </div>
+
+
+
+
+
+
+      
+            </div>
+
+      <div *ngIf="idMotivoFiltro==1" class="modal-footer justify-content-center">
+
+        <button type="submit" (click)="submitPasoDos(segundoPasoForm)"
+        [disabled]="segundoPasoForm.pristine || segundoPasoForm.invalid" class="btn btn-primary">
+        Continuar
+        </button>
+      </div>
+
+      <div *ngIf="idMotivoFiltro==2"  class="modal-footer justify-content-center">
+      
+      <button  type="submit" (click)="submitPasoDosAjusteMenos(segundoPasoForm)"
+        [disabled]="segundoPasoForm.pristine || segundoPasoForm.invalid" class="btn btn-primary">
+        Continuar
+        </button>
+                  
+      </div>
+
+      <div *ngIf="idMotivoFiltro==3" class="modal-footer justify-content-center">
+      
+        <button  type="submit" (click)="submitPasoDosTraslado(segundoPasoForm)"
+          [disabled]="segundoPasoForm.pristine || segundoPasoForm.invalid" class="btn btn-primary">
+          Continuar
+          </button>
+                    
+        </div>
+
+
+    </div>
+  </div>   
+
+    </form>
+
+
+
+
+    <form *ngIf="pasoTresTraslado" [formGroup]="tercerPasoFormTraslado" novalidate class="editForm">
+      <div class="modal-header justify-content-center mt-2">
+        <a href="">
+          <h1 class="texto-centrado">PASO 3</h1>
+          <span>Informacion del ganado cargado</span>
+        </a>
+      </div>
+      <div class="card">
+        <div class="card-body">
+            <div class="mt-4">
+
+
+
+
+
+          <div class="form-group  mb-3">
+              <label for="exampleInputPassword1">El ganado esta ubicado en el sector(s) <b>{{strArrayDepositosOrigenes}}</b>. Seleccion hacia donde lo quiere trasladar.</label>
+                   
+          </div>            
+
+
+
+          <div class="form-group  mb-3">
+            <label for="exampleInputPassword1">Destino:</label>
+           
+           
+ 
+            <select name="id_sector_destino" class="form-select mr-sm-2" 
+            formControlName="id_sector_destino">
+              <option value="-1">Seleccione...</option>
+              <option  *ngFor="let sec of sectores" 
+              [value]="sec.id" [selected]="sec.id ==1" >
+            {{sec.nombre}}
+              </option>
+
+              </select>
+
+
+
+
+            <small class="form-text text-danger"
+               *ngIf="tercerPasoFormTraslado.controls['id_sector_destino'].invalid && (tercerPasoFormTraslado.controls['id_sector_destino'].dirty || tercerPasoFormTraslado.controls['id_sector_destino'].touched)">Por favor ingrese un sector valido
+            </small>                  
+          </div> 
+
+
+
+
+
+
+            </div>
+      <div class="modal-footer justify-content-center">
+
+        <button type="submit" (click)="submitPasoCuatro(tercerPasoFormTraslado)"
+        [disabled]="tercerPasoFormTraslado.pristine || tercerPasoFormTraslado.invalid" class="btn btn-primary">
+        Continuar
+        </button>
+                  
+      </div>
+
+    </div>
+  </div>   
+
+    </form>
+
+
+
+
+
+
+    <form *ngIf="pasoTresRegistroSanitario" [formGroup]="tercerPasoFormRegistroSanitario" novalidate class="editForm">
+      <div class="modal-header justify-content-center mt-2">
+        <a href="">
+          <h1 class="texto-centrado">PASO 3</h1>
+          <span>Informacion del ganado saneado</span>
+        </a>
+      </div>
+      <div class="card">
+        <div class="card-body">
+
+
+
+   
+            <div class="mt-4 text-center">
+              <i class="me-2 mdi mdi-thumb-up"></i>
+                <h4 class="card-title mt-2">Resumen de transaccion</h4>
+                <h6 class="card-subtitle">Este es el resumen de la accion actual</h6>
+                <hr>
+                <div class="row mb-3 mb-3">
+                    <p>Se registrara el saneado un total de <strong>{{animalesSaneados}}</strong> animales por motivo sanitario <strong>{{nombreProcesoSanitario}}</strong>.
+                    </p>
+              
+                </div>
+                <div 
+                 *ngIf="afectaPeso"  class="row mb-3">
+          
+                  <div class="row">
+                  <p>Se declara que el ganado ha sido pesado por muestra, alterando los pesos de cada animal que integra el lote saneado.</p>
+                  <hr>
+
+                    <div class="col-12 mb-3">
+                          
+                      <p>Peso anterior de la muestra:<strong>{{kilosAnimalesSaneadosMuestraActual}} kg</strong></p>
+                    
+                    </div>
+                    <div class="col-12 mb-3">
+                
+                      <p>Peso actual de la muestra:<strong>{{kilosAnimalesSaneadosMuestraNueva}} kg</strong></p>
+                  
+                    </div>
+                    <div class="col-12 mb-3">
+                    
+                      <p>Porcentaje de incremento de kilos: <strong>{{porcentajeKilosAumentados }}%</strong></p>
+                      
+                    </div> 
+                  </div>
+                </div>
+
+               
+         
+
+            </div>
+
+   
+
+
+      <div class="modal-footer justify-content-center">
+
+        <button type="submit" (click)="submitPasoCuatro(tercerPasoFormRegistroSanitario)" class="btn btn-primary">
+        Continuar
+        </button>
+                  
+      </div>
+
+    </div>
+  </div>   
+
+    </form>
+
+
+
+
+
+
+
+    <form *ngIf="pasoTresRegistroPesada" [formGroup]="tercerPasoFormRegistroPesada" novalidate class="editForm">
+      <div class="modal-header justify-content-center mt-2">
+        <a href="">
+          <h1 class="texto-centrado">PASO 3</h1>
+          <span>Informacion del ganado pesado</span>
+        </a>
+      </div>
+      <div class="card">
+        <div class="card-body">
+
+
+
+   
+            <div class="mt-4 text-center">
+              <i class="me-2 mdi mdi-thumb-up"></i>
+                <h4 class="card-title mt-2">Resumen de transaccion</h4>
+                <h6 class="card-subtitle">Este es el resumen de la accion actual</h6>
+                <hr>
+                <div class="row mb-3 mb-3">
+                    <p>Se registrara el peso de un total de <strong>{{animalesPesados}}</strong>.
+                    </p>
+              
+                </div>
+                <div  class="row mb-3">
+          
+                  <div class="row">
+
+                  
+                    <div class="col-12 mb-3">
+                          
+                      <p>Peso anterior de la muestra:<strong>{{kilosAnimalesSaneadosMuestraActual}} kg</strong></p>
+                    
+                    </div>
+                    <div class="col-12 mb-3">
+                
+                      <p>Peso actual de la muestra:<strong>{{kilosAnimalesSaneadosMuestraNueva}} kg</strong></p>
+                  
+                    </div>
+                    <div class="col-12 mb-3">
+                    
+                      <p>Porcentaje de incremento de kilos: <strong>{{porcentajeKilosAumentados }}%</strong></p>
+                      
+                    </div> 
+                  </div>
+                </div>
+
+               
+         
+
+            </div>
+
+   
+
+
+      <div class="modal-footer justify-content-center">
+
+        <button type="submit" (click)="submitPasoCuatro(tercerPasoFormRegistroPesada)" class="btn btn-primary">
+        Continuar
+        </button>
+                  
+      </div>
+
+    </div>
+  </div>   
+
+    </form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <form *ngIf="pasoTres" [formGroup]="tercerPasoForm" novalidate class="editForm">
+      <div class="modal-header justify-content-center mt-2">
+        <a href="">
+          <h1 class="texto-centrado">PASO 3</h1>
+          <span>Informacion del ganado cargado</span>
+        </a>
+      </div>
+      <div class="card">
+        <div class="card-body">
+            <div class="mt-4">
+
+
+
+
+
+          <div id="id_propiedad_ganado" class="form-group  mb-3">
+              <label for="exampleInputPassword1">Propiedad de ganado</label>
+              <select  name="id_propiedad_ganado" class="form-select mr-sm-2"  formControlName="id_propiedad_ganado">
+                <option value="-1" [ngValue]="-1">Seleccione...</option>
+                <option  *ngFor="let estado of estadoGanado" 
+                [value]="estado.id" [ngValue]="estado.id" >
+              {{estado.descripcion}}
+                </option>
+
+                
+              </select>
+              <small class="form-text text-danger"
+                 *ngIf="tercerPasoForm.controls['id_propiedad_ganado'].invalid && (tercerPasoForm.controls['id_propiedad_ganado'].dirty || tercerPasoForm.controls['id_propiedad_ganado'].touched)">Por favor ingrese la propiedad del ganado
+              </small>                  
+          </div>            
+
+
+
+          <div class="form-group  mb-3">
+            <label for="exampleInputPassword1">Tipo de ganado</label>
+           
+           
+ 
+            <select name="id_tipo_ganado" class="form-select mr-sm-2" 
+            formControlName="id_tipo_ganado">
+              <option value="-1">Seleccione...</option>
+              <option  *ngFor="let tipo of tipoGanado" 
+              [value]="tipo.id" [selected]="tipo.id ==1" >
+            {{tipo.descripcion}}
+              </option>
+
+              </select>
+
+
+
+
+            <small class="form-text text-danger"
+               *ngIf="tercerPasoForm.controls['id_tipo_ganado'].invalid && (tercerPasoForm.controls['id_tipo_ganado'].dirty || tercerPasoForm.controls['id_tipo_ganado'].touched)">Por favor ingrese el tipo de ganado
+            </small>                  
+          </div> 
+
+
+          <div class="form-group  mb-3">
+            <label for="exampleInputPassword1">Razas de ganado</label>
+            <select name="id_raza_ganado" class="form-select mr-sm-2"  formControlName="id_raza_ganado">
+              <option value="-1" selected>Seleccione...</option>
+              <option  *ngFor="let raza of razaGanado" 
+              [value]="raza.id" >
+            {{raza.descripcion}}
+              </option>
+
+              
+            </select>
+            <small class="form-text text-danger"
+               *ngIf="tercerPasoForm.controls['id_raza_ganado'].invalid && (tercerPasoForm.controls['id_raza_ganado'].dirty || tercerPasoForm.controls['id_raza_ganado'].touched)">Por favor ingrese la raza de ganado
+            </small>                  
+          </div> 
+
+
+
+
+          <div class="form-group  mb-3">
+            <label for="exampleInputPassword1">Categoria de ganado</label>
+            <select name="id_categoria_ganado" class="form-select mr-sm-2"  formControlName="id_categoria_ganado">
+              <option value="-1" selected>Seleccione...</option>
+              <option  *ngFor="let categoria of categoriaGanado" 
+              [value]="categoria.id" >
+            {{categoria.descripcion}}
+              </option>
+
+              
+            </select>
+            <small class="form-text text-danger"
+               *ngIf="tercerPasoForm.controls['id_categoria_ganado'].invalid && (tercerPasoForm.controls['id_categoria_ganado'].dirty || tercerPasoForm.controls['id_categoria_ganado'].touched)">Por favor ingrese el tipo de ganado
+            </small>                  
+          </div> 
+
+
+          <div *ngIf=false class="form-group  mb-3">
+            <label for="exampleInputPassword1">Tipo de peso</label>
+            <select name="id_tipo_peso" class="form-select mr-sm-2"  formControlName="id_tipo_peso">
+              <option value="-1" >Seleccione...</option>
+              <option  *ngFor="let peso of tipoPeso" 
+              [value]="peso.id" [selected]="peso.id ==1">
+            {{peso.descripcion}}
+              </option>
+
+              
+            </select>
+            <small class="form-text text-danger"
+               *ngIf="tercerPasoForm.controls['id_tipo_peso'].invalid && (tercerPasoForm.controls['id_tipo_peso'].dirty || tercerPasoForm.controls['id_tipo_peso'].touched)">Por favor ingrese el tipo de peso
+            </small>                  
+          </div> 
+
+
+          <div class="form-group  mb-3" >
+            <label for="exampleInputEmail1">Peso total facturado (kg)</label>
+            <input type="text" name="peso_total_facturado" class="form-control" value="0" formControlName="peso_total_facturado">
+          </div> 
+          <small class="form-text text-danger"
+          *ngIf="tercerPasoForm.controls['peso_total_facturado'].invalid && (tercerPasoForm.controls['peso_total_facturado'].dirty || tercerPasoForm.controls['peso_total_facturado'].touched)">Por favor ingrese el Peso total neto de la carga.
+        </small>   
+        
+        <div class="form-group  mb-3" >
+          <label for="exampleInputEmail1">Anexo lote</label>
+          <input type="text" name="anexo_lote" class="form-control" value="" formControlName="anexo_lote">
+        </div> 
+   
+    
+
+
+
+
+            </div>
+      <div class="modal-footer justify-content-center">
+
+        <button type="submit" (click)="submitPasoTres(tercerPasoForm)"
+        [disabled]="tercerPasoForm.pristine || tercerPasoForm.invalid" class="btn btn-primary">
+        Continuar
+        </button>
+                  
+      </div>
+
+    </div>
+  </div>   
+
+    </form>
+
+    <form *ngIf="pasoCuatro" [formGroup]="cuartoPasoForm" novalidate class="editForm">
+      <div class="modal-header justify-content-center mt-2">
+        <a href="">
+          <h1 class="texto-centrado">ULTIMO PASO</h1>
+          <span>Resumen y confirmacion de la carga</span>
+        </a>
+      </div>
+      <div class="card">
+
+        <div *ngIf="esMovimiento" class="card-body">
+          <div class="mt-4 text-center">
+            <i class="me-2 mdi mdi-thumb-up"></i>
+              <h4 class="card-title mt-2">Resumen de la transaccion</h4>
+              <h6 class="card-subtitle">Presione confirmar si usted desea confirmar el traslado</h6>
+
+
+
+
+
+
+
+          </div>
+
+    
+
+      </div>
+
+
+
+
+
+                      <div *ngIf="!esMovimiento" class="card-body">
+                          <div class="mt-4 text-center">
+                            <i class="me-2 mdi mdi-thumb-up"></i>
+                              <h4 class="card-title mt-2">Resumen de carga</h4>
+                              <h6 class="card-subtitle">Este es el resumen de la accion actual</h6>
+                              <div *ngIf="segundoPasoForm.controls['id_motivo_mov_stk'].value==1 || segundoPasoForm.controls['id_motivo_mov_stk'].value==4 || segundoPasoForm.controls['id_motivo_mov_stk'].value==3" class="row text-center justify-content-md-center">
+                                  <div class="col-4">
+                                      <a href="javascript:void(0)" class="link">
+                                        <i class="me-2 mdi mdi-scale"></i>
+                                          {{ this.pesoTotalFacturado }} kg
+                                      </a>
+                                  </div>
+                                  <div class="col-4">
+                                    <a href="javascript:void(0)" class="link">
+                                      <i class="me-2 mdi mdi-weight-kilogram"></i>
+                                        {{ this.pesoTotal }} kg
+                                    </a>
+                                  </div>
+                                  <div class="col-4">
+                                    <a href="javascript:void(0)" class="link">
+                                      <i class="me-2 mdi mdi-cow"></i>
+                                      {{ this.cantidad_total }} Un
+                                    </a>
+                                </div> 
+                                
+                              </div>
+                              <div *ngIf="segundoPasoForm.controls['id_motivo_mov_stk'].value==19" class="row text-center justify-content-md-center">
+             
+                                <div class="col-12">
+                                  <a href="javascript:void(0)" class="link">
+                                    <i class="me-2 mdi mdi-cow"></i>
+                                    La cantidad de animales a dar de alta es de {{ this.cantidad_total }} Unidades
+                                  </a>
+                              </div> 
+                              
+                            </div>
+
+                              <div *ngIf="segundoPasoForm.controls['id_motivo_mov_stk'].value==5 || segundoPasoForm.controls['id_motivo_mov_stk'].value==2" class="row text-center justify-content-md-center">
+                    
+                                <div class="col-6">
+                                  <a href="javascript:void(0)" class="link">
+                                    <i class="me-2 mdi mdi-weight-kilogram"></i>
+                                      {{ this.pesoTotal }} kg
+                                  </a>
+                                </div>
+                                <div class="col-6">
+                                  <a href="javascript:void(0)" class="link">
+                                    <i class="me-2 mdi mdi-cow"></i>
+                                    {{ this.cantidad_total }} Un
+                                  </a>
+                              </div> 
+                              
+                            </div>
+
+
+
+                          </div>
+
+                          <div *ngIf="segundoPasoForm.controls['id_motivo_mov_stk'].value==1 || segundoPasoForm.controls['id_motivo_mov_stk'].value==4" class="mt-4 text-center">
+                            <div class="col-md-6  text-center">
+                                <div class="form-check  text-center">
+
+                                    <input id="checkbox-signup" name="bania_garrapata" type="checkbox" class="form-check-input" formControlName="bania_garrapata">
+                                    <label for="checkbox-signup"  class="form-check-label"> Baño contra garrapata</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6  text-center">
+                              <div class="form-check  text-center">
+
+                                  <input id="checkbox-signup" name="parasitos_internos" type="checkbox" class="form-check-input" formControlName="parasitos_internos">
+                                  <label for="checkbox-signup"  class="form-check-label"> Parasitos internos</label>
+                              </div>
+                          </div>
+                          <div class="col-md-6  text-center">
+                            <div class="form-check  text-center">
+
+                                <input id="checkbox-signup" name="carbunco" type="checkbox" class="form-check-input" formControlName="carbunco">
+                                <label for="checkbox-signup"  class="form-check-label"> Carbunco</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6  text-center">
+                          <div class="form-check  text-center">
+
+                              <input id="checkbox-signup" name="clostridiosis" type="checkbox" class="form-check-input" formControlName="clostridiosis">
+                              <label for="checkbox-signup"  class="form-check-label"> Clostridiosis</label>
+                          </div>
+                      </div>                                                  
+
+                        </div>
+
+                      </div>
+
+
+
+
+
+
+        <div>
+            <hr> 
+        </div>
+      
+        <div class="modal-footer justify-content-center">
+
+          <button (click)="submitPasoCuatro(cuartoPasoForm)" class="btn btn-primary">
+          Confirmar
+          </button>   
+
+        </div>
+
+
+    </div>
+
+
+
+
+
+
+
+    </form> 

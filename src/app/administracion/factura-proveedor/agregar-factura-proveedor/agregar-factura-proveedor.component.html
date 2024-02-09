@@ -1,0 +1,495 @@
+<div class="card">
+  <div class="card-body">
+    
+    <form [formGroup]="invoiceForm" #form="ngForm">
+
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <h4 class="mb-0">
+            Factura Prov Id: #
+            <span name="id" id="id" ngDefaultControl>
+              {{ invoice.id }}</span
+            >
+          </h4>
+        </div>
+        <div class="col-md-6 mt-3 mt-md-0">
+          <div class="row justify-content-end">
+            <div class="col-lg-3 col-md-4 col-6">
+              <a
+                routerLink="/administracion/listadoFacturaProv"
+                class="btn btn-outline-danger shadow-sm font-medium d-block w-100"
+              >
+                Cancelar
+              </a>
+            </div>
+            <div class="col-lg-3 col-md-4 col-6">
+              <button
+                type="button"
+                class="btn btn-outline-success shadow-sm font-medium d-block w-100"
+                (click)="saveDetail()"
+                [disabled]="addForm?.invalid || invoiceForm?.invalid"
+
+                
+              >
+   
+                Guardar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex align-items-center border-top pt-3 pb-3 border-bottom">
+        <div class="ms-auto">
+          <h5>Fecha Hoy</h5>
+          <span>{{ fechaHoy | date : "dd/MM/yyyy" }}</span>
+        </div>
+
+      </div>
+
+      <div class="row mt-4">
+        <div class="col-md-8">
+          <h5>Proveedor:</h5>
+          <div>
+            <select
+              class="form-select"
+              id="id_titular"
+              name="id_titular"
+              formControlName="id_titular"
+              (change)="onProveedorSelected()"
+              [class.is-invalid]="id_titular.invalid && (id_titular.dirty || id_titular.touched)"
+            >
+              <option value="-1" [ngValue]="-1" selected>Seleccione...</option>
+              <option
+                *ngFor="let prov of proveedores"
+                [value]="prov.id"
+                [ngValue]="prov.id"
+                >
+                {{ prov.razon_social }}
+              </option>
+            </select>
+            <div *ngIf="id_titular.invalid && (id_titular.dirty || id_titular.touched)" class="invalid-feedback">
+              <div *ngIf="id_titular.errors?.['required']">
+               Este campo es obligatorio
+              </div>
+   
+            </div>
+          </div>
+        </div>
+
+
+
+        <div class="col-md-4">
+          <h5>Fecha de Factura:</h5>
+          <div>
+            <input
+              type="date"
+              class="form-control"
+              placeholder="Fecha factura"
+              id="fecha"
+              name="fecha"
+              formControlName="fecha"
+              [class.is-invalid]="fecha.invalid && (fecha.dirty || fecha.touched)"
+            />
+            <div *ngIf="fecha.invalid && (fecha.dirty || fecha.touched)" class="invalid-feedback">
+              <div *ngIf="fecha.errors?.['required']">
+               Este campo es obligatorio
+              </div>
+   
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-4">
+        <div class="col-md-8">
+          <div>
+            <input
+              type="text"
+              class="form-control"
+              name="rut"
+              placeholder="RUT"
+              formControlName="rut"
+              readonly
+              required
+            />
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div>
+            <input
+              type="text"
+              class="form-control"
+              name="direccion"
+              formControlName="direccion"
+              placeholder="Direccion"
+              readonly
+              required
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-4">
+        <div class="col-md-8">
+          <div class="mb-3">
+            <input
+              required
+              type="text"
+              class="form-control"
+              name="telefono_contacto"
+              formControlName="telefono_contacto"
+              placeholder="Telefono"
+              readonly
+            />
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="mb-3">
+            <input
+              required
+              type="text"
+              class="form-control"
+              name="email"
+              formControlName="email"
+              placeholder="Email"
+              readonly
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-4">
+        <div class="col-md-3">
+          <h5>Factura prov:</h5>
+          <div class="mb-3">
+            <div class="row">
+              <div class="col-md-3">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Serie"
+                  id="serie_fact_prov"
+                  name="serie_fact_prov"
+                  formControlName="serie_fact_prov"
+                  [class.is-invalid]="serie_fact_prov.invalid && (serie_fact_prov.dirty || serie_fact_prov.touched)"
+                 />
+                 <div *ngIf="serie_fact_prov.invalid && (serie_fact_prov.dirty || serie_fact_prov.touched)" class="invalid-feedback">
+                  <div *ngIf="serie_fact_prov.errors?.['required']">
+                   Este campo es obligatorio
+                  </div>
+       
+                </div>
+              </div>
+              <div class="col-md-9">
+                <input
+                type="number"
+                  class="form-control"
+                  placeholder="Nro."
+                  id="nro_fact_prov"
+                  name="nro_fact_prov"
+                  formControlName="nro_fact_prov"
+                  [class.is-invalid]="nro_fact_prov.invalid && (nro_fact_prov.dirty || nro_fact_prov.touched)"
+                  
+                  />
+                  <div *ngIf="nro_fact_prov.invalid && (nro_fact_prov.dirty || nro_fact_prov.touched)" class="invalid-feedback">
+                    <div *ngIf="nro_fact_prov.errors?.['required']">
+                     Este campo es obligatorio
+                    </div>
+         
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-2">
+          <div class="mb-3">
+            <h5>Moneda:</h5>
+            <div>
+
+
+ 
+
+
+              <select
+                class="form-select"
+                type="number"
+                id="id_moneda"
+                name="id_moneda"
+                formControlName="id_moneda"
+                [class.is-invalid]="id_moneda.invalid && (id_moneda.dirty || id_moneda.touched)"
+              >
+              <option value="-1"  selected>Seleccione...</option>
+                <option
+                  *ngFor="let mon of monedas"
+                  [value]="mon.id"
+       
+       
+                >
+                  {{ mon.simbolo }}
+                </option>
+              </select>
+              <div *ngIf="id_moneda.invalid && (id_moneda.dirty || id_moneda.touched)" class="invalid-feedback">
+                <div *ngIf="id_moneda.errors?.['required']">
+                 Este campo es obligatorio
+                </div>
+     
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="mb-3">
+            <h5>TC:</h5>
+            <div>
+              <input
+              type="number"
+                class="form-control"
+                placeholder="Tipo de cambio del dia"
+                id="tc"
+                name="tc"
+                formControlName="tc"
+                [class.is-invalid]="tc.invalid && (tc.dirty || tc.touched)"
+                readonly
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+
+          <div class="mb-3">
+            <h5>Lote de entrada:</h5>
+    
+            <div>
+            
+              
+
+
+
+
+
+
+
+
+
+              <select
+                  class="form-select"
+                  id="nro_trans_ref"
+                  name="nro_trans_ref"
+                  formControlName="nro_trans_ref"
+                  [class.is-invalid]="nro_trans_ref.invalid && (nro_trans_ref.dirty || nro_trans_ref.touched)"
+                  >
+                  <option value="-1" [ngValue]="-1" selected>Seleccione...</option>
+                  
+                  <option  *ngFor="let lot of lotes" 
+                  [value]="lot.nro_trans" [ngValue]="lot.nro_trans"  >
+                {{lot.nro_lote}}
+                  </option>
+              </select>
+            </div>      
+    
+          </div>
+        </div>
+
+        <div class="col-md-2">
+
+          <div class="mb-3">
+            <h5>Costea Lote</h5>
+    
+            <div>
+              <select
+                  class="form-select"
+                  id="afecta_costo"
+                  name="afecta_costo"
+                  formControlName="afecta_costo"
+                  [class.is-invalid]="afecta_costo.invalid && (afecta_costo.dirty || afecta_costo.touched)"
+                  >
+            
+                  <option value="N" [ngValue]="N" selected>No</option>
+                  <option value="S" [ngValue]="S">Si</option>
+             
+              </select>        
+              
+            </div>      
+    
+          </div>
+        </div>
+
+
+
+      </div>
+
+      <div class="row mt-4">
+        <div class="col-md-12">
+          <div class="mb-3">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Observaciones"
+              id="observaciones"
+              name="observaciones"
+              formControlName="observaciones"
+              [class.is-invalid]="observaciones.invalid && (observaciones.dirty || observaciones.touched)"
+              
+            />
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <div [formGroup]="addForm">
+      <div class="table-responsive">
+        <table class="table table-hover table-bordered no-wrap align-middle">
+          <thead>
+            <tr>
+              <th class="border-bottom-0">#</th>
+              <th class="border-bottom-0">Articulo</th>
+              <th class="border-bottom-0">Precio Un.</th>
+              <th class="border-bottom-0">Cantidad</th>
+              <th class="border-bottom-0">Importe</th>
+              <th class="border-bottom-0"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="
+                let row of addForm.get('rows')?.controls;
+                let index = index
+              "
+            >
+              <td>
+                {{ index + 1 }}
+              </td>
+
+              <td>
+                <select
+                  class="form-select"
+                  name="cod_articulo"
+                  [formControl]="row.get('cod_articulo')"
+                >
+                  <option value="-1" [ngValue]="-1" selected>
+                    Seleccione...
+                  </option>
+                  <option
+                    *ngFor="let art of articulos"
+                    [value]="art.cod_articulo"
+                    [ngValue]="art.cod_articulo"
+                  >
+                    {{ art.nombre }} - {{art.unidad_compra}}
+                  </option>
+                </select>
+              </td>
+
+              <td>
+                <input
+                  type="number"
+                  class="form-control"
+                  min="1"
+                  [formControl]="row.get('precio_unitario')"
+                  (input)="itemsChanged()"
+                />
+              </td>
+
+              <td>
+                <input
+                  type="number"
+                  class="form-control"
+                  min="1"
+                  [formControl]="row.get('cantidad')"
+                  (input)="itemsChanged()"
+                />
+              </td>
+
+              <td>
+                <input
+                  class="form-control"
+                  [formControl]="row.get('importe_mo')"
+                  [value]="
+                    row.get('precio_unitario').value * row.get('cantidad').value
+                  "
+                />
+              </td>
+
+              <td>
+                <span *ngIf="index > 0">
+                  <button
+                    type="button"
+                    class="btn btn-danger"
+                    (click)="onRemoveRow(index)"
+                  >
+                    Borrar
+                  </button>
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="text-end">
+        <button
+          type="button"
+          class="btn btn-info"
+          (click)="onAddRow()"
+          [disabled]="addForm.invalid"
+          *ngIf="addForm.get('rows')"
+        >
+          Agregar item
+        </button>
+
+        <div class="border-top mt-3 pt-3">
+          <h5><span>Sub total </span> : {{ importe_mo }}</h5>
+        </div>
+        <div class="border-top mt-3 pt-3">
+          <h5>Iva excento:</h5>
+          <div class="row justify-content-end">
+            <div class="col-lg-2 col-md-4">
+              <div class="input-group mb-3">
+                <input type="number" class="form-control" value="0" />
+                <span class="input-group-text">%</span>
+                <span class="input-group-text bg-white font-medium">
+                  {{ importe_iva_excento_mo | number : "1.1-2" }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="border-top mt-3 pt-3">
+          <h5>Iva minimo:</h5>
+          <div class="row justify-content-end">
+            <div class="col-lg-2 col-md-4">
+              <div class="input-group mb-3">
+                <input type="number" class="form-control" value="10" />
+                <span class="input-group-text">%</span>
+                <span class="input-group-text bg-white font-medium">
+                  {{ importe_iva_minimo_mo | number : "1.1-2" }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="border-top mt-3 pt-3">
+          <h5>Iva basico:</h5>
+          <div class="row justify-content-end">
+            <div class="col-lg-2 col-md-4">
+              <div class="input-group mb-3">
+                <input type="number" class="form-control" value="22" />
+                <span class="input-group-text">%</span>
+                <span class="input-group-text bg-white font-medium">
+                  {{ importe_iva_basico_mo | number : "1.1-2" }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>        
+
+        <hr />
+        <h3><span class="fw-bold me-2">Total:</span>${{ importe_total_mo }}</h3>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,407 @@
+<div class="row">
+  <div class="col-12">
+    <div class="card card-body">
+      <h4 class="card-title">{{ nombreSeccion   | titlecase }}</h4>
+      <h5 class="card-subtitle">Lista de {{ nombreSeccion  }}.</h5>
+      <div class="d-flex mb-3 mt-3">
+        <input type="text" class="form-control w-25" placeholder="Buscar por nombre" [(ngModel)]='searchTerm'>
+        <button class="btn btn-primary ms-auto" (click)="chequeoApertura(1,editDatoModal, null)">Agregar {{ nombreSeccion  }}</button>
+      </div>
+      <div class="table-responsive table-bordered">
+        <table class="table table-striped mb-0 no-wrap align-middle">
+          <thead>
+            <tr>
+              <th class="text-center" scope="col">#</th>
+              <th scope="col">Codigo Articulo</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Tipo Articulo</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let dato of filterArray | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
+       
+            
+              <td class="text-center">
+                {{dato.id}}
+              </td>
+
+              <td>{{ dato.cod_articulo }}</td>
+         
+              <td>{{ dato.nombre }}</td>
+              <td>{{ dato.id_tipo_articulo }}</td>             
+     
+              <td>
+                <a href="javascript: void(0);" (click)="chequeoApertura(3,editDatoModal, dato)" class="link me-2"
+                  placement="top" ngbTooltip="Edit">
+                  <!-- <i class="far fa-edit"></i> -->
+                  <i-feather name="edit-2" class="feather-sm"></i-feather>
+                </a>
+                <a href="javascript: void(0);" class="link" (click)="deleteDato(2,dato.id)" placement="top"
+                  ngbTooltip="Delete">
+                  <i-feather name="trash-2" class="feather-sm"></i-feather>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="d-flex justify-content-center mt-5">
+        <ngb-pagination [(page)]="page" [pageSize]="pageSize" [collectionSize]="filterArray.length"></ngb-pagination>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #editDatoModal let-modal>
+
+  <div class="modal-header">
+
+    <h5 class="modal-title" id="editUserLabel">Agregar</h5>
+
+    <button type="button" class="close" (click)="closeBtnClick()" aria-label="Close">
+    </button>
+
+  </div>
+
+  <div class="modal-body">
+
+    <form [formGroup]="editDato" (ngSubmit)="onSubmit()">
+
+
+
+      <div class="mb-3 row">
+        <label for="cod_articulo" class="col-sm-4 col-form-label">Codigo articulo</label>
+        <div class="col-sm-8">
+          <input
+            type="text"
+            class="form-control"
+            formControlName="cod_articulo"
+            id="cod_articulo"
+            [ngClass]="{ 'is-invalid': submitted && f['cod_articulo'].errors }"
+          />
+          <div *ngIf="submitted && f['cod_articulo'].errors" class="invalid-feedback">
+            <div *ngIf="f['cod_articulo'].errors['required']">Codigo de articulo es obligatorio</div>
+      
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="mb-3 row">
+        <label for="nombre" class="col-sm-4 col-form-label">Nombre</label>
+        <div class="col-sm-8">
+          <input
+            type="text"
+            class="form-control"
+            formControlName="nombre"
+            id="nombre"
+            [ngClass]="{ 'is-invalid': submitted && f['nombre'].errors }"
+          />
+          <div *ngIf="submitted && f['nombre'].errors" class="invalid-feedback">
+            <div *ngIf="f['nombre'].errors['required']">Nombre es obligatorio</div>
+      
+          </div>
+        </div>
+      </div>      
+
+
+      
+
+
+      <div class="mb-3 row">
+        <label for="position" class="col-sm-4 col-form-label">Unidad de stock</label>
+        <div class="col-sm-8">
+
+
+          <select name="id_unidad_stk" class="form-select mr-sm-2" formControlName="id_unidad_stk" id="id_unidad_stk"
+          [ngClass]="{ 'is-invalid': submitted && f['id_unidad_stk'].errors }"  >
+            <option value="-1" [ngValue]="-1">Seleccione...</option>
+            <option  *ngFor="let tt of unidades_stock" 
+            [value]="tt.id" [ngValue]="tt.id"  >
+          {{tt.descripcion}}
+            </option>
+
+            
+          </select>  
+
+
+
+
+          <div
+            *ngIf="submitted && f['id_unidad_stk'].errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['id_unidad_stk'].errors['required']">
+              Unidad de stock es obligatorio
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="mb-3 row">
+        <label for="position" class="col-sm-4 col-form-label">Unidad de compra</label>
+        <div class="col-sm-8">
+
+
+          <select name="id_unidad_cmp" class="form-select mr-sm-2" formControlName="id_unidad_cmp" id="id_unidad_cmp"
+          [ngClass]="{ 'is-invalid': submitted && f['id_unidad_cmp'].errors }"  >
+            <option value="-1" [ngValue]="-1">Seleccione...</option>
+            <option  *ngFor="let tt of unidades_stock" 
+            [value]="tt.id" [ngValue]="tt.id"  >
+          {{tt.descripcion}}
+            </option>
+
+            
+          </select>  
+
+
+
+
+          <div
+            *ngIf="submitted && f['id_unidad_cmp'].errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['id_unidad_cmp'].errors['required']">
+              Unidad de compra es obligatorio
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="mb-3 row">
+        <label for="position" class="col-sm-4 col-form-label">Unidad de venta</label>
+        <div class="col-sm-8">
+
+
+          <select name="id_unidad_vta" class="form-select mr-sm-2" formControlName="id_unidad_vta" id="id_unidad_vta"
+          [ngClass]="{ 'is-invalid': submitted && f['id_unidad_vta'].errors }"  >
+            <option value="-1" [ngValue]="-1">Seleccione...</option>
+            <option  *ngFor="let tt of unidades_stock" 
+            [value]="tt.id" [ngValue]="tt.id"  >
+          {{tt.descripcion}}
+            </option>
+
+            
+          </select>  
+
+
+
+
+          <div
+            *ngIf="submitted && f['id_unidad_vta'].errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['id_unidad_vta'].errors['required']">
+              Unidad de venta es obligatorio
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="mb-3 row">
+        <label for="factor_conv_cmp_a_stk" class="col-sm-4 col-form-label">Factor de conversion (Compra - stock)</label>
+        <div class="col-sm-8">
+          <input
+            type="text"
+            class="form-control"
+            formControlName="factor_conv_cmp_a_stk"
+            id="factor_conv_cmp_a_stk"
+            [ngClass]="{ 'is-invalid': submitted && f['factor_conv_cmp_a_stk'].errors }"
+          />
+          <div *ngIf="submitted && f['factor_conv_cmp_a_stk'].errors" class="invalid-feedback">
+            <div *ngIf="f['factor_conv_cmp_a_stk'].errors['required']">El factor de conversion es obligatorio</div>
+      
+          </div>
+        </div>
+      </div>   
+
+
+
+
+      <div class="mb-3 row">
+        <label for="position" class="col-sm-4 col-form-label">Tasa iva venta</label>
+        <div class="col-sm-8">
+
+
+          <select name="id_tasa_iva_vta" class="form-select mr-sm-2" formControlName="id_tasa_iva_vta" id="id_tasa_iva_vta"
+          [ngClass]="{ 'is-invalid': submitted && f['id_tasa_iva_vta'].errors }"  >
+            <option value="-1" [ngValue]="-1">Seleccione...</option>
+            <option  *ngFor="let tt of tasas_iva" 
+            [value]="tt.id" [ngValue]="tt.id"  >
+          {{tt.descripcion}}
+            </option>
+
+            
+          </select>  
+
+
+
+
+          <div
+            *ngIf="submitted && f['id_tasa_iva_vta'].errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['id_tasa_iva_vta'].errors['required']">
+              Tasa iva venta es obligatorio
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="mb-3 row">
+        <label for="position" class="col-sm-4 col-form-label">Tasa iva compra</label>
+        <div class="col-sm-8">
+
+
+          <select name="id_tasa_iva_cmp" class="form-select mr-sm-2" formControlName="id_tasa_iva_cmp" id="id_tasa_iva_cmp"
+          [ngClass]="{ 'is-invalid': submitted && f['id_tasa_iva_cmp'].errors }"  >
+            <option value="-1" [ngValue]="-1">Seleccione...</option>
+            <option  *ngFor="let tt of tasas_iva" 
+            [value]="tt.id" [ngValue]="tt.id"  >
+          {{tt.descripcion}}
+            </option>
+
+            
+          </select>  
+
+
+
+
+          <div
+            *ngIf="submitted && f['id_tasa_iva_cmp'].errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['id_tasa_iva_cmp'].errors['required']">
+              Tasa iva compra es obligatorio
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+
+      <div class="mb-3 row">
+        <label for="position" class="col-sm-4 col-form-label">Categoria ganado</label>
+        <div class="col-sm-8">
+
+
+          <select name="id_categoria_ganado" class="form-select mr-sm-2" formControlName="id_categoria_ganado" id="id_categoria_ganado"
+          [ngClass]="{ 'is-invalid': submitted && f['id_categoria_ganado'].errors }"  >
+            <option value="-1" [ngValue]="-1">Seleccione...</option>
+            <option  *ngFor="let cp of categorias_ganado" 
+            [value]="cp.id" [ngValue]="cp.id"  >
+            {{cp.descripcion}}
+            </option>
+
+            
+          </select>  
+
+          <div
+            *ngIf="submitted && f['id_categoria_ganado'].errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['id_categoria_ganado'].errors['required']">
+              La categoria de ganado es obligatoria
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="mb-3 row">
+        <label for="position" class="col-sm-4 col-form-label">Raza de ganado</label>
+        <div class="col-sm-8">
+
+
+          <select name="id_marca_ganado" class="form-select mr-sm-2" formControlName="id_marca_ganado" id="id_marca_ganado"
+          [ngClass]="{ 'is-invalid': submitted && f['id_marca_ganado'].errors }"  >
+            <option value="-1" [ngValue]="-1">Seleccione...</option>
+            <option  *ngFor="let cc of marcas_ganado" 
+            [value]="cc.id" [ngValue]="cc.id"  >
+            {{cc.descripcion}}
+            </option>
+
+            
+          </select>  
+
+          <div
+            *ngIf="submitted && f['id_marca_ganado'].errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['id_marca_ganado'].errors['required']">
+              La raza de ganado es obligatoria
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3 row">
+        <label for="position" class="col-sm-4 col-form-label">Tipo de articulo</label>
+        <div class="col-sm-8">
+
+
+          <select name="id_tipo_articulo" class="form-select mr-sm-2" formControlName="id_tipo_articulo" id="id_tipo_articulo"
+          [ngClass]="{ 'is-invalid': submitted && f['id_tipo_articulo'].errors }"  >
+            <option value="-1" [ngValue]="-1">Seleccione...</option>
+            <option  *ngFor="let cc of tipos_articulo" 
+            [value]="cc.id" [ngValue]="cc.id"  >
+            {{cc.descripcion}}
+            </option>
+
+            
+          </select>  
+
+          <div
+            *ngIf="submitted && f['id_tipo_articulo'].errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['id_tipo_articulo'].errors['required']">
+              El tipo de articulo es obligatorio
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+
+
+
+
+
+
+
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeBtnClick()"
+        >
+          Cerrar
+        </button>
+
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="editDato.invalid"
+        >
+          Guardar
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>

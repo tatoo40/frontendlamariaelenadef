@@ -1,0 +1,40 @@
+[
+  {
+
+    "Caravana": "3122314",
+    "categoria": "Novillo 1-2",
+    "lote": "0",
+    "peso": 320,
+    "un": "Kg",
+    "propio": "Si",
+    "dicose": "3232312"
+  },
+  {
+    "Caravana": "31897622314",
+    "categoria": "Novillo 2-3",
+    "lote": "0",
+    "peso": 457,
+    "un": "Kg",
+    "propio": "Si",
+    "dicose": "3232312"
+  },
+  {
+    "Caravana": "435674",
+    "categoria": "Novillo 2-3",
+    "lote": "0",
+    "peso": 487,
+    "un": "Kg",
+    "propio": "Si",
+    "dicose": "3232312"
+  },
+  {
+    "Caravana": "314362",
+    "categoria": "Novillo 1-2",
+    "lote": "0",
+    "peso": 320,
+    "un": "Kg",
+    "propio": "Si",
+    "dicose": "3232312"
+  }
+ 
+]

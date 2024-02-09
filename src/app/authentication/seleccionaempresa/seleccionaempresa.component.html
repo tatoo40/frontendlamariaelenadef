@@ -1,0 +1,54 @@
+
+
+<div class="auth-wrapper d-flex no-block justify-content-center align-items-center" style="background:url(assets/images/background/login-register.jpg) no-repeat center center;">
+    <div class="auth-box on-sidebar m-3 m-md-0">
+        <div>
+            <div class="text-center">
+                <span class="db"><img src="assets/images/logo-icon.png" alt="logo" /></span>
+                <h5 class="font-medium mb-4">Seleccione empresa con la cual operar</h5>
+
+       
+
+
+            </div>
+            <!-- Form -->
+            <div class="row">
+                <div class="col-12">
+                    <form class="form-horizontal form-material" 
+                    id="seleccionEmpresaForm" 
+                    autocomplete="off"
+                    [formGroup]="seleccionEmpresaForm"
+                    (ngSubmit)="seleccionEmpresa()">
+
+
+                    <div class="mb-3 row">
+                        <div class="col-12 ">
+                            <select class="form-control" formControlName="id_empresa">
+                                <option value="">Seleccione una empresa</option>
+                                <option *ngFor="let empresa of empresas" [value]="empresa.id">{{ empresa.nombre }}</option>
+                              </select>
+                        </div>
+                    </div>
+  
+
+                        <div class="row">
+                            <div class="col text-danger">
+                           
+        
+                            </div>
+                        </div>
+
+
+
+                        <div class="mb-3 text-center ">
+                            <div class="col-xs-12 mb-4">
+                                <button class="btn btn-info btn-lg btn-block waves-effect waves-light" type="submit">Registrarme</button>
+                            </div>
+                        </div>
+              
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,252 @@
+<div class="row">
+  <div class="col-12">
+    <div class="card card-body">
+      <h4 class="card-title">{{ nombreSeccion   | titlecase }}</h4>
+      <h5 class="card-subtitle">Lista de {{ nombreSeccion  }}.</h5>
+      <div class="d-flex mb-3 mt-3">
+        <input type="text" class="form-control w-25" placeholder="Buscar por nombre" [(ngModel)]='searchTerm'>
+        <button class="btn btn-primary ms-auto" (click)="chequeoApertura(1,editDatoModal, null)">Agregar {{ nombreSeccion  }}</button>
+      </div>
+      <div class="table-responsive table-bordered">
+        <table class="table table-striped mb-0 no-wrap align-middle">
+          <thead>
+            <tr>
+              <th class="text-center" scope="col">#</th>
+              <th scope="col">Serie factura</th>
+              <th scope="col">Nro factura</th>
+              <th scope="col">Titular</th>
+              <th scope="col">Moneda</th>
+              <th scope="col">Importe mo</th>
+              <th scope="col">Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let dato of filterArray | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
+       
+            
+              <td class="text-center">
+                {{dato.id}}
+              </td>
+
+              <td>{{ dato.serie_fact_prov }}</td>
+              <td>{{ dato.nro_fact_prov }}</td> 
+              <td>{{ dato.id_titular }}</td>
+              <td>{{ dato.id_moneda }}</td>
+              <td>{{ dato.importe_mo }}</td>
+              <td>{{ dato.id_estado_pago }}</td>     
+     
+              <td>
+                <a href="javascript: void(0);" (click)="chequeoApertura(3,editDatoModal, dato)" class="link me-2"
+                  placement="top" ngbTooltip="Edit">
+                  <!-- <i class="far fa-edit"></i> -->
+                  <i-feather name="edit-2" class="feather-sm"></i-feather>
+                </a>
+                <a href="javascript: void(0);" class="link" (click)="deleteDato(2,dato.id)" placement="top"
+                  ngbTooltip="Delete">
+                  <i-feather name="trash-2" class="feather-sm"></i-feather>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="d-flex justify-content-center mt-5">
+        <ngb-pagination [(page)]="page" [pageSize]="pageSize" [collectionSize]="filterArray.length"></ngb-pagination>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #editDatoModal let-modal>
+
+  <div class="modal-header">
+
+    <h5 class="modal-title" id="editUserLabel">Agregar</h5>
+
+    <button type="button" class="close" (click)="closeBtnClick()" aria-label="Close">
+    </button>
+
+  </div>
+
+  <div class="modal-body">
+
+    <form [formGroup]="editDato" (ngSubmit)="onSubmit()">
+
+
+
+      <div class="mb-3 row">
+        <label for="serie_fact_prov" class="col-sm-4 col-form-label">Serie factura</label>
+        <div class="col-sm-8">
+          <input
+            type="text"
+            class="form-control"
+            formControlName="serie_fact_prov"
+            id="serie_fact_prov"
+            [ngClass]="{ 'is-invalid': submitted && f['serie_fact_prov'].errors }"
+          />
+          <div *ngIf="submitted && f['serie_fact_prov'].errors" class="invalid-feedback">
+            <div *ngIf="f['serie_fact_prov'].errors['required']">Serie factura es obligatorio</div>
+      
+          </div>
+        </div>
+      </div>   
+
+
+      <div class="mb-3 row">
+        <label for="nro_fact_prov" class="col-sm-4 col-form-label">Nro factura</label>
+        <div class="col-sm-8">
+          <input
+            type="text"
+            class="form-control"
+            formControlName="nro_fact_prov"
+            id="nro_fact_prov"
+            [ngClass]="{ 'is-invalid': submitted && f['nro_fact_prov'].errors }"
+          />
+          <div *ngIf="submitted && f['nro_fact_prov'].errors" class="invalid-feedback">
+            <div *ngIf="f['nro_fact_prov'].errors['required']">Nro factura es obligatorio</div>
+      
+          </div>
+        </div>
+      </div>   
+
+
+      
+
+
+      <div class="mb-3 row">
+        <label for="position" class="col-sm-4 col-form-label">Titular</label>
+        <div class="col-sm-8">
+
+
+          <select name="id_titular" class="form-select mr-sm-2" formControlName="id_titular" id="id_titular"
+          [ngClass]="{ 'is-invalid': submitted && f['id_titular'].errors }"  >
+            <option value="-1" [ngValue]="-1">Seleccione...</option>
+            <option  *ngFor="let tt of titulares" 
+            [value]="tt.id" [ngValue]="tt.id"  >
+          {{tt.nombre_fantasia}}
+            </option>
+
+            
+          </select>  
+
+
+
+
+          <div
+            *ngIf="submitted && f['id_titular'].errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['id_titular'].errors['required']">
+              El titular es obligatorio
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <label for="position" class="col-sm-4 col-form-label">Moneda</label>
+        <div class="col-sm-8">
+
+
+          <select name="id_moneda" class="form-select mr-sm-2" formControlName="id_moneda" id="id_moneda"
+          [ngClass]="{ 'is-invalid': submitted && f['id_moneda'].errors }"  >
+            <option value="-1" [ngValue]="-1">Seleccione...</option>
+            <option  *ngFor="let tt of monedas" 
+            [value]="tt.id" [ngValue]="tt.id"  >
+          {{tt.simbolo}}
+            </option>
+
+            
+          </select>  
+
+
+
+
+          <div
+            *ngIf="submitted && f['id_moneda'].errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['id_moneda'].errors['required']">
+              La moneda es obligatorio
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="mb-3 row">
+        <label for="importe_mo" class="col-sm-4 col-form-label">Importe mo</label>
+        <div class="col-sm-8">
+          <input
+            type="text"
+            class="form-control"
+            formControlName="importe_mo"
+            id="importe_mo"
+            [ngClass]="{ 'is-invalid': submitted && f['importe_mo'].errors }"
+          />
+          <div *ngIf="submitted && f['importe_mo'].errors" class="invalid-feedback">
+            <div *ngIf="f['importe_mo'].errors['required']">Nro factura es obligatorio</div>
+      
+          </div>
+        </div>
+      </div>   
+
+      <div class="mb-3 row">
+        <label for="position" class="col-sm-4 col-form-label">Estado de pago</label>
+        <div class="col-sm-8">
+
+
+          <select name="id_estado_pago" class="form-select mr-sm-2" formControlName="id_estado_pago" id="id_estado_pago"
+          [ngClass]="{ 'is-invalid': submitted && f['id_estado_pago'].errors }"  >
+            <option value="-1" [ngValue]="-1">Seleccione...</option>
+            <option  *ngFor="let tt of estados_pago" 
+            [value]="tt.id" [ngValue]="tt.id"  >
+          {{tt.descripcion}}
+            </option>
+
+            
+          </select>  
+
+
+
+
+          <div
+            *ngIf="submitted && f['id_estado_pago'].errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['id_estado_pago'].errors['required']">
+              El estado de pago es obligatorio
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      
+
+
+
+
+
+
+
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeBtnClick()"
+        >
+          Cerrar
+        </button>
+
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="editDato.invalid"
+        >
+          Guardar
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>

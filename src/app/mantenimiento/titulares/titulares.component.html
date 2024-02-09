@@ -1,0 +1,336 @@
+<div class="row">
+  <div class="col-12">
+    <div class="card card-body">
+      <h4 class="card-title">{{ nombreSeccion   | titlecase }}</h4>
+      <h5 class="card-subtitle">Lista de {{ nombreSeccion  }}.</h5>
+      <div class="d-flex mb-3 mt-3">
+        <input type="text" class="form-control w-25" placeholder="Buscar por nombre" [(ngModel)]='searchTerm'>
+        <button class="btn btn-primary ms-auto" (click)="chequeoApertura(1,editDatoModal, null)">Agregar {{ nombreSeccion  }}</button>
+      </div>
+      <div class="table-responsive table-bordered">
+        <table class="table table-striped mb-0 no-wrap align-middle">
+          <thead>
+            <tr>
+              <th class="text-center" scope="col">#</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Rut</th>
+              <th scope="col">Tipo titular</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let dato of filterArray | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
+       
+            
+              <td class="text-center">
+                {{dato.id}}
+              </td>
+
+              <td>{{ dato.nombre_fantasia }}</td>
+         
+              <td>{{ dato.rut }}</td>
+              <td>{{ dato.id_tipo_titular }}</td>             
+     
+              <td>
+                <a href="javascript: void(0);" (click)="chequeoApertura(3,editDatoModal, dato)" class="link me-2"
+                  placement="top" ngbTooltip="Edit">
+                  <!-- <i class="far fa-edit"></i> -->
+                  <i-feather name="edit-2" class="feather-sm"></i-feather>
+                </a>
+                <a href="javascript: void(0);" class="link" (click)="deleteDato(3,dato.id)" placement="top"
+                  ngbTooltip="Delete">
+                  <i-feather name="trash-2" class="feather-sm"></i-feather>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="d-flex justify-content-center mt-5">
+        <ngb-pagination [(page)]="page" [pageSize]="pageSize" [collectionSize]="filterArray.length"></ngb-pagination>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #editDatoModal let-modal>
+
+  <div class="modal-header">
+
+    <h5 class="modal-title" id="editUserLabel">Agregar</h5>
+
+    <button type="button" class="close" (click)="closeBtnClick()" aria-label="Close">
+    </button>
+
+  </div>
+
+  <div class="modal-body">
+
+    <form [formGroup]="editDato" (ngSubmit)="onSubmit()">
+
+
+
+      <div class="mb-3 row">
+        <label for="nombre_fantasia" class="col-sm-4 col-form-label">Nombre fantasia</label>
+        <div class="col-sm-8">
+          <input
+            type="text"
+            class="form-control"
+            formControlName="nombre_fantasia"
+            id="nombre_fantasia"
+            [ngClass]="{ 'is-invalid': submitted && f['nombre_fantasia'].errors }"
+          />
+          <div *ngIf="submitted && f['nombre_fantasia'].errors" class="invalid-feedback">
+            <div *ngIf="f['nombre_fantasia'].errors['required']">nombre_fantasia es obligatorio</div>
+      
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="mb-3 row">
+        <label for="razon_social" class="col-sm-4 col-form-label">Razon social</label>
+        <div class="col-sm-8">
+          <input
+            type="text"
+            class="form-control"
+            formControlName="razon_social"
+            id="razon_social"
+            [ngClass]="{ 'is-invalid': submitted && f['razon_social'].errors }"
+          />
+          <div *ngIf="submitted && f['razon_social'].errors" class="invalid-feedback">
+            <div *ngIf="f['razon_social'].errors['required']">Razon social es obligatorio</div>
+      
+          </div>
+        </div>
+      </div>      
+
+
+      <div class="mb-3 row">
+        <label for="rut" class="col-sm-4 col-form-label">Rut</label>
+        <div class="col-sm-8">
+          <input
+            type="text"
+            class="form-control"
+            formControlName="rut"
+            id="rut"
+            [ngClass]="{ 'is-invalid': submitted && f['razon_social'].errors }"
+          />
+          <div *ngIf="submitted && f['rut'].errors" class="invalid-feedback">
+            <div *ngIf="f['rut'].errors['required']">Rut es obligatorio</div>
+      
+          </div>
+        </div>
+      </div>  
+
+      <div class="mb-3 row">
+        <label for="direccion" class="col-sm-4 col-form-label">Direccion</label>
+        <div class="col-sm-8">
+          <input
+            type="text"
+            class="form-control"
+            formControlName="direccion"
+            id="direccion"
+            [ngClass]="{ 'is-invalid': submitted && f['direccion'].errors }"
+          />
+          <div *ngIf="submitted && f['direccion'].errors" class="invalid-feedback">
+            <div *ngIf="f['direccion'].errors['required']">Direccion es obligatorio</div>
+      
+          </div>
+        </div>
+      </div>  
+
+
+      <div class="mb-3 row">
+        <label for="email" class="col-sm-4 col-form-label">Email</label>
+        <div class="col-sm-8">
+          <input
+            type="text"
+            class="form-control"
+            formControlName="email"
+            id="email"
+            [ngClass]="{ 'is-invalid': submitted && f['email'].errors }"
+          />
+          <div *ngIf="submitted && f['email'].errors" class="invalid-feedback">
+            <div *ngIf="f['email'].errors['required']">Email es obligatorio</div>
+      
+          </div>
+        </div>
+      </div>  
+
+      <div class="mb-3 row">
+        <label for="nombre_contacto" class="col-sm-4 col-form-label">Nombre contacto</label>
+        <div class="col-sm-8">
+          <input
+            type="text"
+            class="form-control"
+            formControlName="nombre_contacto"
+            id="nombre_contacto"
+            [ngClass]="{ 'is-invalid': submitted && f['nombre_contacto'].errors }"
+          />
+          <div *ngIf="submitted && f['nombre_contacto'].errors" class="invalid-feedback">
+            <div *ngIf="f['nombre_contacto'].errors['required']">Nombre contacto es obligatorio</div>
+      
+          </div>
+        </div>
+      </div>  
+
+
+      <div class="mb-3 row">
+        <label for="telefono_contacto" class="col-sm-4 col-form-label">Telefono contacto</label>
+        <div class="col-sm-8">
+          <input
+            type="text"
+            class="form-control"
+            formControlName="telefono_contacto"
+            id="telefono_contacto"
+            [ngClass]="{ 'is-invalid': submitted && f['telefono_contacto'].errors }"
+          />
+          <div *ngIf="submitted && f['telefono_contacto'].errors" class="invalid-feedback">
+            <div *ngIf="f['telefono_contacto'].errors['required']">Telefono contacto es obligatorio</div>
+      
+          </div>
+        </div>
+      </div>  
+
+      <div class="mb-3 row">
+        <label for="observaciones" class="col-sm-4 col-form-label">Observaciones</label>
+        <div class="col-sm-8">
+          <input
+            type="text"
+            class="form-control"
+            formControlName="observaciones"
+            id="observaciones"
+            [ngClass]="{ 'is-invalid': submitted && f['observaciones'].errors }"
+          />
+          <div *ngIf="submitted && f['observaciones'].errors" class="invalid-feedback">
+            <div *ngIf="f['observaciones'].errors['required']">Observaciones es obligatorio</div>
+      
+          </div>
+        </div>
+      </div>  
+    
+
+
+      <div class="mb-3 row">
+        <label for="position" class="col-sm-4 col-form-label">Tipo titular</label>
+        <div class="col-sm-8">
+
+
+          <select name="id_tipo_titular" class="form-select mr-sm-2" formControlName="id_tipo_titular" id="id_tipo_titular"
+          [ngClass]="{ 'is-invalid': submitted && f['id_tipo_titular'].errors }"  >
+            <option value="-1" [ngValue]="-1">Seleccione...</option>
+            <option  *ngFor="let tt of tipos_titulares" 
+            [value]="tt.id" [ngValue]="tt.id"  >
+          {{tt.descripcion}}
+            </option>
+
+            
+          </select>  
+
+
+
+
+          <div
+            *ngIf="submitted && f['id_tipo_titular'].errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['id_tipo_titular'].errors['required']">
+              Tipo titular es obligatorio
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="mb-3 row">
+        <label for="position" class="col-sm-4 col-form-label">Categoria proveddor</label>
+        <div class="col-sm-8">
+
+
+          <select name="id_categoria_prov" class="form-select mr-sm-2" formControlName="id_categoria_prov" id="id_categoria_prov"
+          [ngClass]="{ 'is-invalid': submitted && f['id_categoria_prov'].errors }"  >
+            <option value="-1" [ngValue]="-1">Seleccione...</option>
+            <option  *ngFor="let cp of categorias_prov" 
+            [value]="cp.id" [ngValue]="cp.id"  >
+            {{cp.descripcion}}
+            </option>
+
+            
+          </select>  
+
+          <div
+            *ngIf="submitted && f['id_categoria_prov'].errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['id_categoria_prov'].errors['required']">
+              La categoria proveedor es obligatoria
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="mb-3 row">
+        <label for="position" class="col-sm-4 col-form-label">Categoria cliente</label>
+        <div class="col-sm-8">
+
+
+          <select name="id_categoria_cliente" class="form-select mr-sm-2" formControlName="id_categoria_cliente" id="id_categoria_cliente"
+          [ngClass]="{ 'is-invalid': submitted && f['id_categoria_cliente'].errors }"  >
+            <option value="-1" [ngValue]="-1">Seleccione...</option>
+            <option  *ngFor="let cc of categorias_cliente" 
+            [value]="cc.id" [ngValue]="cc.id"  >
+            {{cc.descripcion}}
+            </option>
+
+            
+          </select>  
+
+          <div
+            *ngIf="submitted && f['id_categoria_cliente'].errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['id_categoria_cliente'].errors['required']">
+              La categoria cliente es obligatoria
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeBtnClick()"
+        >
+          Cerrar
+        </button>
+
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="editDato.invalid"
+        >
+          Guardar
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>

@@ -1,0 +1,293 @@
+<div class="row">
+  <div class="col-12">
+    <div class="card card-body">
+      <h4 class="card-title">{{ nombreSeccion   | titlecase }}</h4>
+      <h5 class="card-subtitle">Lista de {{ nombreSeccion  }}.</h5>
+      <div class="d-flex mb-3 mt-3">
+        <input type="text" class="form-control w-25" placeholder="Buscar por nombre" [(ngModel)]='searchTerm'>
+        <button class="btn btn-primary ms-auto" (click)="chequeoApertura(1,editDatoModal, null)">Agregar {{ nombreSeccion  }}</button>
+      </div>
+      <div class="table-responsive table-bordered">
+        <table class="table table-striped mb-0 no-wrap align-middle">
+          <thead>
+            <tr>
+              <th class="text-center" scope="col">#</th>
+              <th scope="col">Fecha</th>
+              <th scope="col">Caravana ant</th>
+              <th scope="col">Caravana nueva</th>
+              <th scope="col">Observaciones</th>
+    
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let dato of filterArray | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
+       
+            
+              <td class="text-center">
+                {{dato.id}}
+              </td>
+
+              <td>{{ dato.fecha | date :'fullDate' }}</td>
+              <td>{{ dato.cod_identidad }}</td>
+              <td>{{ dato.cod_identidad_nueva }}</td>     
+              <td>{{ dato.observaciones }}</td>
+           
+     
+              <td>
+                <a href="javascript: void(0);" (click)="chequeoApertura(3,editDatoModal, dato)" class="link me-2"
+                  placement="top" ngbTooltip="Edit">
+                  <!-- <i class="far fa-edit"></i> -->
+                  <i-feather name="edit-2" class="feather-sm"></i-feather>
+                </a>
+                <a href="javascript: void(0);" class="link" (click)="deleteDato(2,dato.id)" placement="top"
+                  ngbTooltip="Delete">
+                  <i-feather name="trash-2" class="feather-sm"></i-feather>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="d-flex justify-content-center mt-5">
+        <ngb-pagination [(page)]="page" [pageSize]="pageSize" [collectionSize]="filterArray.length"></ngb-pagination>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #editDatoModal let-modal>
+
+  <div class="modal-header">
+
+    <h5 class="modal-title" id="editUserLabel">Agregar</h5>
+
+    <button type="button" class="close" (click)="closeBtnClick()" aria-label="Close">
+    </button>
+
+  </div>
+
+  <div class="modal-body">
+
+    <form [formGroup]="editDato" (ngSubmit)="onSubmit()">
+
+
+
+      <div class="mb-3 row">
+        <label for="fecha" class="col-sm-4 col-form-label">Fecha</label>
+        <div class="col-sm-8">
+          <input
+            type="date"
+            class="form-control"
+            formControlName="fecha"
+            id="fecha"
+            [ngClass]="{ 'is-invalid': submitted && f['fecha'].errors }"
+          />
+          <div *ngIf="submitted && f['fecha'].errors" class="invalid-feedback">
+            <div *ngIf="f['fecha'].errors['required']">Fecha es obligatorio</div>
+      
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+
+
+
+      <div class="mb-3 row">
+        <label for="cod_identidad" class="col-sm-4 col-form-label">Caravana</label>
+        <div class="col-sm-8">
+
+      
+          <select name="cod_identidad" class="form-select mr-sm-2" formControlName="cod_identidad" id="cod_identidad"
+          [ngClass]="{ 'is-invalid': submitted && f['cod_identidad'].errors }" 
+          (change)="onSelected(editDato.controls['cod_identidad'].value)" >
+          <option value="-1" selected>Seleccione...</option>
+          <option  *ngFor="let bicho of ganadoActivo" 
+          [value]="bicho.cod_identidad" >
+                {{bicho.cod_identidad}}
+          </option>
+  
+            
+          </select>  
+
+
+
+
+
+
+
+          <div *ngIf="submitted && f['cod_identidad'].errors" class="invalid-feedback">
+            <div *ngIf="f['cod_identidad'].errors['required']">Caravana es obligatorio</div>
+      
+          </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+      <table class="table align-middle fs-3 mb-0">
+        <tbody> 
+            <tr>
+                <td>Marca</td>
+                <td class="text-end font-medium">{{marcaLabel}}</td>
+            </tr>
+            <tr>
+                <td>Categoria</td>
+                <td class="text-end font-medium">{{categoriaLabel}}</td>
+            </tr>
+            <tr>
+                <td>Sexo</td>
+                <td class="text-end font-medium">{{sexoLabel}}</td>
+            </tr>
+            <tr>
+                <td>Peso actual</td>
+                <td class="text-end font-medium">{{pesoLabel}} Kg.</td>
+            </tr>
+        </tbody>            
+    </table>
+
+
+    <hr>
+    <h2>Datos nuevos del ganado</h2>
+    <div class="mb-3 row">
+      <label for="position" class="col-sm-4 col-form-label">Raza</label>
+      <div class="col-sm-8">
+
+
+        <select name="id_marca_ganado" class="form-select mr-sm-2" formControlName="id_marca_ganado" id="id_marca_ganado"
+        [ngClass]="{ 'is-invalid': submitted && f['id_marca_ganado'].errors }" (change)="obtengoArticulo()" >
+        <option value="-1" selected>Seleccione...</option>
+        <option  *ngFor="let raza of razaGanado" 
+        [value]="raza.id" >
+      {{raza.descripcion}}
+        </option>
+
+          
+        </select>  
+
+
+        <div
+          *ngIf="submitted && f['id_marca_ganado'].errors"
+          class="invalid-feedback"
+        >
+          <div *ngIf="f['id_marca_ganado'].errors['required']">
+           Raza de ganando es obligatorio
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+    <div class="mb-3 row">
+      <label for="position" class="col-sm-4 col-form-label">Categoria</label>
+      <div class="col-sm-8">
+
+
+        <select name="id_categoria_ganado" class="form-select mr-sm-2" formControlName="id_categoria_ganado" id="id_categoria_ganado"
+        [ngClass]="{ 'is-invalid': submitted && f['id_categoria_ganado'].errors }" (change)="obtengoArticulo()" >
+        <option value="-1" selected>Seleccione...</option>
+        <option  *ngFor="let categoria of categoriaGanado" 
+        [value]="categoria.id" >
+      {{categoria.descripcion}}
+        </option>
+
+          
+        </select>  
+
+
+        <div
+          *ngIf="submitted && f['id_categoria_ganado'].errors"
+          class="invalid-feedback"
+        >
+          <div *ngIf="f['id_categoria_ganado'].errors['required']">
+           La categoria de ganando es obligatorio
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+      <div class="mb-3 row">
+        <label for="observaciones" class="col-sm-4 col-form-label">Observaciones</label>
+        <div class="col-sm-8">
+          <input
+            type="text"
+            class="form-control"
+            formControlName="observaciones"
+            id="observaciones"
+            [ngClass]="{ 'is-invalid': submitted && f['observaciones'].errors }"
+          />
+          <div *ngIf="submitted && f['observaciones'].errors" class="invalid-feedback">
+            <div *ngIf="f['observaciones'].errors['required']">Observaciones es obligatorio</div>
+      
+          </div>
+        </div>
+      </div>
+
+
+   
+
+
+
+
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeBtnClick()"
+        >
+          Cerrar
+        </button>
+
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="editDato.invalid"
+        >
+          Guardar
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>
