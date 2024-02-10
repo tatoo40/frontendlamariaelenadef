@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  //base_url: 'http://144.126.218.210:3333'
-  base_url: 'http://localhost:3334'
+  base_url: 'http://144.126.218.210:3334'
+  //base_url: 'http://localhost:3334'
 };
 
 /*
