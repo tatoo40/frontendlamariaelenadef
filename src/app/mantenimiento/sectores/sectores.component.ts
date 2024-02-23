@@ -49,7 +49,8 @@ export class SectoresComponent implements OnInit {
   ///OBTENGO DATOS DE LA SECCION QUE ESTOY TRABAJANDO////////////
   secciones = JSON.parse(localStorage.getItem('seccion'));
 
-  empresas= JSON.parse(localStorage.getItem('empresas'));
+  empresasSel = JSON.parse(localStorage.getItem('empresas'));
+  empresas= this.empresasSel[0];
   depositos = JSON.parse(localStorage.getItem('deposito'));
 
 
@@ -123,6 +124,8 @@ export class SectoresComponent implements OnInit {
       id: [''],
       nombre: ['', Validators.required],
       superficie: ['', Validators.required],
+      latitud: ['', Validators.required],
+      longitud: ['', Validators.required],
       id_deposito:['', Validators.required],
       id_empresa:1
  
@@ -283,7 +286,8 @@ export class SectoresComponent implements OnInit {
         nombre: dato.nombre,
         superficie: dato.superficie,
         id_deposito: dato.id_deposito,
-
+        latitud:  dato.latitud,
+        longitud:  dato.longitud,
      
       });
     }
@@ -301,6 +305,8 @@ export class SectoresComponent implements OnInit {
         this.DatoDetail.nombre = this.editDato.get('nombre')?.value;
         this.DatoDetail.superficie= parseFloat(this.editDato.get('superficie')?.value);
         this.DatoDetail.id_deposito= this.editDato.get('id_deposito')?.value;
+        this.DatoDetail.latitud= this.editDato.get('latitud')?.value;
+        this.DatoDetail.longitud= this.editDato.get('longitud')?.value;
         this.DatoDetail.id_empresa= 1;
 
       }
@@ -331,7 +337,9 @@ export class SectoresComponent implements OnInit {
 this.DatoDetail.nombre = this.editDato.get('nombre')?.value;
 this.DatoDetail.superficie= parseFloat(this.editDato.get('superficie')?.value);
 this.DatoDetail.id_deposito= this.editDato.get('id_deposito')?.value;
-this.DatoDetail.id_empresa= 1;
+this.DatoDetail.latitud= this.editDato.get('latitud')?.value;
+this.DatoDetail.longitud= this.editDato.get('longitud')?.value;
+this.DatoDetail.id_empresa= this.empresas.id;
 
       this.Datoservice.addDato(this.DatoDetail as Datos).subscribe((dato) => {
         //console.log(dato);

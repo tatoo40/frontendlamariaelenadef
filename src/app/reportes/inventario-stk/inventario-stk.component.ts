@@ -57,7 +57,8 @@ export class InventarioStkComponent implements OnInit {
   tipos_ganado = JSON.parse(localStorage.getItem('tipo_ganado'));
   categoriaGanado = JSON.parse(localStorage.getItem('categoria_ganado'));
   tiposArticulo  = JSON.parse(localStorage.getItem('tipo_articulo'));
-  empresas= JSON.parse(localStorage.getItem('empresas'));
+  empresasSel= JSON.parse(localStorage.getItem('empresas'));
+  empresas= this.empresasSel[0]
   sectores= JSON.parse(localStorage.getItem('sector'));
 
   nombreSeccion = 'Inventario de stock';

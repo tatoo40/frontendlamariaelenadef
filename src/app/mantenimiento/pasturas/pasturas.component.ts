@@ -50,7 +50,8 @@ export class PasturasComponent implements OnInit {
   secciones = JSON.parse(localStorage.getItem('seccion'));
   tipos_ganado = JSON.parse(localStorage.getItem('tipo_ganado'));
 
-  empresas= JSON.parse(localStorage.getItem('empresas'));
+  empresasSel= JSON.parse(localStorage.getItem('empresas'));
+  empresas = this.empresasSel[0]
 
 
   nombreSeccion = 'Pasturas';

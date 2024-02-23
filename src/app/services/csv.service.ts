@@ -137,7 +137,8 @@ export class CsvService {
     const campos = propertyNames;
     const csvArray = tiposArchivoEmpresa
 
-
+    //console.log(campos);
+    //console.log(csvArray);
 
     // Verificar si las columnas de campos coinciden con el CSV
     procesoSeleccionado = verificarColumnas(campos, csvArray);
@@ -211,7 +212,7 @@ export class CsvService {
       dataArray.push(obj);
     });
 
-    console.log(dataArray)
+    //console.log(dataArray)
 
     return dataArray;
   }
@@ -230,6 +231,7 @@ function verificarColumnas(campos: string[], arrayCsv: any[]) {
     const columnasCSV = arrayCsv[i].campos.split('|');
 
     // Verificar si la cantidad de columnas coincide con los campos definidos
+
     if (campos.length === columnasCSV.length) {
       filaCoincidente = null; // La cantidad de columnas no coincide
 

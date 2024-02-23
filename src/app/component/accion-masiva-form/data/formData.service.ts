@@ -63,7 +63,7 @@ export class FormDataService {
         this.formData.cantidad_total=data.cantidad_total
         this.formData.peso_total_facturado = data.peso_total_facturado;
         this.formData.peso_total_real = data.peso_total_real;
-  
+        this.formData.cantidad_muestra = data.cantidad_muestra;
         var datePipe = new DatePipe("en-US");
         const value = datePipe.transform(data.fecha, "dd/MM/yyyy");
        //const value = data.fecha;
@@ -97,7 +97,8 @@ export class FormDataService {
         this.formData.carbunco = data.carbunco;
         this.formData.parasitos_internos = data.parasitos_internos;
         this.formData.clostridiosis = data.clostridiosis;
-
+        this.formData.banio = data.banio;
+        this.formData.banio_nitromic = data.banio_nitromic;
         
     }
     setDatosArticulo(data){

@@ -113,18 +113,18 @@ export class StockService {
  
 
     let params = new HttpParams();
-    const caravanasUnicas = Array.from(new Set(ganado.map((item) => item.caravana)));
+    const caravanasUnicas = Array.from(new Set(ganado.map((item) => item.EID)));
 
     Object.keys(caravanasUnicas).forEach((key) => {
       params = params.append(key, caravanasUnicas[key]);
     });
 
     let queryString = '';
-    caravanasUnicas.forEach((caravana, index) => {
+    caravanasUnicas.forEach((EID, index) => {
       if (index > 0) {
         queryString += '&';
       }
-      queryString += `${index}=${caravana}`;
+      queryString += `${index}=${EID}`;
     });
     
 
@@ -151,18 +151,18 @@ export class StockService {
  
 
     let params = new HttpParams();
-    const caravanasUnicas = Array.from(new Set(ganado.map((item) => item.caravana)));
+    const caravanasUnicas = Array.from(new Set(ganado.map((item) => item.EID)));
 
     Object.keys(caravanasUnicas).forEach((key) => {
       params = params.append(key, caravanasUnicas[key]);
     });
 
     let queryString = '';
-    caravanasUnicas.forEach((caravana, index) => {
+    caravanasUnicas.forEach((EID, index) => {
       if (index > 0) {
         queryString += '&';
       }
-      queryString += `${index}=${caravana}`;
+      queryString += `${index}=${EID}`;
     });
     
 

@@ -4,6 +4,7 @@ import { Routes } from '@angular/router';
 import { InventarioStkComponent } from './inventario-stk/inventario-stk.component';
 import { ComprasGanadoComponent } from './compras-ganado/compras-ganado.component';
 import { ComprasInsumoComponent } from './compras-insumos/compras-insumo.component';
+import { ConsumosInsumosComponent } from './consumos-insumos/consumos-insumos.component';
 
 export const ReportesRoutes: Routes = [
   {
@@ -47,7 +48,19 @@ export const ReportesRoutes: Routes = [
         },
         
       }
-      
+      ,      
+      {
+        path: 'consumos-insumos',
+        component: ConsumosInsumosComponent,
+        data: {
+          title: 'Consumos de insumos',
+          urls: [
+            { title: 'Reportes', url: '/dashboard' },
+            { title: 'Consumos de insumos' },
+          ],
+        },
+        
+      }   
 
     ],
     

@@ -15,6 +15,7 @@ export class FormData {
    public peso_total_real:number;
    public peso_total_facturado:number;   
    public cantidad_total:number;
+   public cantidad_muestra:number;
    public id_tipo_peso:number;
    public cod_articulo:string;   
    public lineas:[]
@@ -26,6 +27,8 @@ export class FormData {
    public bania_garrapata:boolean;
    public carbunco:boolean;
    public clostridiosis:boolean;
+   public banio:boolean;
+   public banio_nitromic:boolean;
    public parasitos_internos:boolean;   
    public anexo_lote:string;
    public id_deposito_destino:number;

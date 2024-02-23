@@ -56,7 +56,8 @@ export class AgregarIngresoRomaneoComponent implements OnInit {
 
   clienteDatos = JSON.parse(localStorage.getItem('titular'));
   monedas = JSON.parse(localStorage.getItem('moneda'));
-  empresa = JSON.parse(localStorage.getItem('empresas'));
+  empresaSel = JSON.parse(localStorage.getItem('empresas'));
+  empresa = this.empresaSel[0];
   arrayTc = JSON.parse(localStorage.getItem('tipo_cambio_diario'));
   arrayParametros = JSON.parse(localStorage.getItem('cpt_parametros_x_fecha'));
 

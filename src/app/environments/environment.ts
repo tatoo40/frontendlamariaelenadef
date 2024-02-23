@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  base_url: 'http://144.126.218.210:3334'
-  //base_url: 'http://localhost:3334'
+  base_url: 'https://www.srvchotapps.xyz:3000'
+  //base_url: 'https://localhost:3000'
 };
 
 /*

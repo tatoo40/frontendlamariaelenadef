@@ -14,8 +14,9 @@ export class IngresoRomaneoService {
     //this.getRomaneo(1).subscribe((data) => this.RomaneoList.push(data));
   }
 
-  empresa = JSON.parse(localStorage.getItem('empresas'));
-
+  empresaSel = JSON.parse(localStorage.getItem('empresas'));
+  empresa = this.empresaSel[0]
+  
   private sccionGetUrl = 'utiles/' + this.empresa.id + '/romaneos';
   //private seccionUrl = 'general/'+seccion;
 

@@ -65,9 +65,9 @@ export class AgregarFacturasProvComponent implements OnInit {
 
   proveedoresDatos = JSON.parse(localStorage.getItem('titular'));
   monedas = JSON.parse(localStorage.getItem('moneda'));
-  empresa = JSON.parse(localStorage.getItem('empresas'));
+  empresaSel = JSON.parse(localStorage.getItem('empresas'));
   arrayTc = JSON.parse(localStorage.getItem('tipo_cambio_diario'));
-
+  empresa = this.empresaSel[0]
 
 
   fechaBuscada = this.formatoFechaBd.transform(new Date());

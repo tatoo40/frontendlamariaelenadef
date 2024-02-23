@@ -104,8 +104,9 @@ public empresaId:number;
         return;
       }
       
-      this.registerForm.get('id_empresa').setValue(this.empresaId);
-
+      //this.registerForm.get('id_empresa').setValue(this.empresaId);
+      this.registerForm.get('id_empresa').setValue(1);
+      
       this.usuarioService.crearUsuario(this.registerForm.value).subscribe({
         next: (resp) => {
           console.log(resp);

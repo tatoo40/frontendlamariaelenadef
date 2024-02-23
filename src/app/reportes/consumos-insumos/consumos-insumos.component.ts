@@ -12,8 +12,8 @@ import {
 } from '@angular/forms';
 import { CommonModule, DatePipe } from '@angular/common';
 import { NgbModal, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
-import { Datos } from './compras-insumo';
-import { ComprasInsumoService } from './compras-insumo.service'; 
+import { Datos } from './consumos-insumos';
+import { ConsumosInsumosService } from './consumos-insumos.service'; 
 import { FeatherModule } from 'angular-feather';
 import { DdMmYYYYDatePipe } from 'src/app/dd-mm-yyyy-date.pipe';
 import { DdMmYyyyConBarras } from 'src/app/dd-mm-yyyy-barra-date.pipe';
@@ -26,7 +26,7 @@ import * as XLSX from 'xlsx';
 import { writeFile } from 'xlsx';
 import { ExporterService } from 'src/app/services/exporter.service';
 
-const appDatoSelector='app-compras-insumo';
+const appDatoSelector='app-consumos-insumos';
 
 @Component({
   selector: appDatoSelector,
@@ -38,10 +38,10 @@ const appDatoSelector='app-compras-insumo';
     ReactiveFormsModule,
     NgbPaginationModule,
   ],
-  templateUrl: './compras-insumo.component.html',
-  styleUrls: ['./compras-insumo.component.css'],
+  templateUrl: './consumos-insumos.component.html',
+  styleUrls: ['./consumos-insumos.component.css'],
 })
-export class ComprasInsumoComponent implements OnInit {
+export class ConsumosInsumosComponent implements OnInit {
   // INSTANCIO FORMULARIO Y SUS DATOS///////////////////////////////////////////////
  
   submitted = false;
@@ -103,7 +103,7 @@ export class ComprasInsumoComponent implements OnInit {
 
   constructor(
     ///////////////////////////////////////////CAMBIAR ACA////////////////////////
-    private Datoservice: ComprasInsumoService,
+    private Datoservice: ConsumosInsumosService,
     private fb: UntypedFormBuilder,
     private modalService: NgbModal,
     private datePipe: DdMmYYYYDatePipe,

@@ -9,6 +9,11 @@ import { ListadoIngresosRomaneoComponent } from './ingreso-romaneo/lista-factura
 import { verIngresoRomaneoComponent } from './ingreso-romaneo/ver-ingreso-romaneo/ver-ingreso-romaneo.component';
 import { AgregarIngresoRomaneoComponent } from './ingreso-romaneo/agregar-ingreso-romaneo/agregar-ingreso-romaneo.component';
 import { PagoProveedorComponent } from './pago-proveedor/pago-proveedor.component';
+//import { AjustesStockComponent } from './ajustes-stock/ajustes-stock.component';
+import { RegistrosConsumosComponent } from './resgistros-consumos/resgistros-consumos.component';
+import { RegistrosGastosComponent } from './registros-gastos/registros-gastos.component';
+
+
 
                  
 export const AppsRoutes: Routes = [
@@ -83,7 +88,42 @@ export const AppsRoutes: Routes = [
           ],
         },
       }       
-      
+      ,      
+      {
+        path: 'registros-consumos',
+        component: RegistrosConsumosComponent,
+        data: {
+          title: 'Registro de consumos',
+          urls: [
+            { title: 'Administracion', url: '/dashboard' },
+            { title: 'Registro de consumos' },
+          ],
+        },
+      }       
+      ,      
+      {
+        path: 'registros-gastos',
+        component: RegistrosGastosComponent,
+        data: {
+          title: 'Registro de gastos',
+          urls: [
+            { title: 'Administracion', url: '/dashboard' },
+            { title: 'Registro de gastos' },
+          ],
+        },
+      }       
+      ,      
+      {
+        path: 'ajustes-stock',
+        component: RegistrosGastosComponent,
+        data: {
+          title: 'Ajustes de stock',
+          urls: [
+            { title: 'Administracion', url: '/dashboard' },
+            { title: 'Ajuste de stock' },
+          ],
+        },
+      }                         
     ],
   },
 ];

@@ -15,8 +15,9 @@
               <th scope="col">Nombre</th>
               <th scope="col">Superficie</th>
               <th scope="col">Deposito</th>
-         
-
+              <th scope="col">Ha.</th>      
+              <th scope="col">Lat.</th>  
+              <th scope="col">Long.</th>  
             </tr>
           </thead>
           <tbody>
@@ -31,8 +32,9 @@
          
               <td>{{ dato.superficie }}</td>
               <td>{{ dato.id_deposito }}</td>
-                     
-     
+              <td>{{ dato.superficie }}</td>                     
+              <td>{{ dato.latitud }}</td>   
+              <td>{{ dato.longitud }}</td>  
               <td>
                 <a href="javascript: void(0);" (click)="chequeoApertura(3,editDatoModal, dato)" class="link me-2"
                   placement="top" ngbTooltip="Edit">
@@ -110,6 +112,39 @@
         </div>
       </div>
 
+      <div class="mb-3 row">
+        <label for="latitud" class="col-sm-4 col-form-label">Latitud</label>
+        <div class="col-sm-8">
+          <input
+            type="text"
+            class="form-control"
+            formControlName="latitud"
+            id="latitud"
+            [ngClass]="{ 'is-invalid': submitted && f['latitud'].errors }"
+          />
+          <div *ngIf="submitted && f['latitud'].errors" class="invalid-feedback">
+            <div *ngIf="f['latitud'].errors['required']">Latitud es obligatorio</div>
+      
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3 row">
+        <label for="longitud" class="col-sm-4 col-form-label">Longitud</label>
+        <div class="col-sm-8">
+          <input
+            type="text"
+            class="form-control"
+            formControlName="longitud"
+            id="longitud"
+            [ngClass]="{ 'is-invalid': submitted && f['longitud'].errors }"
+          />
+          <div *ngIf="submitted && f['longitud'].errors" class="invalid-feedback">
+            <div *ngIf="f['longitud'].errors['required']">Longitud es obligatorio</div>
+      
+          </div>
+        </div>
+      </div>      
       
 
 

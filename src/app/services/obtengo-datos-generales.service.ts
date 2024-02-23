@@ -30,7 +30,7 @@ export class ObtengoDatosGeneralesService {
       'tipo_cambio_diario', 'catelgoria_cli', 'accion', 'seccion', 'pasturas',
       'permisos_x_usuario_seccion', 'control_trans', 'controles_x_seccion_accion', 'categoria_prov', 'marca_ganado','unidades','tipo_articulo',
       'motivo_sanitario','cpt_parametros_x_fecha', 'tasas_iva',
-      'cpt_evolucion_ganado', 'estado_pago'
+      'cpt_evolucion_ganado', 'estado_pago', 'tipos_dosis','tipos_gasto'
     ];
 
   
@@ -71,19 +71,11 @@ export class ObtengoDatosGeneralesService {
 
     
     
-          //const dataEmpresaUsuSelArray:any = JSON.parse(localStorage.getItem('empresas')) 
-          //const dataEmpresaUsuSel:any = dataEmpresaUsuSelArray[0]
-
-    
-          await this.http.get(`${base_url}/generalempresa/tipos_archivo_lector/${id}`, { headers: headers })
-          .subscribe((resp: any) => {
-            localStorage.setItem('tipos_archivo_lector', JSON.stringify(resp));
-          });
 
 
           const estructurasNecesariasEmpresa = [ 'deposito', 'dicose','titular', 'cpf_log',
           'sector', 'pasturas_x_sector','cpt_registro_lluvias','articulos_x_titular', 
-          ,'cpt_pago_fact_prov','cpt_relaciono_snig','cpt_recaravaneo','cpt_parametros_x_empresa'
+          ,'cpt_pago_fact_prov','cpt_relaciono_snig','cpt_recaravaneo','cpt_parametros_x_empresa','tipos_archivo_lector'
           ];
       
           estructurasNecesariasEmpresa.forEach(async element => {

@@ -56,8 +56,8 @@ export class ArticulosComponent implements OnInit {
   usuario = JSON.parse(localStorage.getItem('usuario_contectado'));
 
 
-  empresas= JSON.parse(localStorage.getItem('empresas'));
-
+  empresasSel= JSON.parse(localStorage.getItem('empresas'));
+  empresas = this.empresasSel[0]
 
   nombreSeccion = 'Articulos';
   nombreSeccionTabla = 'articulos';
@@ -346,6 +346,7 @@ export class ArticulosComponent implements OnInit {
         this.DatoDetail.id_tasa_iva_vta= this.editDato.get('id_tasa_iva_vta')?.value;
 
 
+        console.log(this.DatoDetail);
    
 
       this.Datoservice.addDato(this.DatoDetail as Datos).subscribe((dato) => {

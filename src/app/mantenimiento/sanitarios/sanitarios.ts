@@ -6,6 +6,7 @@ export class Datos {
   public unidad_frecuencia='';
   public dosis=0;
   public cod_articulo='';
+  public id_tipo_dosis=0;
 }
 
 

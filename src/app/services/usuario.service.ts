@@ -90,6 +90,7 @@ export class UsuarioService {
     // Creo Empresa
     // Creo Usuario por empresa
     // Principio solo estructura con La Maria Elena  
+    //console.log('aca')
     return this.http.post(`${base_url}/auth/signup`, formData)
       .pipe(
         tap((resp:any)=>{

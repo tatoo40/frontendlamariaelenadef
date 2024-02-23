@@ -1,0 +1,7 @@
+{
+    "/api": {
+        "target": "https://dataservice.accuweather.com",
+        "secure": false
+    }
+}
+

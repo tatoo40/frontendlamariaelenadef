@@ -33,7 +33,7 @@ export class CargaMasivaService {
 
     
     const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
-    console.log(formData);
+    //console.log(formData);
     return this.http.post(`${base_url}/accionxlote/${accion}`, formData, {headers: headers})
       .pipe(
         tap((resp:any)=>{

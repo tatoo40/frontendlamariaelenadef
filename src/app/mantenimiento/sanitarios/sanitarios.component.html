@@ -110,10 +110,39 @@
           </div>
         </div>
       </div>
+      <div class="mb-3 row">
+        <label for="position" class="col-sm-4 col-form-label">Tipo dosis:</label>
+        <div class="col-sm-8">
+
+
+          <select name="id_tipo_dosis" class="form-select mr-sm-2" formControlName="id_tipo_dosis" id="id_tipo_dosis"
+          [ngClass]="{ 'is-invalid': submitted && f['id_tipo_dosis'].errors }"  >
+            <option value="-1" [ngValue]="-1">Seleccione...</option>
+            <option  *ngFor="let tipo_dosis of tipos_dosis" 
+            [value]="tipo_dosis.id" [ngValue]="tipo_dosis.id"  >
+          {{tipo_dosis.descripcion}}
+            </option>
+
+            
+          </select>  
+
+
+
+
+          <div
+            *ngIf="submitted && f['id_tipo_dosis'].errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['id_tipo_dosis'].errors['required']">
+              Tipo dosis es obligatorio
+            </div>
+          </div>
+        </div>
+      </div>
 
       
       <div class="mb-3 row">
-        <label for="dosis" class="col-sm-4 col-form-label">Dosis (l/animal)</label>
+        <label for="dosis" class="col-sm-4 col-form-label">Dosis (Unidad/tipo de dosis)</label>
         <div class="col-sm-8">
           <input
             type="text"

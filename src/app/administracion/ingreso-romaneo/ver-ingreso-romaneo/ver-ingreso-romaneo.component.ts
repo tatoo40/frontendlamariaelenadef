@@ -38,7 +38,7 @@ export class verIngresoRomaneoComponent implements OnInit {
     });
 
 
-
+    console.log( this.romaneoDetail);
 
 
   }

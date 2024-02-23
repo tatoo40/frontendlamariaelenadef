@@ -50,10 +50,12 @@ export class SanitariosComponent implements OnInit {
   secciones = JSON.parse(localStorage.getItem('seccion'));
   tipos_ganado = JSON.parse(localStorage.getItem('tipo_ganado'));
   articulos = JSON.parse(localStorage.getItem('articulo'));
+  tipos_dosis = JSON.parse(localStorage.getItem('tipos_dosis'));
 
   filteredArticulos = this.articulos.filter((articulo) => articulo.id_tipo_articulo === 4 || articulo.id===0);
 
-  empresas= JSON.parse(localStorage.getItem('empresas'));
+  empresasSel= JSON.parse(localStorage.getItem('empresas'));
+  empresas = this.empresasSel[0]
 
 
   nombreSeccion = 'Motivos sanitarios';
@@ -123,6 +125,7 @@ export class SanitariosComponent implements OnInit {
       ///////////////////////////////////////////CAMBIAR ACA////////////////////////
       id: [''],
       descripcion: ['', Validators.required],
+      id_tipo_dosis: ['', Validators.required],
       frecuencia: ['', Validators.required],
       unidad_frecuencia:['', Validators.required],
       recurrente:[false, Validators.required],
@@ -263,6 +266,7 @@ export class SanitariosComponent implements OnInit {
         recurrente: dato.recurrente,
         unidad_frecuencia: dato.unidad_frecuencia,
         dosis:dato.dosis,
+        id_tipo_dosis:dato.id_tipo_dosis,
         cod_articulo:dato.cod_articulo
      
       });
@@ -284,6 +288,7 @@ export class SanitariosComponent implements OnInit {
         this.DatoDetail.unidad_frecuencia= this.editDato.get('unidad_frecuencia')?.value;
         this.DatoDetail.dosis= parseFloat(this.editDato.get('dosis')?.value);
         this.DatoDetail.cod_articulo= this.editDato.get('cod_articulo')?.value;
+        this.DatoDetail.id_tipo_dosis= this.editDato.get('id_tipo_dosis')?.value;
 
       }
 /////////////////CAMBIAR ACA/////////////////////////////
@@ -314,6 +319,7 @@ this.DatoDetail.descripcion = this.editDato.get('descripcion')?.value;
 this.DatoDetail.frecuencia= parseFloat(this.editDato.get('frecuencia')?.value);
 this.DatoDetail.recurrente= this.editDato.get('recurrente')?.value;
 this.DatoDetail.unidad_frecuencia= this.editDato.get('unidad_frecuencia')?.value;
+this.DatoDetail.id_tipo_dosis= this.editDato.get('id_tipo_dosis')?.value;
 this.DatoDetail.dosis= parseFloat(this.editDato.get('dosis')?.value);
 this.DatoDetail.cod_articulo= this.editDato.get('cod_articulo')?.value;
 

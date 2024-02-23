@@ -20,7 +20,7 @@ let  procedimientoXTipoArchivo: number = 0;
 interface Linea {
   EID: string;
   EIDMADRE: string;
-  PESO: number | 0; // Aquí estamos permitiendo que el campo peso sea una cadena o nulo
+  peso: string; // Aquí estamos permitiendo que el campo peso sea una cadena o nulo
 }
 
 @Component({
@@ -170,7 +170,8 @@ export class AccionMasivaFormComponent implements OnInit {
     this.cuartoPasoForm.controls['clostridiosis'].setValue(true);
     this.cuartoPasoForm.controls['parasitos_internos'].setValue(true);
     this.cuartoPasoForm.controls['carbunco'].setValue(true);    
-
+    this.cuartoPasoForm.controls['banio'].setValue(true);   
+    this.cuartoPasoForm.controls['banio_nitromic'].setValue(true);   
     this.segundoPasoFormRegSanitario.controls['fecha'].setValue(currentDate);
 
     this.segundoPasoFormRegPesada.controls['fecha'].setValue(currentDate);
@@ -237,7 +238,7 @@ export class AccionMasivaFormComponent implements OnInit {
     form.value.peso_total_real = this.kilosAnimalesSaneadosMuestraActual;
     form.value.peso_total_facturado = this.kilosAnimalesSaneadosMuestraNueva;
     form.value.cantidad_total = this.animalesSaneados;
-
+    form.value.cantidad_muestra = this.animalesPesados;
     // Construyo el objeto y asigno valores
     //console.log(form)
     this.formDataService.setDatosSegundoFormularioRegistroSanitario(form.value);
@@ -294,11 +295,12 @@ export class AccionMasivaFormComponent implements OnInit {
 
 
     this.cuartoPasoForm = this.fb.group({
-      bania_garrapata: [true],
-      clostridiosis: [true],
-      parasitos_internos: [true],
-      carbunco: [true],
-
+      bania_garrapata: [false],
+      clostridiosis: [false],
+      parasitos_internos: [false],
+      carbunco: [false],
+      banio:[false],
+      banio_nitromic:[false]
    
     });
 
@@ -570,27 +572,45 @@ export class AccionMasivaFormComponent implements OnInit {
     //console.log(stockActivo)
     //console.log(this.formDataService.getFormData().lineas);
 
-    const arrayCaravanasPesoMayorCero:Linea[]=this.formDataService.getFormData().lineas;
+    const arrayCaravanasProcesadas:Linea[]=this.formDataService.getFormData().lineas;
 
-    const caravanasConPesoMayorCero = arrayCaravanasPesoMayorCero
-    .filter((objeto) => objeto.PESO > 0)
-    .map((objeto) => ({ EID: Number(objeto.EID) }));
+
+    // Filtrar los objetos cuyo atributo 'PESO' es mayor que cero
+    const caravanasConPesoMayorCero = arrayCaravanasProcesadas.filter(objeto => parseFloat(objeto.peso) > 0);
+
+    // Calcular la suma de pesos y la cantidad de registros
+    const { sumaPesos, cantidadRegistros } = caravanasConPesoMayorCero.reduce((acumulador, objeto) => {
+        // Sumar el peso al acumulador
+        acumulador.sumaPesos += parseFloat(objeto.peso);
+        // Incrementar la cantidad de registros
+        acumulador.cantidadRegistros++;
+        return acumulador;
+    }, { sumaPesos: 0, cantidadRegistros: 0 }); // Inicializar el acumulador con valores iniciales
+
+    //console.log('Suma de pesos:', sumaPesos);
+    //console.log('Cantidad de registros:', cantidadRegistros);
+    this.animalesPesados = cantidadRegistros;
+
   
     //console.log(caravanasConPesoMayorCero);
-
-
-    const caravanasEncontradas = caravanasConPesoMayorCero.map((objeto) => objeto.EID);
-    const sumaTotalCantidad2 = stockActivo[0]
-      .filter((objeto) => caravanasEncontradas.includes(Number(objeto.cod_identidad)))
-      .reduce((acumulador, objeto) => acumulador + objeto.cantidad2, 0);
-
-    //console.log(sumaTotalCantidad2);
-
+    //const caravanasEncontradas = caravanasConPesoMayorCero.map((objeto) => objeto.EID);
+    
+     //el peso de la bichas en stock
+    const caravanasEncontradas = stockActivo[0].filter(objeto =>
+      arrayCaravanasProcesadas.some(caravana => caravana.EID === objeto.cod_identidad)
+    );
+  
+    const sumaCantidad2 = caravanasEncontradas.reduce((acumulador, caravana) => {
+      return acumulador + caravana.cantidad2;
+    }, 0);
+    
 
 
     // Obtengo cantidad total de animales saneados.
-    this.kilosAnimalesSaneadosMuestraNueva = arrayCaravanasPesoMayorCero.reduce((acumulador, objeto) => acumulador + objeto.PESO, 0);
-    this.kilosAnimalesSaneadosMuestraActual = sumaTotalCantidad2;
+    this.kilosAnimalesSaneadosMuestraNueva = sumaPesos;
+    this.kilosAnimalesSaneadosMuestraActual = sumaCantidad2;
+
+
     let cuentaPorcentaje = this.kilosAnimalesSaneadosMuestraActual/this.kilosAnimalesSaneadosMuestraNueva;
     this.porcentajeKilosAumentados = this.porcentajePipe.transform((1-cuentaPorcentaje)*100); 
 
@@ -644,7 +664,7 @@ export class AccionMasivaFormComponent implements OnInit {
     const arrayCaravanasPesoMayorCero:Linea[]=this.formDataService.getFormData().lineas;
 
     const caravanasConPesoMayorCero = arrayCaravanasPesoMayorCero
-    .filter((objeto) => objeto.PESO > 0)
+    .filter((objeto) => parseFloat(objeto.peso) > 0)
     .map((objeto) => ({ EID: Number(objeto.EID) }));
   
     //console.log(caravanasConPesoMayorCero);
@@ -660,7 +680,7 @@ export class AccionMasivaFormComponent implements OnInit {
 
 
     // Obtengo cantidad total de animales saneados.
-    this.kilosAnimalesSaneadosMuestraNueva = arrayCaravanasPesoMayorCero.reduce((acumulador, objeto) => acumulador + objeto.PESO, 0);
+    this.kilosAnimalesSaneadosMuestraNueva = arrayCaravanasPesoMayorCero.reduce((acumulador, objeto) => acumulador + parseFloat(objeto.peso), 0);
     this.kilosAnimalesSaneadosMuestraActual = sumaTotalCantidad2;
     this.porcentajeKilosAumentados = this.porcentajePipe.transform((1-(this.kilosAnimalesSaneadosMuestraActual/this.kilosAnimalesSaneadosMuestraNueva))*100); 
 

@@ -49,7 +49,8 @@ export class ArticulosTitularComponent implements OnInit {
   ///OBTENGO DATOS DE LA SECCION QUE ESTOY TRABAJANDO////////////
   secciones = JSON.parse(localStorage.getItem('seccion'));
 
-  empresas= JSON.parse(localStorage.getItem('empresas'));
+  empresasSel = JSON.parse(localStorage.getItem('empresas'));
+  empresas= this.empresasSel[0];
   depositos = JSON.parse(localStorage.getItem('deposito'));
   titulares = JSON.parse(localStorage.getItem('titular'));
   articulos = JSON.parse(localStorage.getItem('articulo'));

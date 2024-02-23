@@ -36,6 +36,7 @@ export class ListadoFacturasProvComponent {
   constructor(public invoiceService:FacturaProvService) {
 
     this.invoiceService.getInvoicesWithLines().subscribe((dato) => {
+          console.log(dato)
           this.obtengoFacturasProv =dato;
           this.compInvoice = dato;
 

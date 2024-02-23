@@ -30,7 +30,7 @@ export class VistaGanadoGoogleMapsComponent implements AfterViewInit {
 
   public options: google.maps.MapOptions = {
     center: {lat: -33.853759, lng: 151.212803}, // Sydney Harbour center
-    zoom: 14,
+    zoom: 10,
   };
 
 
@@ -123,7 +123,7 @@ export class VistaGanadoGoogleMapsComponent implements AfterViewInit {
       // Convertir el objeto resultado a un array de objetos
       this.DatoSector= Object.values(resultadoSector);
 
-
+      //console.log(this.DatoSector);
 
 
   
@@ -202,7 +202,7 @@ export class VistaGanadoGoogleMapsComponent implements AfterViewInit {
       // Convertir el objeto resultado a un array de objetos
       this.DatoDetailSector= Object.values(resultadoArticuloSector);
 
-
+      //console.log(this.DatoDetailSector)
 
     });
 

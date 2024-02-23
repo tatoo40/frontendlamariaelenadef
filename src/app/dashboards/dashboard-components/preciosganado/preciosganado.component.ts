@@ -38,7 +38,7 @@ export class PreciosGanadoComponent   {
   constructor(private Datoservice: StockService,private formatoFecha:DdMmYYYYDateSoloPipe) {
     
     const fechaFormateada = this.formatoFecha.transform(this.fechaHoy);   
-    console.log(this.parametros_x_fecha)
+    //console.log(this.parametros_x_fecha)
 
 
 
